@@ -1,0 +1,20 @@
+{
+  "name": "cognigy-blueprint",
+  "version": "1.0.0",
+  "description": "Demonstrates how to use the Cognigy Integration Framework",
+  "main": "build/module.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Cognigy GmbH",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/events": "^1.2.0",
+    "@types/node": "^10.12.5",
+    "typescript": "^3.1.6"
+  },
+  "dependencies": {
+    "node-red-contrib-cognitive-services": "^0.5.3",
+    "node-red-node-random": "^0.1.2"
+  }
+}

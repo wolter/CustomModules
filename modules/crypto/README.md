@@ -1,0 +1,1 @@
+﻿Exposes Node.JS's crypto functions to Cognigy.AI

@@ -1,0 +1,19 @@
+{
+	"name": "Cluedin",
+	"version": "1.0.0",
+	"description": "Integrates Cognigy.AI with Cluedin",
+	"main": "build/module.js",
+	"scripts": {
+		"test": "node test/test.s",
+		"build": "tsc -p ."
+	},
+	"author": "Cognigy GmbH",
+	"license": "MIT",
+	"devDependencies": {
+		"@types/node": "^10.12.5",
+		"typescript": "^3.1.6"
+	},
+	"dependencies": {
+		"graphql-client": "^2.0.1"
+	}
+}

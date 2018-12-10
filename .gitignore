@@ -1,0 +1,9 @@
+modules/*/build
+modules/*/node_modules
+modules/*/src/shared
+modules/*/.env
+modules/service-endpoint/creds.data
+modules/service-endpoint/gactions
+.env
+coverage/
+*.zip

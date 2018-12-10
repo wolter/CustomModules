@@ -1,0 +1,88 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "Launch Request Test",
+            "program": "${workspaceFolder}/modules\\request\\test\\test.js",
+            "outFiles": [
+                "${workspaceFolder}/**/*.js"
+            ],
+            "envFile": "${workspaceRoot}/.env"
+        },
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "Launch DialogFlow Test",
+            "program": "${workspaceFolder}/modules\\dialogflow\\test\\test.js",
+            "outFiles": [
+                "${workspaceFolder}/**/*.js"
+            ],
+            "envFile": "${workspaceRoot}/.env"
+        },
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "Launch Nodered Test",
+            "program": "${workspaceFolder}/modules\\nodered-wrapper\\test\\test.js",
+            "outFiles": [
+                "${workspaceFolder}/**/*.js"
+            ],
+            "envFile": "${workspaceRoot}/.env"
+        },
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "Launch Salesforce Test",
+            "program": "${workspaceFolder}/modules\\salesforce\\test\\test.js",
+            "outFiles": [
+                "${workspaceFolder}/**/*.js"
+            ],
+            "envFile": "${workspaceRoot}/.env"
+        },
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "Launch Zendesk Test",
+            "program": "${workspaceFolder}/modules\\zendesk\\test\\test.js",
+            "outFiles": [
+                "${workspaceFolder}/**/*.js"
+            ],
+            "envFile": "${workspaceRoot}/.env"
+        },
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "Launch Hubspot Test",
+            "program": "${workspaceFolder}/modules\\hubspot\\test\\test.js",
+            "outFiles": [
+                "${workspaceFolder}/**/*.js"
+            ],
+            "envFile": "${workspaceRoot}/.env"
+        },
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "Launch Cluedin Test",
+            "program": "${workspaceFolder}/modules\\cluedin\\test\\test.js",
+            "outFiles": [
+                "${workspaceFolder}/**/*.js"
+            ],
+            "envFile": "${workspaceRoot}/.env"
+        },
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "Launch Crypto Test",
+            "program": "${workspaceFolder}/modules\\crypto\\test\\test.js",
+            "outFiles": [
+                "${workspaceFolder}/**/*.js"
+            ],
+            "envFile": "${workspaceRoot}/.env"
+        }
+    ]
+}

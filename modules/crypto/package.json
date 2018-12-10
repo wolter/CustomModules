@@ -1,0 +1,16 @@
+{
+	"name": "Crypto",
+	"version": "1.0.0",
+	"description": "Exposes crypto",
+	"main": "build/module.js",
+	"scripts": {
+		"build": "tsc -p ."
+	},
+	"author": "Cognigy GmbH",
+	"license": "MIT",
+	"devDependencies": {
+		"@types/crypto-js": "^3.1.43",
+		"@types/node": "^10.12.5",
+		"typescript": "^3.1.6"
+	}
+}
