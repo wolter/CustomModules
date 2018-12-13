@@ -31,6 +31,7 @@ const context = {
 				]
 			}
 		};
+
 		let result = await mod.findCompanyByDomain({ "input": {}, "context": context }, { "domain": "cognddigy.com", "properties": "properties", "writeToContext": true, "store": "hubspot", "secret": secret, "stopOnError": false });
 		console.log(JSON.stringify(result, undefined, 4));
 

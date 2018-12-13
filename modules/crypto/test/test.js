@@ -16,4 +16,4 @@ const input = {
 	} catch (err) {
 		console.log(err);
 	}
-})(); 
+})();

@@ -20,4 +20,4 @@ const secret = {
 	} catch (err) {
 		console.log(err);
 	}
-})(); 
+})();
