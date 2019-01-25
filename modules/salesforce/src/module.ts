@@ -46,7 +46,7 @@ module.exports.SOQLQuery = SOQLQuery;
 /**
  * Describes the function
  * @arg {SecretSelect} `secret` The configured secret to use
- * @arg {Select[Account,Contact,Event]} `option` The entity type to create
+ * @arg {String} `option` The entity type to create
  * @arg {JSON} `info` The information as JSON
  * @arg {Boolean} `writeToContext` Whether to write to Cognigy Context (true) or Input (false)
  * @arg {CognigyScript} `store` Where to store the result
