@@ -46,19 +46,21 @@ module.exports.SOQLQuery = SOQLQuery;
 /**
  * Describes the function
  * @arg {SecretSelect} `secret` The configured secret to use
- * @arg {CognigyScript} `accountName` The name of the new account
+ * @arg {Select[Account,Contact,Event]} `option` The entity type to create
+ * @arg {JSON} `info` The information as JSON
  * @arg {Boolean} `writeToContext` Whether to write to Cognigy Context (true) or Input (false)
  * @arg {CognigyScript} `store` Where to store the result
  * @arg {Boolean} `stopOnError` Whether to stop on error or continue
  */
-async function create_account(input: IFlowInput, args: { secret: CognigySecret, accountName: string, writeToContext: boolean, store: string, stopOnError: boolean }): Promise<IFlowInput | {}> {
+async function create_entity(input: IFlowInput, args: { secret: CognigySecret, option: string, info: string, writeToContext: boolean, store: string, stopOnError: boolean }): Promise<IFlowInput | {}> {
   // Check if secret exists and contains correct parameters
   if (!args.secret || !args.secret.username || !args.secret.password || !args.secret.token) return Promise.reject("Secret not defined or invalid.");
-  if (!args.accountName) return Promise.reject("No Account Name defined.");
+  if (!args.info) return Promise.reject("No Account Name defined.");
 
   return new Promise((resolve, reject) => {
     let result = {};
     var conn = new jsforce.Connection();
+
 
     conn.login(args.secret.username, args.secret.password + args.secret.token, function(err, res) {
       if (err) {
@@ -68,8 +70,9 @@ async function create_account(input: IFlowInput, args: { secret: CognigySecret, 
         else input.input[args.store] = result;
         resolve(input);
       } else {
+
         // Single record creation
-        conn.sobject("Account").create({ Name : args.accountName }, function(err, ret) {
+        conn.sobject(args.option).create(args.info, function(err, ret) {
           if (err) { 
             if (args.stopOnError) { reject(err.message); return; }
             else result = { "error": err.message};
@@ -77,8 +80,6 @@ async function create_account(input: IFlowInput, args: { secret: CognigySecret, 
           if (args.writeToContext) input.context.getFullContext()[args.store] = result;
           else input.input[args.store] = result;
           resolve(input);
-          // if (err || !ret.success) { return console.error(err, ret); }
-          // console.log("Created record id : " + ret.id);
         });
       }
     });
@@ -87,4 +88,4 @@ async function create_account(input: IFlowInput, args: { secret: CognigySecret, 
 }
 
 // You have to export the function, otherwise it is not available
-module.exports.create_account = create_account;
+module.exports.create_entity = create_entity;
