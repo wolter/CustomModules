@@ -2,7 +2,7 @@
 	"name": "Salesforce",
 	"version": "1.0.0",
 	"description": "This module integrates Cognigy.AI with Salesforce",
-	"main": "build/module.js",
+	"main": "module.js",
 	"scripts": {
 		"build": "tsc -p ."
 	},

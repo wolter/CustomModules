@@ -1,4 +1,4 @@
-var mod = require("../build/module");
+var mod = require("../module");
 
 const input = {
     input: {},
