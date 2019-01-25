@@ -80,3 +80,17 @@ Creates a new **account** in the **Accounts** Salesforce table. The JSON in *Inf
 }
 ```
 
+## Node: retrieve
+
+Retrieves the entity by searching for the given ID.
+
+```json
+{
+  "sf_retrieve": {
+    "id": "0051t000002geBqAAI",
+    "organizationId": "00D1t000000xCYwEAM",
+    "url": "https://login.salesforce.com/id/00D1t000000xCYwEAM/0051t000002geBqAAI"
+  }
+}
+
+```
