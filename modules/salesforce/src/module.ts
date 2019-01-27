@@ -137,3 +137,52 @@ async function retrieve(input: IFlowInput, args: { secret: CognigySecret, option
 
 // You have to export the function, otherwise it is not available
 module.exports.retrieve = retrieve;
+
+
+/**
+ * Describes the function
+ * @arg {SecretSelect} `secret` The configured secret to use
+ * @arg {String} `option` The entity type to delete
+ * @arg {String} `entity_id` of the entitity to delete
+ * @arg {Boolean} `writeToContext` Whether to write to Cognigy Context (true) or Input (false)
+ * @arg {CognigyScript} `store` Where to store the result
+ * @arg {Boolean} `stopOnError` Whether to stop on error or continue
+ */
+async function delete_entity(input: IFlowInput, args: { secret: CognigySecret, option: string, entity_id: string, writeToContext: boolean, store: string, stopOnError: boolean }): Promise<IFlowInput | {}> {
+  // Check if secret exists and contains correct parameters
+  if (!args.secret || !args.secret.username || !args.secret.password || !args.secret.token) return Promise.reject("Secret not defined or invalid.");
+  if (!args.entity_id) return Promise.reject("No ID defined.");
+
+  return new Promise((resolve, reject) => {
+    let result = {};
+    var conn = new jsforce.Connection();
+
+
+    conn.login(args.secret.username, args.secret.password + args.secret.token, function(err, res) {
+      if (err) {
+        if (args.stopOnError) { reject(err.message); return; }
+        result = { "error": err.message };
+        if (args.writeToContext) input.context.getFullContext()[args.store] = result;
+        else input.input[args.store] = result;
+        resolve(input);
+      } else {
+
+        conn.sobject(args.option).destroy(args.entity_id, function(err, apiResult) {
+          if (err) {
+            if (args.stopOnError) { reject(err.message); return; }
+            else result = { "error": err.message};
+          } else result = apiResult;
+
+          if (args.writeToContext) input.context.getFullContext()[args.store] = result;
+          else input.input[args.store] = result;
+          resolve(input);
+        });
+      }
+    });
+
+  });
+}
+
+
+// You have to export the function, otherwise it is not available
+module.exports.delete_entity = delete_entity;
