@@ -72,11 +72,11 @@ async function create_entity(input: IFlowInput, args: { secret: CognigySecret, o
       } else {
 
         // Single record creation
-        conn.sobject(args.option).create(args.info, function(err, ret) {
+        conn.sobject(args.option).create(args.info, function(err, apiResult) {
           if (err) { 
             if (args.stopOnError) { reject(err.message); return; }
             else result = { "error": err.message};
-          } else result = res;
+          } else result = apiResult;
           if (args.writeToContext) input.context.getFullContext()[args.store] = result;
           else input.input[args.store] = result;
           resolve(input);
@@ -119,11 +119,12 @@ async function retrieve(input: IFlowInput, args: { secret: CognigySecret, option
         resolve(input);
       } else {
 
-        conn.sobject(args.option).retrieve(args.entity_id, function(err, account) {
+        conn.sobject(args.option).retrieve(args.entity_id, function(err, apiResult) {
           if (err) {
             if (args.stopOnError) { reject(err.message); return; }
             else result = { "error": err.message};
-          } else result = res;
+          } else result = apiResult;
+
           if (args.writeToContext) input.context.getFullContext()[args.store] = result;
           else input.input[args.store] = result;
           resolve(input);

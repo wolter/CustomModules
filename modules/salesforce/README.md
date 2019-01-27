@@ -86,11 +86,23 @@ Retrieves the entity by searching for the given ID.
 
 ```json
 {
-  "sf_retrieve": {
-    "id": "0051t000002geBqAAI",
-    "organizationId": "00D1t000000xCYwEAM",
-    "url": "https://login.salesforce.com/id/00D1t000000xCYwEAM/0051t000002geBqAAI"
-  }
+ "sf_retrieve": {
+     "attributes": {
+       "type": "Account",
+       "url": "/services/data/v42.0/sobjects/Account/0011t00000FIlUTAA1"
+     },
+     "Id": "0011t00000FIlUTAA1",
+     "IsDeleted": false,
+     "MasterRecordId": null,
+     "Name": "My Account #1",
+     "Type": null,
+     "ParentId": null,
+     "BillingStreet": null,
+     "BillingCity": null,
+     "BillingState": null,
+     "BillingPostalCode": null,
+     "BillingCountry": null,
+     ...
 }
 
 ```
