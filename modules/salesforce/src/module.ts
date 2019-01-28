@@ -100,7 +100,7 @@ module.exports.create_entity = create_entity;
  * @arg {CognigyScript} `store` Where to store the result
  * @arg {Boolean} `stopOnError` Whether to stop on error or continue
  */
-async function retrieve(input: IFlowInput, args: { secret: CognigySecret, option: string, entity_id: string, writeToContext: boolean, store: string, stopOnError: boolean }): Promise<IFlowInput | {}> {
+async function retrieve_entity(input: IFlowInput, args: { secret: CognigySecret, option: string, entity_id: string, writeToContext: boolean, store: string, stopOnError: boolean }): Promise<IFlowInput | {}> {
   // Check if secret exists and contains correct parameters
   if (!args.secret || !args.secret.username || !args.secret.password || !args.secret.token) return Promise.reject("Secret not defined or invalid.");
   if (!args.entity_id) return Promise.reject("No ID defined.");
@@ -136,7 +136,7 @@ async function retrieve(input: IFlowInput, args: { secret: CognigySecret, option
 }
 
 // You have to export the function, otherwise it is not available
-module.exports.retrieve = retrieve;
+module.exports.retrieve_entity = retrieve_entity;
 
 
 /**
