@@ -186,6 +186,8 @@ async function deleteEntity(input: IFlowInput, args: { secret: CognigySecret, op
 // You have to export the function, otherwise it is not available
 module.exports.deleteEntity = deleteEntity;
 
+
+// TODO: Starts an endless loop.
 /**
  * Describes the function
  * @arg {SecretSelect} `secret` The configured secret to use
@@ -196,10 +198,12 @@ module.exports.deleteEntity = deleteEntity;
  * @arg {CognigyScript} `store` Where to store the result
  * @arg {Boolean} `stopOnError` Whether to stop on error or continue
  */
-async function updateEntity(input: IFlowInput, args: { secret: CognigySecret, option: string, entity_id: string, values_to_change: string, writeToContext: boolean, store: string, stopOnError: boolean }): Promise<IFlowInput | {}> {
+async function updateEntity(input: IFlowInput, args: { secret: CognigySecret, option: string, entityId: string, valuesToChange: string, writeToContext: boolean, store: string, stopOnError: boolean }): Promise<IFlowInput | {}> {
+  input.actions.output(JSON.stringify(args),undefined);
+
   // Check if secret exists and contains correct parameters
   if (!args.secret || !args.secret.username || !args.secret.password || !args.secret.token) return Promise.reject("Secret not defined or invalid.");
-  if (!args.entity_id) return Promise.reject("No ID defined.");
+  if (!args.entityId) return Promise.reject("No ID defined.");
 
   return new Promise((resolve, reject) => {
     let result = {};
@@ -215,8 +219,8 @@ async function updateEntity(input: IFlowInput, args: { secret: CognigySecret, op
         resolve(input);
       } else {
 
-        let valuesToChange = JSON.parse(args.values_to_change);
-        const options = Object.assign({ Id : args.entity_id }, valuesToChange);
+        let valuesToChangeParsed = JSON.parse(args.valuesToChange);
+        const options = Object.assign({ Id : args.entityId }, valuesToChangeParsed);
         conn.sobject(args.option).update(options, function(err, apiResult) {
           if (err) {
             if (args.stopOnError) { reject(err.message); return; }
