@@ -42,7 +42,6 @@ async function SOQLQuery(input: IFlowInput, args: { secret: CognigySecret, soql:
 // You have to export the function, otherwise it is not available
 module.exports.SOQLQuery = SOQLQuery;
 
-// TODO info in obnject ändern
 /**
  * Describes the function
  * @arg {SecretSelect} `secret` The configured secret to use
@@ -52,7 +51,7 @@ module.exports.SOQLQuery = SOQLQuery;
  * @arg {CognigyScript} `store` Where to store the result
  * @arg {Boolean} `stopOnError` Whether to stop on error or continue
  */
-async function create_entity(input: IFlowInput, args: { secret: CognigySecret, option: string, info: string, writeToContext: boolean, store: string, stopOnError: boolean }): Promise<IFlowInput | {}> {
+async function createEntity(input: IFlowInput, args: { secret: CognigySecret, option: string, info: string, writeToContext: boolean, store: string, stopOnError: boolean }): Promise<IFlowInput | {}> {
   // Check if secret exists and contains correct parameters
   if (!args.secret || !args.secret.username || !args.secret.password || !args.secret.token) return Promise.reject("Secret not defined or invalid.");
   if (!args.info) return Promise.reject("No Info defined.");
@@ -88,7 +87,7 @@ async function create_entity(input: IFlowInput, args: { secret: CognigySecret, o
 }
 
 // You have to export the function, otherwise it is not available
-module.exports.create_entity = create_entity;
+module.exports.createEntity = createEntity;
 
 
 /**
@@ -100,7 +99,7 @@ module.exports.create_entity = create_entity;
  * @arg {CognigyScript} `store` Where to store the result
  * @arg {Boolean} `stopOnError` Whether to stop on error or continue
  */
-async function retrieve_entity(input: IFlowInput, args: { secret: CognigySecret, option: string, entity_id: string, writeToContext: boolean, store: string, stopOnError: boolean }): Promise<IFlowInput | {}> {
+async function retrieveEntity(input: IFlowInput, args: { secret: CognigySecret, option: string, entity_id: string, writeToContext: boolean, store: string, stopOnError: boolean }): Promise<IFlowInput | {}> {
   // Check if secret exists and contains correct parameters
   if (!args.secret || !args.secret.username || !args.secret.password || !args.secret.token) return Promise.reject("Secret not defined or invalid.");
   if (!args.entity_id) return Promise.reject("No ID defined.");
@@ -136,7 +135,7 @@ async function retrieve_entity(input: IFlowInput, args: { secret: CognigySecret,
 }
 
 // You have to export the function, otherwise it is not available
-module.exports.retrieve_entity = retrieve_entity;
+module.exports.retrieveEntity = retrieveEntity;
 
 
 /**
@@ -148,7 +147,7 @@ module.exports.retrieve_entity = retrieve_entity;
  * @arg {CognigyScript} `store` Where to store the result
  * @arg {Boolean} `stopOnError` Whether to stop on error or continue
  */
-async function delete_entity(input: IFlowInput, args: { secret: CognigySecret, option: string, entity_id: string, writeToContext: boolean, store: string, stopOnError: boolean }): Promise<IFlowInput | {}> {
+async function deleteEntity(input: IFlowInput, args: { secret: CognigySecret, option: string, entity_id: string, writeToContext: boolean, store: string, stopOnError: boolean }): Promise<IFlowInput | {}> {
   // Check if secret exists and contains correct parameters
   if (!args.secret || !args.secret.username || !args.secret.password || !args.secret.token) return Promise.reject("Secret not defined or invalid.");
   if (!args.entity_id) return Promise.reject("No ID defined.");
@@ -185,19 +184,19 @@ async function delete_entity(input: IFlowInput, args: { secret: CognigySecret, o
 
 
 // You have to export the function, otherwise it is not available
-module.exports.delete_entity = delete_entity;
+module.exports.deleteEntity = deleteEntity;
 
 /**
  * Describes the function
  * @arg {SecretSelect} `secret` The configured secret to use
  * @arg {String} `option` The entity type to retrieve
- * @arg {String} `entity_id` of the entitity to retrieve
- * @arg {JSON} `values_to_change` of the entitity to retrieve
+ * @arg {String} `entityId` of the entitity to retrieve
+ * @arg {JSON} `valuesToChange` of the entitity to retrieve
  * @arg {Boolean} `writeToContext` Whether to write to Cognigy Context (true) or Input (false)
  * @arg {CognigyScript} `store` Where to store the result
  * @arg {Boolean} `stopOnError` Whether to stop on error or continue
  */
-async function update_entity(input: IFlowInput, args: { secret: CognigySecret, option: string, entity_id: string, values_to_change: string, writeToContext: boolean, store: string, stopOnError: boolean }): Promise<IFlowInput | {}> {
+async function updateEntity(input: IFlowInput, args: { secret: CognigySecret, option: string, entity_id: string, values_to_change: string, writeToContext: boolean, store: string, stopOnError: boolean }): Promise<IFlowInput | {}> {
   // Check if secret exists and contains correct parameters
   if (!args.secret || !args.secret.username || !args.secret.password || !args.secret.token) return Promise.reject("Secret not defined or invalid.");
   if (!args.entity_id) return Promise.reject("No ID defined.");
@@ -235,6 +234,5 @@ async function update_entity(input: IFlowInput, args: { secret: CognigySecret, o
 }
 
 // You have to export the function, otherwise it is not available
-module.exports.update_entity = update_entity;
-// 0031t00000D508kAAB
+module.exports.updateEntity = updateEntity;
 
