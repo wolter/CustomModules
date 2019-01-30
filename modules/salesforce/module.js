@@ -219,6 +219,7 @@ async function deleteEntity(input, args) {
 }
 // You have to export the function, otherwise it is not available
 module.exports.deleteEntity = deleteEntity;
+// TODO: Starts an endless loop.
 /**
  * Describes the function
  * @arg {SecretSelect} `secret` The configured secret to use
@@ -253,25 +254,39 @@ async function updateEntity(input, args) {
                 resolve(input);
             }
             else {
-                let valuesToChangeParsed = JSON.parse(args.valuesToChange);
-                const options = Object.assign({ Id: args.entityId }, valuesToChangeParsed);
-                conn.sobject(args.option).update(options, function (err, apiResult) {
-                    if (err) {
-                        if (args.stopOnError) {
-                            reject(err.message);
-                            return;
+                // let valuesToChangeParsed = JSON.parse(args.valuesToChange);
+                if (typeof args.valuesToChange === "object") {
+                    const options = Object.assign({ Id: args.entityId }, args.valuesToChange);
+                    conn.sobject(args.option).update(options, function (err, apiResult) {
+                        if (err) {
+                            if (args.stopOnError) {
+                                reject(err.message);
+                                return;
+                            }
+                            else
+                                result = { "error": err.message };
                         }
                         else
-                            result = { "error": err.message };
+                            result = apiResult;
+                        if (args.writeToContext)
+                            input.context.getFullContext()[args.store] = result;
+                        else
+                            input.input[args.store] = result;
+                        resolve(input);
+                    });
+                }
+                else {
+                    if (args.stopOnError) {
+                        reject(err.message);
+                        return;
                     }
-                    else
-                        result = apiResult;
+                    result = { "error": err.message };
                     if (args.writeToContext)
                         input.context.getFullContext()[args.store] = result;
                     else
                         input.input[args.store] = result;
                     resolve(input);
-                });
+                }
             }
         });
     });

@@ -219,18 +219,28 @@ async function updateEntity(input: IFlowInput, args: { secret: CognigySecret, op
         resolve(input);
       } else {
 
-        let valuesToChangeParsed = JSON.parse(args.valuesToChange);
-        const options = Object.assign({ Id : args.entityId }, valuesToChangeParsed);
-        conn.sobject(args.option).update(options, function(err, apiResult) {
-          if (err) {
-            if (args.stopOnError) { reject(err.message); return; }
-            else result = { "error": err.message};
-          } else result = apiResult;
+        // let valuesToChangeParsed = JSON.parse(args.valuesToChange);
 
+        if (typeof args.valuesToChange === "object"){
+          const options = Object.assign({ Id : args.entityId }, args.valuesToChange);
+          conn.sobject(args.option).update(options, function(err, apiResult) {
+            if (err) {
+              if (args.stopOnError) { reject(err.message); return; }
+              else result = { "error": err.message};
+            } else result = apiResult;
+
+            if (args.writeToContext) input.context.getFullContext()[args.store] = result;
+            else input.input[args.store] = result;
+            resolve(input);
+          });
+        }else {
+          if (args.stopOnError) { reject(err.message); return; }
+          result = { "error": err.message };
           if (args.writeToContext) input.context.getFullContext()[args.store] = result;
           else input.input[args.store] = result;
           resolve(input);
-        });
+        }
+
       }
     });
 
