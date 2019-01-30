@@ -106,3 +106,15 @@ Retrieves the entity by searching for the given ID.
 }
 
 ```
+
+## Node: update
+
+Updates an entity by ID and JSON arguments. The following code shows an example for updating a **Contact**:
+
+```json
+{
+    "FirstName": "Peter", 
+    "LastName": "Parker"
+}
+```
+
