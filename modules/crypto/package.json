@@ -4,7 +4,12 @@
 	"description": "Exposes crypto",
 	"main": "build/module.js",
 	"scripts": {
+		"test": "node test/test.js",
 		"build": "tsc -p ."
+	},
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/Cognigy/CustomModules"
 	},
 	"author": "Cognigy GmbH",
 	"license": "MIT",
