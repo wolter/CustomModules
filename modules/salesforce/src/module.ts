@@ -48,16 +48,16 @@ module.exports.SOQLQuery = SOQLQuery;
  * Describes the function
  * @arg {SecretSelect} `secret` The configured secret to use
  * @arg {CognigyScript} `entity` The entity type to create
- * @arg {JSON} `info` The information as JSON
+ * @arg {JSON} `record` The information as JSON
  * @arg {Boolean} `writeToContext` Whether to write to Cognigy Context (true) or Input (false)
  * @arg {CognigyScript} `store` Where to store the result
  * @arg {Boolean} `stopOnError` Whether to stop on error or continue
  */
-async function createEntity(input: IFlowInput, args: { secret: CognigySecret, entity: string, info: string, writeToContext: boolean, store: string, stopOnError: boolean }): Promise<IFlowInput | {}> {
+async function createEntity(input: IFlowInput, args: { secret: CognigySecret, entity: string, record: string, writeToContext: boolean, store: string, stopOnError: boolean }): Promise<IFlowInput | {}> {
 
   // Check if secret exists and contains correct parameters
   if (!args.secret || !args.secret.username || !args.secret.password || !args.secret.token) return Promise.reject("Secret not defined or invalid.");
-  if (!args.info) return Promise.reject("No Info defined.");
+  if (!args.record) return Promise.reject("No record defined.");
 
   return new Promise((resolve, reject) => {
     let result = {};
@@ -73,7 +73,7 @@ async function createEntity(input: IFlowInput, args: { secret: CognigySecret, en
       } else {
 
         // Single record creation
-        conn.sobject(args.entity).create(args.info, function(err, apiResult) {
+        conn.sobject(args.entity).create(args.record, function(err, apiResult) {
           if (err) { 
             if (args.stopOnError) { reject(err.message); return; }
             else result = { "error": err.message};
@@ -95,16 +95,16 @@ module.exports.createEntity = createEntity;
  * Describes the function
  * @arg {SecretSelect} `secret` The configured secret to use
  * @arg {CognigyScript} `entity` The entity type to retrieve
- * @arg {CognigyScript} `entity_id` of the entitity to retrieve
+ * @arg {CognigyScript} `entityId` of the entitity to retrieve
  * @arg {Boolean} `writeToContext` Whether to write to Cognigy Context (true) or Input (false)
  * @arg {CognigyScript} `store` Where to store the result
  * @arg {Boolean} `stopOnError` Whether to stop on error or continue
  */
-async function retrieveEntity(input: IFlowInput, args: { secret: CognigySecret, entity: string, entity_id: string, writeToContext: boolean, store: string, stopOnError: boolean }): Promise<IFlowInput | {}> {
+async function retrieveEntity(input: IFlowInput, args: { secret: CognigySecret, entity: string, entityId: string, writeToContext: boolean, store: string, stopOnError: boolean }): Promise<IFlowInput | {}> {
 
   // Check if secret exists and contains correct parameters
   if (!args.secret || !args.secret.username || !args.secret.password || !args.secret.token) return Promise.reject("Secret not defined or invalid.");
-  if (!args.entity_id) return Promise.reject("No ID defined.");
+  if (!args.entityId) return Promise.reject("No ID defined.");
 
   return new Promise((resolve, reject) => {
     let result = {};
@@ -119,7 +119,7 @@ async function retrieveEntity(input: IFlowInput, args: { secret: CognigySecret, 
         resolve(input);
       } else {
 
-        conn.sobject(args.entity).retrieve(args.entity_id, function(err, apiResult) {
+        conn.sobject(args.entity).retrieve(args.entityId, function(err, apiResult) {
           if (err) {
             if (args.stopOnError) { reject(err.message); return; }
             else result = { "error": err.message};
@@ -142,16 +142,16 @@ module.exports.retrieveEntity = retrieveEntity;
  * Describes the function
  * @arg {SecretSelect} `secret` The configured secret to use
  * @arg {CognigyScript} `entity` The entity type to delete
- * @arg {CognigyScript} `entity_id` of the entitity to delete
+ * @arg {CognigyScript} `entityId` of the entitity to delete
  * @arg {Boolean} `writeToContext` Whether to write to Cognigy Context (true) or Input (false)
  * @arg {CognigyScript} `store` Where to store the result
  * @arg {Boolean} `stopOnError` Whether to stop on error or continue
  */
-async function deleteEntity(input: IFlowInput, args: { secret: CognigySecret, entity: string, entity_id: string, writeToContext: boolean, store: string, stopOnError: boolean }): Promise<IFlowInput | {}> {
+async function deleteEntity(input: IFlowInput, args: { secret: CognigySecret, entity: string, entityId: string, writeToContext: boolean, store: string, stopOnError: boolean }): Promise<IFlowInput | {}> {
 
   // Check if secret exists and contains correct parameters
   if (!args.secret || !args.secret.username || !args.secret.password || !args.secret.token) return Promise.reject("Secret not defined or invalid.");
-  if (!args.entity_id) return Promise.reject("No ID defined.");
+  if (!args.entityId) return Promise.reject("No ID defined.");
 
   return new Promise((resolve, reject) => {
     let result = {};
@@ -167,7 +167,7 @@ async function deleteEntity(input: IFlowInput, args: { secret: CognigySecret, en
         resolve(input);
       } else {
 
-        conn.sobject(args.entity).destroy(args.entity_id, function(err, apiResult) {
+        conn.sobject(args.entity).destroy(args.entityId, function(err, apiResult) {
           if (err) {
             if (args.stopOnError) { reject(err.message); return; }
             else result = { "error": err.message};
