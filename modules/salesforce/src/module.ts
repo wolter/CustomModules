@@ -1,4 +1,3 @@
-
 const jsforce = require('jsforce');
 
 /**
@@ -249,4 +248,3 @@ async function updateEntity(input: IFlowInput, args: { secret: CognigySecret, op
 
 // You have to export the function, otherwise it is not available
 module.exports.updateEntity = updateEntity;
-

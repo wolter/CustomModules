@@ -2,9 +2,9 @@
  * THIS FILE CONTAINS THE RELEVANT COGNIGY INTERFACES FOR TYPESCRIPT
  */
 
- /**
-  * Flow Input/Output Object
-  */
+/**
+ * Flow Input/Output Object
+ */
 interface IFlowInput {
 	input: INLProperties;
 	data: any;
@@ -93,7 +93,7 @@ interface ICognigyNLPProperties {
 	intentClarification?: string;
 
 	/** The full results of our intent mapper */
-	intentMapperResults?: any; 
+	intentMapperResults?: any;
 
 	/** The parent id of the flow that contains the winning intent, something like "6d200e6e7a6fa4549308b44b20f5217e" */
 	intentFlow?: string;
@@ -384,10 +384,10 @@ interface IActions {
 	resetContext?: () => Promise<object>;
 	resetState?: () => Promise<string>;
 	completeGoal?: (key: string) => void;
-	addLexiconKeyphrase?: (lexicon: string, keyphrase: string, tags: Array<string>, synonyms: Array<string>, data?: Object ) => void;
+	addLexiconKeyphrase?: (lexicon: string, keyphrase: string, tags: Array<string>, synonyms: Array<string>, data?: Object) => void;
 	setKeyphrase?: (keyphrase: string, tags: string[], synoyms: string[]) => void;
 	setTimezoneOffset?: (offset: number | string) => void;
-    parseCognigyScript?: (text: string, condition?: boolean) => string;
+	parseCognigyScript?: (text: string, condition?: boolean) => string;
 }
 
 interface IUser {
