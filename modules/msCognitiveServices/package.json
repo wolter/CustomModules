@@ -1,0 +1,20 @@
+{
+  "name": "mscognitiveservices",
+  "version": "1.0.0",
+  "description": "Microsoft Cognitive Services Custom Module (Language, Search API)",
+  "main": "module.js",
+  "scripts": {
+    "build": "tsc -p ."
+  },
+  "keywords": [
+    "Microsoft",
+    "Cognitive",
+    "Services"
+  ],
+  "author": "Cognigy GmbH",
+  "license": "MIT",
+  "dependencies": {
+    "@types/node": "^10.12.20",
+    "https": "^1.0.0"
+  }
+}
