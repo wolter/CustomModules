@@ -8,14 +8,14 @@ const jsforce = require('jsforce');
  * @arg {Boolean} `stopOnError` Whether to stop on error or continue
  */
 async function SOQLQuery(input, args) {
-    // Check if secret exists and contains correct parameters  
+    // Check if secret exists and contains correct parameters
     if (!args.secret || !args.secret.username || !args.secret.password || !args.secret.token)
         return Promise.reject("Secret not defined or invalid.");
     if (!args.soql)
         return Promise.reject("No SOQL Query defined.");
     return new Promise((resolve, reject) => {
         let result = {};
-        var conn = new jsforce.Connection();
+        let conn = new jsforce.Connection();
         conn.login(args.secret.username, args.secret.password + args.secret.token, function (err, res) {
             if (err) {
                 if (args.stopOnError) {
@@ -56,8 +56,8 @@ module.exports.SOQLQuery = SOQLQuery;
 /**
  * Describes the function
  * @arg {SecretSelect} `secret` The configured secret to use
- * @arg {String} `option` The entity type to create
- * @arg {JSON} `info` The information as JSON
+ * @arg {CognigyScript} `entity` The entity type to create
+ * @arg {JSON} `record` The information as JSON
  * @arg {Boolean} `writeToContext` Whether to write to Cognigy Context (true) or Input (false)
  * @arg {CognigyScript} `store` Where to store the result
  * @arg {Boolean} `stopOnError` Whether to stop on error or continue
@@ -66,11 +66,11 @@ async function createEntity(input, args) {
     // Check if secret exists and contains correct parameters
     if (!args.secret || !args.secret.username || !args.secret.password || !args.secret.token)
         return Promise.reject("Secret not defined or invalid.");
-    if (!args.info)
-        return Promise.reject("No Info defined.");
+    if (!args.record)
+        return Promise.reject("No record defined.");
     return new Promise((resolve, reject) => {
         let result = {};
-        var conn = new jsforce.Connection();
+        let conn = new jsforce.Connection();
         conn.login(args.secret.username, args.secret.password + args.secret.token, function (err, res) {
             if (err) {
                 if (args.stopOnError) {
@@ -86,7 +86,7 @@ async function createEntity(input, args) {
             }
             else {
                 // Single record creation
-                conn.sobject(args.option).create(args.info, function (err, apiResult) {
+                conn.sobject(args.entity).create(args.record, function (err, apiResult) {
                     if (err) {
                         if (args.stopOnError) {
                             reject(err.message);
@@ -112,8 +112,8 @@ module.exports.createEntity = createEntity;
 /**
  * Describes the function
  * @arg {SecretSelect} `secret` The configured secret to use
- * @arg {String} `option` The entity type to retrieve
- * @arg {String} `entity_id` of the entitity to retrieve
+ * @arg {CognigyScript} `entity` The entity type to retrieve
+ * @arg {CognigyScript} `entityId` of the entitity to retrieve
  * @arg {Boolean} `writeToContext` Whether to write to Cognigy Context (true) or Input (false)
  * @arg {CognigyScript} `store` Where to store the result
  * @arg {Boolean} `stopOnError` Whether to stop on error or continue
@@ -122,11 +122,11 @@ async function retrieveEntity(input, args) {
     // Check if secret exists and contains correct parameters
     if (!args.secret || !args.secret.username || !args.secret.password || !args.secret.token)
         return Promise.reject("Secret not defined or invalid.");
-    if (!args.entity_id)
+    if (!args.entityId)
         return Promise.reject("No ID defined.");
     return new Promise((resolve, reject) => {
         let result = {};
-        var conn = new jsforce.Connection();
+        let conn = new jsforce.Connection();
         conn.login(args.secret.username, args.secret.password + args.secret.token, function (err, res) {
             if (err) {
                 if (args.stopOnError) {
@@ -141,7 +141,7 @@ async function retrieveEntity(input, args) {
                 resolve(input);
             }
             else {
-                conn.sobject(args.option).retrieve(args.entity_id, function (err, apiResult) {
+                conn.sobject(args.entity).retrieve(args.entityId, function (err, apiResult) {
                     if (err) {
                         if (args.stopOnError) {
                             reject(err.message);
@@ -167,8 +167,8 @@ module.exports.retrieveEntity = retrieveEntity;
 /**
  * Describes the function
  * @arg {SecretSelect} `secret` The configured secret to use
- * @arg {String} `option` The entity type to delete
- * @arg {String} `entity_id` of the entitity to delete
+ * @arg {CognigyScript} `entity` The entity type to delete
+ * @arg {CognigyScript} `entityId` of the entitity to delete
  * @arg {Boolean} `writeToContext` Whether to write to Cognigy Context (true) or Input (false)
  * @arg {CognigyScript} `store` Where to store the result
  * @arg {Boolean} `stopOnError` Whether to stop on error or continue
@@ -177,11 +177,11 @@ async function deleteEntity(input, args) {
     // Check if secret exists and contains correct parameters
     if (!args.secret || !args.secret.username || !args.secret.password || !args.secret.token)
         return Promise.reject("Secret not defined or invalid.");
-    if (!args.entity_id)
+    if (!args.entityId)
         return Promise.reject("No ID defined.");
     return new Promise((resolve, reject) => {
         let result = {};
-        var conn = new jsforce.Connection();
+        let conn = new jsforce.Connection();
         conn.login(args.secret.username, args.secret.password + args.secret.token, function (err, res) {
             if (err) {
                 if (args.stopOnError) {
@@ -196,7 +196,7 @@ async function deleteEntity(input, args) {
                 resolve(input);
             }
             else {
-                conn.sobject(args.option).destroy(args.entity_id, function (err, apiResult) {
+                conn.sobject(args.entity).destroy(args.entityId, function (err, apiResult) {
                     if (err) {
                         if (args.stopOnError) {
                             reject(err.message);
@@ -219,11 +219,10 @@ async function deleteEntity(input, args) {
 }
 // You have to export the function, otherwise it is not available
 module.exports.deleteEntity = deleteEntity;
-// TODO: Starts an endless loop.
 /**
  * Describes the function
  * @arg {SecretSelect} `secret` The configured secret to use
- * @arg {String} `option` The entity type to retrieve
+ * @arg {String} `entity` The entity type to retrieve
  * @arg {String} `entityId` of the entitity to retrieve
  * @arg {JSON} `valuesToChange` of the entitity to retrieve
  * @arg {Boolean} `writeToContext` Whether to write to Cognigy Context (true) or Input (false)
@@ -231,7 +230,6 @@ module.exports.deleteEntity = deleteEntity;
  * @arg {Boolean} `stopOnError` Whether to stop on error or continue
  */
 async function updateEntity(input, args) {
-    input.actions.output(JSON.stringify(args), undefined);
     // Check if secret exists and contains correct parameters
     if (!args.secret || !args.secret.username || !args.secret.password || !args.secret.token)
         return Promise.reject("Secret not defined or invalid.");
@@ -257,7 +255,7 @@ async function updateEntity(input, args) {
                 // let valuesToChangeParsed = JSON.parse(args.valuesToChange);
                 if (typeof args.valuesToChange === "object") {
                     const options = Object.assign({ Id: args.entityId }, args.valuesToChange);
-                    conn.sobject(args.option).update(options, function (err, apiResult) {
+                    conn.sobject(args.entity).update(options, function (err, apiResult) {
                         if (err) {
                             if (args.stopOnError) {
                                 reject(err.message);
