@@ -17,6 +17,8 @@ All modules in this repository are provided as TypeScript source code. In order 
 3. Zip the root of the module and the /build folder
 4. Upload the zipped module into your Cognigy.AI installation through the [Cognigy Integration Framework manager](https://docs.cognigy.com/docs/integration-framework#section-4-upload-your-module).
 
+>In shared Cognigy.AI environments only Cognigy-approved custom modules may be uploaded.
+
 ## Best Practices
 In order to guarantee a uniform user experiences, we have set up a number of best practices
 
