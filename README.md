@@ -10,7 +10,7 @@ This repository contains the source code of existing Custom Modules which can be
 All Cognigy Custom Modules are provided under the MIT license.
 
 ## Installation
-All modules in this repository are provided as TypeScript source code. In order to use them in your Cognigy.AI installation, you need to perform the following steps:
+All modules in this repository are provided as [TypeScript](https://www.typescriptlang.org/) source code which can be transpiled to JavaScript. In order to use them in your Cognigy.AI installation, you need to perform the following steps:
 
 1. Clone the repository
 2. Navigate to a module folder (e.g. modules/salesforce), run `npm install` to install dependencies and `tsc` to transpile the module from TypeScript to JavaScript
