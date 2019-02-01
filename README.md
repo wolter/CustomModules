@@ -9,6 +9,14 @@ This repository contains the existing Custom Modules which can be used as bluepr
 
 All Cognigy Custom Modules are provided under the MIT license.
 
+## Installation
+All modules in this repository are provided as TypeScript source code. In order to use them in your Cognigy.AI installation, you need to perform the following steps:
+
+1. Clone the repository
+2. Navigate to a module folder (e.g. modules/salesforce), run `npm install` to install dependencies and `tsc` to transpile the module from TypeScript to JavaScript
+3. Zip the root of the module and the /build folder
+4. Upload the zipped module into your Cognigy.AI installation through the [Cognigy Integration Framework manager](https://docs.cognigy.com/docs/integration-framework#section-4-upload-your-module).
+
 ## Best Practices
 In order to guarantee a uniform user experiences, we have set up a number of best practices
 
