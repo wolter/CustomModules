@@ -1,4 +1,4 @@
-# Cognigy Integration Framework
+# Cognigy Integration Framework Modules
 In Cognigy.AI, Conversational AIs are configured in so-called Flows, which contain the NLP/NLU configuration and then a decision tree to formulate the output to the user or trigger actions in third party systems. 
 
 The Cognigy Integration Framework enables anyone to build JavaScript modules and to expose these are Nodes within a Cognigy Flow. There are no restrictions on NPMs or functionality.
