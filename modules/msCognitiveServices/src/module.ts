@@ -304,3 +304,54 @@ async function namedEntityRecognition(input: IFlowInput, args: { secret: Cognigy
 
 // You have to export the function, otherwise it is not available
 module.exports.namedEntityRecognition = namedEntityRecognition;
+
+
+/**
+ * searches in the bing web search engine
+ * @arg {SecretSelect} `secret` The configured secret to use
+ * @arg {CognigyScript} `query` The text to check
+ * @arg {Boolean} `writeToContext` Whether to write to Cognigy Context (true) or Input (false)
+ * @arg {CognigyScript} `store` Where to store the result
+ * @arg {Boolean} `stopOnError` Whether to stop on error or continue
+ */
+async function bingWebSearch(input: IFlowInput, args: { secret: CognigySecret, query: string, writeToContext: boolean, store: string, stopOnError: boolean }): Promise<IFlowInput | {}>  {
+    // Check if secret exists and contains correct parameters
+    if (!args.secret || !args.secret.key) return Promise.reject("Secret not defined or invalid.");
+    if (!args.query) return Promise.reject("No query defined.");
+
+    return new Promise((resolve, reject) => {
+        let result = {};
+
+        let accessKey = args.secret.key;
+
+        https.get({
+            hostname: 'api.cognitive.microsoft.com',
+            path:     '/bing/v7.0/search?q=' + encodeURIComponent(args.query),
+            headers:  { 'Ocp-Apim-Subscription-Key': accessKey },
+        }, res => {
+            let body = '';
+            res.on('data', part => body += part);
+            res.on('end', () => {
+                for (var header in res.headers) {
+                    if (header.startsWith("bingapis-") || header.startsWith("x-msedge-")) {
+                        console.log(header + ": " + res.headers[header])
+                    }
+                }
+                result = JSON.parse(body);
+                if (args.writeToContext) input.context.getFullContext()[args.store] = result;
+                else input.input[args.store] = result;
+                resolve(input);
+            });
+            res.on('error', err => {
+                if (args.stopOnError) { reject(err.message); return; }
+                result = { "error": err.message };
+                if (args.writeToContext) input.context.getFullContext()[args.store] = result;
+                else input.input[args.store] = result;
+                resolve(input);
+            })
+        })
+    });
+}
+
+// You have to export the function, otherwise it is not available
+module.exports.bingWebSearch = bingWebSearch;
