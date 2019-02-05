@@ -287,7 +287,7 @@ async function namedEntityRecognition(input, args) {
 // You have to export the function, otherwise it is not available
 module.exports.namedEntityRecognition = namedEntityRecognition;
 /**
- * finds entities in a given sentence
+ * searches in the bing web search engine and returns the first 5 results
  * @arg {SecretSelect} `secret` The configured secret to use
  * @arg {CognigyScript} `query` The text to check
  * @arg {Boolean} `writeToContext` Whether to write to Cognigy Context (true) or Input (false)
@@ -311,14 +311,9 @@ async function bingWebSearch(input, args) {
             let body = '';
             res.on('data', part => body += part);
             res.on('end', () => {
-                for (var header in res.headers) {
-                    if (header.startsWith("bingapis-") || header.startsWith("x-msedge-")) {
-                        console.log(header + ": " + res.headers[header]);
-                    }
-                }
                 result = JSON.parse(body);
                 if (args.writeToContext)
-                    input.context.getFullContext()[args.store] = result;
+                    input.actions.addToContext(args.store, result, "simple"); //input.context.getFullContext()[args.store] = result;
                 else
                     input.input[args.store] = result;
                 resolve(input);

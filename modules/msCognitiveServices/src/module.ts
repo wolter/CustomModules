@@ -332,13 +332,9 @@ async function bingWebSearch(input: IFlowInput, args: { secret: CognigySecret, q
             let body = '';
             res.on('data', part => body += part);
             res.on('end', () => {
-                for (var header in res.headers) {
-                    if (header.startsWith("bingapis-") || header.startsWith("x-msedge-")) {
-                        console.log(header + ": " + res.headers[header])
-                    }
-                }
                 result = JSON.parse(body);
-                if (args.writeToContext) input.context.getFullContext()[args.store] = result;
+                // TODO: only print the 5 first results
+                if (args.writeToContext) input.actions.addToContext(args.store, result, "simple");
                 else input.input[args.store] = result;
                 resolve(input);
             });
