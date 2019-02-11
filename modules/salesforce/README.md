@@ -13,16 +13,16 @@ This modules needs a CognigySecret to be defined and passed to the Nodes. The se
 
   
 
-## Node: create_entity
+## Node: createEntity
 
 All **Salesforce API Fields** are listed in the following PDF File: 
 [Salesforce API Fields](https://resources.docs.salesforce.com/206/latest/en-us/sfdc/pdf/salesforce_field_names_reference.pdf)
 
 ### Option: Event
 
-Creates an **event** in the Salesforce calendar. The JSON in *Info JSON* shows an example.
+Creates an **event** in the Salesforce calendar. The JSON in *record JSON* shows an example.
 
-#### Info JSON
+#### Record JSON
 
 ```json
 {
@@ -37,9 +37,9 @@ Creates an **event** in the Salesforce calendar. The JSON in *Info JSON* shows a
 
 ### Option: Contact
 
-Creates a new **contact** in the **Contacts** Salesforce table. The JSON in *Info JSON* shows an example.
+Creates a new **contact** in the **Contacts** Salesforce table. The JSON in *Record JSON* shows an example.
 
-#### Info JSON
+#### Record JSON
 
 ```json 
 {
@@ -59,11 +59,11 @@ Creates a new **contact** in the **Contacts** Salesforce table. The JSON in *Inf
 }
 ```
 
-### Option: Account
+### Entity: Account
 
-Creates a new **account** in the **Accounts** Salesforce table. The JSON in *Info JSON* shows an example.
+Creates a new **account** in the **Accounts** Salesforce table. The JSON in *Record JSON* shows an example.
 
-#### Info JSON
+#### Record JSON
 
 ```json
 {
@@ -80,7 +80,7 @@ Creates a new **account** in the **Accounts** Salesforce table. The JSON in *Inf
 }
 ```
 
-## Node: retrieve
+## Node: retrieveEntity
 
 Retrieves the entity by searching for the given ID.
 
@@ -101,8 +101,37 @@ Retrieves the entity by searching for the given ID.
      "BillingCity": null,
      "BillingState": null,
      "BillingPostalCode": null,
-     "BillingCountry": null,
-     ...
+     "BillingCountry": null
 }
 
 ```
+
+## Node: deleteEntity
+
+Deletes an entity by ID. Specify the type of **entity**, such as **Contact**. The response looks like the following: 
+
+```json
+    "id": "0031t00000D508kAAB",
+    "success": true,
+    "errors": []
+```
+
+## Node: updateEntity
+
+Updates an entity by ID and JSON arguments. The following code shows an example for updating a **Contact**:
+
+```json
+{
+    "FirstName": "Peter", 
+    "LastName": "Parker"
+}
+```
+
+The response looks like the following: 
+
+```json
+    "id": "0031t00000D508kAAB",
+    "success": true,
+    "errors": []
+```
+

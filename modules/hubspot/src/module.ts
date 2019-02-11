@@ -10,47 +10,47 @@ const Hubspot = require('hubspot');
  * @arg {Boolean} `stopOnError` Whether to stop on error or continue
  */
 async function findContactByEmail(input: IFlowInput, args: { secret: CognigySecret, email: string, writeToContext: boolean, properties: string, store: string, stopOnError: boolean }): Promise<IFlowInput | {}> {
-    if (!args.secret || !args.secret.apiKey) return Promise.reject("Secret not defined or invalid.");
-    if (!args.email) return Promise.reject("No email defined.");
+	if (!args.secret || !args.secret.apiKey) return Promise.reject("Secret not defined or invalid.");
+	if (!args.email) return Promise.reject("No email defined.");
 
-    const hubspot = new Hubspot({ apiKey: args.secret.apiKey });
-    let result = {};
+	const hubspot = new Hubspot({ apiKey: args.secret.apiKey });
+	let result = {};
 
-    return new Promise((resolve, reject) => {
-        hubspot.contacts.getByEmail(args.email, (err, res) => {
-            if (err) {
-                // if an error was triggered, either reject or write error to store
-                if (args.stopOnError) { reject(err); return; }
-                else result = { "error": err.message };
-            } else {
-                const properties = (args.properties) ? args.properties.split(",") : [];
-                if (properties.indexOf("vid") === -1) properties.push("vid");
-                Object.keys(res).forEach((key) => {
-                    // if key isn't in the defined properties, delete it
-                    if (properties.indexOf(key) === -1) delete res[key];
-                    else if (key === "properties") {
-                        // if the key is properties, remove versions
-                        Object.keys(res[key]).forEach((propkey) => {
-                            delete res[key][propkey]["versions"];
-                        });
-                    }
-                });
-                result = res;
-            }
-            return Promise.resolve(result);
-        })
-        .catch((err) => {
-            if (args.stopOnError) { reject(err); return; }
-            else result = { "error": err.message };
-            return Promise.resolve(result);
-        })
-        .then((res) => {
-            if (!res) return;
-            if (args.writeToContext) input.context.getFullContext()[args.store] = result;
-            else input.input[args.store] = result;
-            resolve(input);
-        });
-    });
+	return new Promise((resolve, reject) => {
+		hubspot.contacts.getByEmail(args.email, (err, res) => {
+			if (err) {
+				// if an error was triggered, either reject or write error to store
+				if (args.stopOnError) { reject(err); return; }
+				else result = { "error": err.message };
+			} else {
+				const properties = (args.properties) ? args.properties.split(",") : [];
+				if (properties.indexOf("vid") === -1) properties.push("vid");
+				Object.keys(res).forEach((key) => {
+					// if key isn't in the defined properties, delete it
+					if (properties.indexOf(key) === -1) delete res[key];
+					else if (key === "properties") {
+						// if the key is properties, remove versions
+						Object.keys(res[key]).forEach((propkey) => {
+							delete res[key][propkey]["versions"];
+						});
+					}
+				});
+				result = res;
+			}
+			return Promise.resolve(result);
+		})
+			.catch((err) => {
+				if (args.stopOnError) { reject(err); return; }
+				else result = { "error": err.message };
+				return Promise.resolve(result);
+			})
+			.then((res) => {
+				if (!res) return;
+				if (args.writeToContext) input.context.getFullContext()[args.store] = result;
+				else input.input[args.store] = result;
+				resolve(input);
+			});
+	});
 }
 
 /**
@@ -63,35 +63,35 @@ async function findContactByEmail(input: IFlowInput, args: { secret: CognigySecr
  * @arg {Boolean} `stopOnError` Whether to stop on error or continue
  */
 async function updateContact(input: IFlowInput, args: { secret: CognigySecret, vid: number, data: any, writeToContext: boolean, store: string, stopOnError: boolean }): Promise<any> {
-    if (!args.secret || !args.secret.apiKey) return Promise.reject("Secret not defined or invalid.");
-    if (!args.vid) return Promise.reject("No vid defined.");
-    if (!args.data) return Promise.reject("No data defined.");
+	if (!args.secret || !args.secret.apiKey) return Promise.reject("Secret not defined or invalid.");
+	if (!args.vid) return Promise.reject("No vid defined.");
+	if (!args.data) return Promise.reject("No data defined.");
 
-    const hubspot = new Hubspot({ apiKey: args.secret.apiKey });
-    let result = {};
+	const hubspot = new Hubspot({ apiKey: args.secret.apiKey });
+	let result = {};
 
-    return new Promise((resolve, reject) => {
-        hubspot.contacts.update(args.vid, args.data, (err, res) => {        
-            if (err) {
-                // if an error was triggered, either reject or write error to store
-                if (args.stopOnError) { reject(err); return; }
-                else result = { "error": err.message };
-            } else result = res;
+	return new Promise((resolve, reject) => {
+		hubspot.contacts.update(args.vid, args.data, (err, res) => {
+			if (err) {
+				// if an error was triggered, either reject or write error to store
+				if (args.stopOnError) { reject(err); return; }
+				else result = { "error": err.message };
+			} else result = res;
 
-            return Promise.resolve(result);
-        })
-        .catch((err) => {
-            if (args.stopOnError) { reject(err); return; }
-            else result = { "error": err.message };
-            return Promise.resolve(result);
-        })
-        .then((res) => {
-            if (!res) return;
-            if (args.writeToContext) input.context.getFullContext()[args.store] = result;
-            else input.input[args.store] = result;
-            resolve(input);
-        });
-    });
+			return Promise.resolve(result);
+		})
+			.catch((err) => {
+				if (args.stopOnError) { reject(err); return; }
+				else result = { "error": err.message };
+				return Promise.resolve(result);
+			})
+			.then((res) => {
+				if (!res) return;
+				if (args.writeToContext) input.context.getFullContext()[args.store] = result;
+				else input.input[args.store] = result;
+				resolve(input);
+			});
+	});
 }
 
 /**
@@ -103,33 +103,33 @@ async function updateContact(input: IFlowInput, args: { secret: CognigySecret, v
  * @arg {Boolean} `stopOnError` Whether to stop on error or continue
  */
 async function createContact(input: IFlowInput, args: { secret: CognigySecret, data: any, writeToContext: boolean, store: string, stopOnError: boolean }): Promise<any> {
-    if (!args.secret || !args.secret.apiKey) return Promise.reject("Secret not defined or invalid.");
-    if (!args.data) return Promise.reject("No data defined.");
-    const hubspot = new Hubspot({ apiKey: args.secret.apiKey });
-    let result = {};
+	if (!args.secret || !args.secret.apiKey) return Promise.reject("Secret not defined or invalid.");
+	if (!args.data) return Promise.reject("No data defined.");
+	const hubspot = new Hubspot({ apiKey: args.secret.apiKey });
+	let result = {};
 
-    return new Promise((resolve, reject) => {
-        hubspot.contacts.create(args.data, (err, res) => {
-            if (err) {
-                // if an error was triggered, either reject or write error to store
-                if (args.stopOnError) { reject(err); return; }
-                else result = { "error": err.message };
-            } else result = res;
+	return new Promise((resolve, reject) => {
+		hubspot.contacts.create(args.data, (err, res) => {
+			if (err) {
+				// if an error was triggered, either reject or write error to store
+				if (args.stopOnError) { reject(err); return; }
+				else result = { "error": err.message };
+			} else result = res;
 
-            return Promise.resolve(result);
-        })
-        .catch((err) => {
-            if (args.stopOnError) { reject(err); return; }
-            else result = { "error": err.message };
-            return Promise.resolve(result);
-        })
-        .then((res) => {
-            if (!res) return;
-            if (args.writeToContext) input.context.getFullContext()[args.store] = result;
-            else input.input[args.store] = result;
-            resolve(input);
-        });
-    });
+			return Promise.resolve(result);
+		})
+			.catch((err) => {
+				if (args.stopOnError) { reject(err); return; }
+				else result = { "error": err.message };
+				return Promise.resolve(result);
+			})
+			.then((res) => {
+				if (!res) return;
+				if (args.writeToContext) input.context.getFullContext()[args.store] = result;
+				else input.input[args.store] = result;
+				resolve(input);
+			});
+	});
 }
 
 /**
@@ -142,51 +142,51 @@ async function createContact(input: IFlowInput, args: { secret: CognigySecret, d
  * @arg {Boolean} `stopOnError` Whether to stop on error or continue
  */
 async function searchContact(input: IFlowInput, args: { secret: CognigySecret, query: string, properties: string, writeToContext: boolean, store: string, stopOnError: boolean }): Promise<any> {
-    if (!args.secret || !args.secret.apiKey) return Promise.reject("Secret not defined or invalid.");
-    if (!args.query) return Promise.reject("No query defined.");
-    const hubspot = new Hubspot({ apiKey: args.secret.apiKey });
-    let result = {};
+	if (!args.secret || !args.secret.apiKey) return Promise.reject("Secret not defined or invalid.");
+	if (!args.query) return Promise.reject("No query defined.");
+	const hubspot = new Hubspot({ apiKey: args.secret.apiKey });
+	let result = {};
 
-    return new Promise((resolve, reject) => {
-        hubspot.contacts.search(args.query, (err, res) => {
-            if (err) {
-                // if an error was triggered, either reject or write error to store
-                if (args.stopOnError) { reject(err); return; }
-                else result = { "error": err.message };
-            } else {
-                const contacts = (res.contacts && Array.isArray(res.contacts) && res.contacts.length > 0) ? res.contacts : null;
-                const properties = (args.properties) ? args.properties.split(",") : [];
-                if (properties.indexOf("vid") === -1) properties.push("vid");
-                if (contacts) {
-                    contacts.forEach((res) => {
-                        Object.keys(res).forEach((key) => {
-                            // if key isn't in the defined properties, delete it
-                            if (properties.indexOf(key) === -1) delete res[key];
-                            else if (key === "properties") {
-                                // if the key is properties, remove versions
-                                Object.keys(res[key]).forEach((propkey) => {
-                                    delete res[key][propkey]["versions"];
-                                });
-                            }
-                        });
-                    })
-                }
-                result = res;
-            }
-            return Promise.resolve(result);
-        })
-        .catch((err) => {
-            if (args.stopOnError) { reject(err); return; }
-            else result = { "error": err.message };
-            return Promise.resolve(result);
-        })
-        .then((res) => {
-            if (!res) return;
-            if (args.writeToContext) input.context.getFullContext()[args.store] = result;
-            else input.input[args.store] = result;
-            resolve(input);
-        });
-    });
+	return new Promise((resolve, reject) => {
+		hubspot.contacts.search(args.query, (err, res) => {
+			if (err) {
+				// if an error was triggered, either reject or write error to store
+				if (args.stopOnError) { reject(err); return; }
+				else result = { "error": err.message };
+			} else {
+				const contacts = (res.contacts && Array.isArray(res.contacts) && res.contacts.length > 0) ? res.contacts : null;
+				const properties = (args.properties) ? args.properties.split(",") : [];
+				if (properties.indexOf("vid") === -1) properties.push("vid");
+				if (contacts) {
+					contacts.forEach((res) => {
+						Object.keys(res).forEach((key) => {
+							// if key isn't in the defined properties, delete it
+							if (properties.indexOf(key) === -1) delete res[key];
+							else if (key === "properties") {
+								// if the key is properties, remove versions
+								Object.keys(res[key]).forEach((propkey) => {
+									delete res[key][propkey]["versions"];
+								});
+							}
+						});
+					})
+				}
+				result = res;
+			}
+			return Promise.resolve(result);
+		})
+			.catch((err) => {
+				if (args.stopOnError) { reject(err); return; }
+				else result = { "error": err.message };
+				return Promise.resolve(result);
+			})
+			.then((res) => {
+				if (!res) return;
+				if (args.writeToContext) input.context.getFullContext()[args.store] = result;
+				else input.input[args.store] = result;
+				resolve(input);
+			});
+	});
 }
 
 /**
@@ -199,51 +199,51 @@ async function searchContact(input: IFlowInput, args: { secret: CognigySecret, q
  * @arg {Boolean} `stopOnError` Whether to stop on error or continue
  */
 async function findCompanyByDomain(input: IFlowInput, args: { secret: CognigySecret, domain: string, writeToContext: boolean, properties: string, store: string, stopOnError: boolean }): Promise<any> {
-    if (!args.secret || !args.secret.apiKey) return Promise.reject("Secret not defined or invalid.");
-    if (!args.domain) return Promise.reject("No domain defined.");
-    const hubspot = new Hubspot({ apiKey: args.secret.apiKey });
-    let result = {};
+	if (!args.secret || !args.secret.apiKey) return Promise.reject("Secret not defined or invalid.");
+	if (!args.domain) return Promise.reject("No domain defined.");
+	const hubspot = new Hubspot({ apiKey: args.secret.apiKey });
+	let result = {};
 
-    return new Promise((resolve, reject) => {
-        hubspot.companies.getByDomain(args.domain, (err, res) => {
-            if (err) {
-                // if an error was triggered, either reject or write error to store
-                if (args.stopOnError) { reject(err); return; }
-                else result = { "error": err.message };
-            } else {
-                const properties = (args.properties) ? args.properties.split(",") : [];
-                if (properties.indexOf("companyId") === -1) properties.push("companyId");
+	return new Promise((resolve, reject) => {
+		hubspot.companies.getByDomain(args.domain, (err, res) => {
+			if (err) {
+				// if an error was triggered, either reject or write error to store
+				if (args.stopOnError) { reject(err); return; }
+				else result = { "error": err.message };
+			} else {
+				const properties = (args.properties) ? args.properties.split(",") : [];
+				if (properties.indexOf("companyId") === -1) properties.push("companyId");
 
-                if (res && Array.isArray(res) && res.length > 0) {
-                    res.forEach((company) => {
-                        Object.keys(company).forEach((key) => {
-                            // if key isn't in the defined properties, delete it
-                            if (properties.indexOf(key) === -1) delete company[key];
-                            else if (key === "properties") {
-                                // if the key is properties, remove versions
-                                Object.keys(company[key]).forEach((propkey) => {
-                                    delete company[key][propkey]["versions"];
-                                });
-                            }
-                        });
-                    })
-                }
-                result = res;
-            }
-            return Promise.resolve(result);
-        })
-        .catch((err) => {
-            if (args.stopOnError) { reject(err); return; }
-            else result = { "error": err.message };
-            return Promise.resolve(result);
-        })
-        .then((res) => {
-            if (!res) return;
-            if (args.writeToContext) input.context.getFullContext()[args.store] = result;
-            else input.input[args.store] = result;
-            resolve(input);
-        });
-    });
+				if (res && Array.isArray(res) && res.length > 0) {
+					res.forEach((company) => {
+						Object.keys(company).forEach((key) => {
+							// if key isn't in the defined properties, delete it
+							if (properties.indexOf(key) === -1) delete company[key];
+							else if (key === "properties") {
+								// if the key is properties, remove versions
+								Object.keys(company[key]).forEach((propkey) => {
+									delete company[key][propkey]["versions"];
+								});
+							}
+						});
+					})
+				}
+				result = res;
+			}
+			return Promise.resolve(result);
+		})
+			.catch((err) => {
+				if (args.stopOnError) { reject(err); return; }
+				else result = { "error": err.message };
+				return Promise.resolve(result);
+			})
+			.then((res) => {
+				if (!res) return;
+				if (args.writeToContext) input.context.getFullContext()[args.store] = result;
+				else input.input[args.store] = result;
+				resolve(input);
+			});
+	});
 }
 
 /**
@@ -256,33 +256,33 @@ async function findCompanyByDomain(input: IFlowInput, args: { secret: CognigySec
  * @arg {Boolean} `stopOnError` Whether to stop on error or continue
  */
 async function createCompany(input: IFlowInput, args: { secret: CognigySecret, data: any, writeToContext: boolean, properties: string, store: string, stopOnError: boolean }): Promise<any> {
-    if (!args.secret || !args.secret.apiKey) return Promise.reject("Secret not defined or invalid.");
-    if (!args.data) return Promise.reject("No data defined.");
-    const hubspot = new Hubspot({ apiKey: args.secret.apiKey });
-    let result = {};
+	if (!args.secret || !args.secret.apiKey) return Promise.reject("Secret not defined or invalid.");
+	if (!args.data) return Promise.reject("No data defined.");
+	const hubspot = new Hubspot({ apiKey: args.secret.apiKey });
+	let result = {};
 
-    return new Promise((resolve, reject) => {
-        hubspot.companies.create(args.data, (err, res) => {
-            if (err) {
-                // if an error was triggered, either reject or write error to store
-                if (args.stopOnError) { reject(err); return; }
-                else result = { "error": err.message };
-            } else result = res;
+	return new Promise((resolve, reject) => {
+		hubspot.companies.create(args.data, (err, res) => {
+			if (err) {
+				// if an error was triggered, either reject or write error to store
+				if (args.stopOnError) { reject(err); return; }
+				else result = { "error": err.message };
+			} else result = res;
 
-            return Promise.resolve(result);
-        })
-        .catch((err) => {
-            if (args.stopOnError) { reject(err); return; }
-            else result = { "error": err.message };
-            return Promise.resolve(result);
-        })
-        .then((res) => {
-            if (!res) return;
-            if (args.writeToContext) input.context.getFullContext()[args.store] = result;
-            else input.input[args.store] = result;
-            resolve(input);
-        });
-    });
+			return Promise.resolve(result);
+		})
+			.catch((err) => {
+				if (args.stopOnError) { reject(err); return; }
+				else result = { "error": err.message };
+				return Promise.resolve(result);
+			})
+			.then((res) => {
+				if (!res) return;
+				if (args.writeToContext) input.context.getFullContext()[args.store] = result;
+				else input.input[args.store] = result;
+				resolve(input);
+			});
+	});
 }
 
 /**
@@ -296,34 +296,34 @@ async function createCompany(input: IFlowInput, args: { secret: CognigySecret, d
  * @arg {Boolean} `stopOnError` Whether to stop on error or continue
  */
 async function updateCompany(input: IFlowInput, args: { secret: CognigySecret, companyId: number, data: any, writeToContext: boolean, properties: string, store: string, stopOnError: boolean }): Promise<any> {
-    if (!args.secret || !args.secret.apiKey) return Promise.reject("Secret not defined or invalid.");
-    if (!args.companyId) return Promise.reject("No companyId defined.");
-    if (!args.data) return Promise.reject("No data defined.");
-    const hubspot = new Hubspot({ apiKey: args.secret.apiKey });
-    let result = {};
+	if (!args.secret || !args.secret.apiKey) return Promise.reject("Secret not defined or invalid.");
+	if (!args.companyId) return Promise.reject("No companyId defined.");
+	if (!args.data) return Promise.reject("No data defined.");
+	const hubspot = new Hubspot({ apiKey: args.secret.apiKey });
+	let result = {};
 
-    return new Promise((resolve, reject) => {
-        hubspot.companies.update(args.companyId, args.data, (err, res) => {
-            if (err) {
-                // if an error was triggered, either reject or write error to store
-                if (args.stopOnError) { reject(err); return; }
-                else result = { "error": err.message };
-            } else result = res;
+	return new Promise((resolve, reject) => {
+		hubspot.companies.update(args.companyId, args.data, (err, res) => {
+			if (err) {
+				// if an error was triggered, either reject or write error to store
+				if (args.stopOnError) { reject(err); return; }
+				else result = { "error": err.message };
+			} else result = res;
 
-            return Promise.resolve(result);
-        })
-        .catch((err) => {
-            if (args.stopOnError) { reject(err); return; }
-            else result = { "error": err.message };
-            return Promise.resolve(result);
-        })
-        .then((res) => {
-            if (!res) return;
-            if (args.writeToContext) input.context.getFullContext()[args.store] = result;
-            else input.input[args.store] = result;
-            resolve(input);
-        });
-    });
+			return Promise.resolve(result);
+		})
+			.catch((err) => {
+				if (args.stopOnError) { reject(err); return; }
+				else result = { "error": err.message };
+				return Promise.resolve(result);
+			})
+			.then((res) => {
+				if (!res) return;
+				if (args.writeToContext) input.context.getFullContext()[args.store] = result;
+				else input.input[args.store] = result;
+				resolve(input);
+			});
+	});
 }
 
 /**
@@ -335,33 +335,33 @@ async function updateCompany(input: IFlowInput, args: { secret: CognigySecret, c
  * @arg {Boolean} `stopOnError` Whether to stop on error or continue
  */
 async function createEngagement(input: IFlowInput, args: { secret: CognigySecret, data: any, writeToContext: boolean, store: string, stopOnError: boolean }): Promise<any> {
-    if (!args.secret || !args.secret.apiKey) return Promise.reject("Secret not defined or invalid.");
-    if (!args.data) return Promise.reject("No data defined.");
-    const hubspot = new Hubspot({ apiKey: args.secret.apiKey });
-    let result = {};
+	if (!args.secret || !args.secret.apiKey) return Promise.reject("Secret not defined or invalid.");
+	if (!args.data) return Promise.reject("No data defined.");
+	const hubspot = new Hubspot({ apiKey: args.secret.apiKey });
+	let result = {};
 
-    return new Promise((resolve, reject) => {
-        hubspot.engagements.create(args.data, (err, res) => {
-            if (err) {
-                // if an error was triggered, either reject or write error to store
-                if (args.stopOnError) { reject(err); return; }
-                else result = { "error": err.message };
-            } else result = res;
+	return new Promise((resolve, reject) => {
+		hubspot.engagements.create(args.data, (err, res) => {
+			if (err) {
+				// if an error was triggered, either reject or write error to store
+				if (args.stopOnError) { reject(err); return; }
+				else result = { "error": err.message };
+			} else result = res;
 
-            return Promise.resolve(result);
-        })
-        .catch((err) => {
-            if (args.stopOnError) { reject(err); return; }
-            else result = { "error": err.message };
-            return Promise.resolve(result);
-        })
-        .then((res) => {
-            if (!res) return;
-            if (args.writeToContext) input.context.getFullContext()[args.store] = result;
-            else input.input[args.store] = result;
-            resolve(input);
-        });
-    });
+			return Promise.resolve(result);
+		})
+			.catch((err) => {
+				if (args.stopOnError) { reject(err); return; }
+				else result = { "error": err.message };
+				return Promise.resolve(result);
+			})
+			.then((res) => {
+				if (!res) return;
+				if (args.writeToContext) input.context.getFullContext()[args.store] = result;
+				else input.input[args.store] = result;
+				resolve(input);
+			});
+	});
 }
 
 /**
@@ -372,32 +372,32 @@ async function createEngagement(input: IFlowInput, args: { secret: CognigySecret
  * @arg {Boolean} `stopOnError` Whether to stop on error or continue
  */
 async function getOwners(input: IFlowInput, args: { secret: CognigySecret, writeToContext: boolean, store: string, stopOnError: boolean }): Promise<any> {
-    if (!args.secret || !args.secret.apiKey) return Promise.reject("Secret not defined or invalid.");
-    const hubspot = new Hubspot({ apiKey: args.secret.apiKey });
-    let result = {};
+	if (!args.secret || !args.secret.apiKey) return Promise.reject("Secret not defined or invalid.");
+	const hubspot = new Hubspot({ apiKey: args.secret.apiKey });
+	let result = {};
 
-    return new Promise((resolve, reject) => {
-        hubspot.owners.get((err, res) => {
-            if (err) {
-                // if an error was triggered, either reject or write error to store
-                if (args.stopOnError) { reject(err); return; }
-                else result = { "error": err.message };
-            } else result = res;
+	return new Promise((resolve, reject) => {
+		hubspot.owners.get((err, res) => {
+			if (err) {
+				// if an error was triggered, either reject or write error to store
+				if (args.stopOnError) { reject(err); return; }
+				else result = { "error": err.message };
+			} else result = res;
 
-            return Promise.resolve(result);
-        })
-        .catch((err) => {
-            if (args.stopOnError) { reject(err); return; }
-            else result = { "error": err.message };
-            return Promise.resolve(result);
-        })
-        .then((res) => {
-            if (!res) return;
-            if (args.writeToContext) input.context.getFullContext()[args.store] = result;
-            else input.input[args.store] = result;
-            resolve(input);
-        });
-    });
+			return Promise.resolve(result);
+		})
+			.catch((err) => {
+				if (args.stopOnError) { reject(err); return; }
+				else result = { "error": err.message };
+				return Promise.resolve(result);
+			})
+			.then((res) => {
+				if (!res) return;
+				if (args.writeToContext) input.context.getFullContext()[args.store] = result;
+				else input.input[args.store] = result;
+				resolve(input);
+			});
+	});
 }
 
 module.exports.findContactByEmail = findContactByEmail;

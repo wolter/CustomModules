@@ -10,25 +10,26 @@ import * as crypto from 'crypto';
  * @arg {Boolean} `stopOnError` Whether to stop on error or continue
  */
 async function encrypt(input: IFlowInput, args: { algorithm: string, text: string, key: string, secret: string, writeToContext: boolean, store: string, stopOnError: boolean }): Promise<IFlowInput | {}> {
-  if (!args.text) return Promise.reject("No text defined.");
-  if (!args.key) return Promise.reject("No key defined.");
-  if (!args.algorithm) return Promise.reject("No algorithm defined.");
-  return new Promise((resolve, reject) => {
-    let result = {}
-    try {
-      const cipher = crypto.createCipher(args.algorithm,args.key)
-      let crypted = cipher.update(args.text,'utf8','hex')
-      crypted += cipher.final('hex');
-      result = { "result": crypted };
-    } catch (err) {
-      if (args.stopOnError) { reject(err); return; }
-      else result = { "error": err.message };
-    }
-    // if not rejected before, write the result buffer to the Context or Input object
-    if (args.writeToContext) input.context.getFullContext()[args.store] = result;
-    else input.input[args.store] = result;
-    resolve(input);
-  });
+	if (!args.text) return Promise.reject("No text defined.");
+	if (!args.key) return Promise.reject("No key defined.");
+	if (!args.algorithm) return Promise.reject("No algorithm defined.");
+
+	return new Promise((resolve, reject) => {
+		let result = {}
+		try {
+			const cipher = crypto.createCipher(args.algorithm, args.key)
+			let crypted = cipher.update(args.text, 'utf8', 'hex')
+			crypted += cipher.final('hex');
+			result = { "result": crypted };
+		} catch (err) {
+			if (args.stopOnError) { reject(err); return; }
+			else result = { "error": err.message };
+		}
+		// if not rejected before, write the result buffer to the Context or Input object
+		if (args.writeToContext) input.context.getFullContext()[args.store] = result;
+		else input.input[args.store] = result;
+		resolve(input);
+	});
 }
 
 /**
@@ -41,25 +42,26 @@ async function encrypt(input: IFlowInput, args: { algorithm: string, text: strin
  * @arg {Boolean} `stopOnError` Whether to stop on error or continue
  */
 async function decrypt(input: IFlowInput, args: { algorithm: string, text: string, key: string, secret: string, writeToContext: boolean, store: string, stopOnError: boolean }): Promise<IFlowInput | {}> {
-  if (!args.text) return Promise.reject("No text defined.");
-  if (!args.key) return Promise.reject("No key defined.");
-  if (!args.algorithm) return Promise.reject("No algorithm defined.");
-  return new Promise((resolve, reject) => {
-    let result = {}
-    try {
-      const decipher = crypto.createDecipher(args.algorithm, args.key)
-      let decrypted = decipher.update(args.text,'hex','utf8')
-      decrypted += decipher.final('utf8');
-      result = { "result": decrypted };
-    } catch (err) {
-      if (args.stopOnError) { reject(err); return; }
-      else result = { "error": err.message };
-    }
-    // if not rejected before, write the result buffer to the Context or Input object
-    if (args.writeToContext) input.context.getFullContext()[args.store] = result;
-    else input.input[args.store] = result;
-    resolve(input);
-  });
+	if (!args.text) return Promise.reject("No text defined.");
+	if (!args.key) return Promise.reject("No key defined.");
+	if (!args.algorithm) return Promise.reject("No algorithm defined.");
+
+	return new Promise((resolve, reject) => {
+		let result = {}
+		try {
+			const decipher = crypto.createDecipher(args.algorithm, args.key)
+			let decrypted = decipher.update(args.text, 'hex', 'utf8')
+			decrypted += decipher.final('utf8');
+			result = { "result": decrypted };
+		} catch (err) {
+			if (args.stopOnError) { reject(err); return; }
+			else result = { "error": err.message };
+		}
+		// if not rejected before, write the result buffer to the Context or Input object
+		if (args.writeToContext) input.context.getFullContext()[args.store] = result;
+		else input.input[args.store] = result;
+		resolve(input);
+	});
 }
 
 /**
@@ -71,22 +73,23 @@ async function decrypt(input: IFlowInput, args: { algorithm: string, text: strin
  * @arg {Boolean} `stopOnError` Whether to stop on error or continue
  */
 async function createHash(input: IFlowInput, args: { algorithm: string, text: string, secret: string, writeToContext: boolean, store: string, stopOnError: boolean }): Promise<IFlowInput | {}> {
-  if (!args.text) return Promise.reject("No text defined.");
-  if (!args.algorithm) return Promise.reject("No algorithm defined.");
-  return new Promise((resolve, reject) => {
-    let result = {}
-    try {
-      const hash = crypto.createHash(args.algorithm).update(args.text).digest('hex')
-      result = { "result": hash };
-    } catch (err) {
-      if (args.stopOnError) { reject(err); return; }
-      else result = { "error": err.message };
-    }
-    // if not rejected before, write the result buffer to the Context or Input object
-    if (args.writeToContext) input.context.getFullContext()[args.store] = result;
-    else input.input[args.store] = result;
-    resolve(input);
-  });
+	if (!args.text) return Promise.reject("No text defined.");
+	if (!args.algorithm) return Promise.reject("No algorithm defined.");
+
+	return new Promise((resolve, reject) => {
+		let result = {}
+		try {
+			const hash = crypto.createHash(args.algorithm).update(args.text).digest('hex')
+			result = { "result": hash };
+		} catch (err) {
+			if (args.stopOnError) { reject(err); return; }
+			else result = { "error": err.message };
+		}
+		// if not rejected before, write the result buffer to the Context or Input object
+		if (args.writeToContext) input.context.getFullContext()[args.store] = result;
+		else input.input[args.store] = result;
+		resolve(input);
+	});
 }
 
 // You have to export the function, otherwise it is not available

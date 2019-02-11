@@ -1,10 +1,15 @@
 {
 	"name": "Salesforce",
-	"version": "1.0.0",
+	"version": "1.1.0",
 	"description": "This module integrates Cognigy.AI with Salesforce",
-	"main": "module.js",
+	"main": "build/module.js",
 	"scripts": {
+		"test": "node test/test.js",
 		"build": "tsc -p ."
+	},
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/Cognigy/CustomModules"
 	},
 	"author": "Cognigy GmbH",
 	"license": "MIT",
