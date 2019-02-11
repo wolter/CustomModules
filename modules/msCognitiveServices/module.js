@@ -286,11 +286,11 @@ async function namedEntityRecognition(input, args) {
 }
 // You have to export the function, otherwise it is not available
 module.exports.namedEntityRecognition = namedEntityRecognition;
+//  * @arg {Boolean} `writeToContext` Whether to write to Cognigy Context (true) or Input (false)
 /**
- * searches in the bing web search engine and returns the first 5 results
+ * searches in the bing web search engine. The entire result is stored in the CognigyInput.
  * @arg {SecretSelect} `secret` The configured secret to use
  * @arg {CognigyScript} `query` The text to check
- * @arg {Boolean} `writeToContext` Whether to write to Cognigy Context (true) or Input (false)
  * @arg {CognigyScript} `store` Where to store the result
  * @arg {Boolean} `stopOnError` Whether to stop on error or continue
  */
@@ -312,10 +312,8 @@ async function bingWebSearch(input, args) {
             res.on('data', part => body += part);
             res.on('end', () => {
                 result = JSON.parse(body);
-                if (args.writeToContext)
-                    input.actions.addToContext(args.store, result, "simple"); //input.context.getFullContext()[args.store] = result;
-                else
-                    input.input[args.store] = result;
+                // if (args.writeToContext) input.actions.addToContext(args.store, result, "simple");
+                input.input[args.store] = result;
                 resolve(input);
             });
             res.on('error', err => {
@@ -324,10 +322,8 @@ async function bingWebSearch(input, args) {
                     return;
                 }
                 result = { "error": err.message };
-                if (args.writeToContext)
-                    input.context.getFullContext()[args.store] = result;
-                else
-                    input.input[args.store] = result;
+                //if (args.writeToContext) input.context.getFullContext()[args.store] = result;
+                input.input[args.store] = result;
                 resolve(input);
             });
         });

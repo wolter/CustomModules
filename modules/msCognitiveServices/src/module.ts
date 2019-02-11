@@ -306,15 +306,15 @@ async function namedEntityRecognition(input: IFlowInput, args: { secret: Cognigy
 module.exports.namedEntityRecognition = namedEntityRecognition;
 
 
+//  * @arg {Boolean} `writeToContext` Whether to write to Cognigy Context (true) or Input (false)
 /**
- * searches in the bing web search engine
+ * searches in the bing web search engine. The entire result is stored in the CognigyInput.
  * @arg {SecretSelect} `secret` The configured secret to use
  * @arg {CognigyScript} `query` The text to check
- * @arg {Boolean} `writeToContext` Whether to write to Cognigy Context (true) or Input (false)
  * @arg {CognigyScript} `store` Where to store the result
  * @arg {Boolean} `stopOnError` Whether to stop on error or continue
  */
-async function bingWebSearch(input: IFlowInput, args: { secret: CognigySecret, query: string, writeToContext: boolean, store: string, stopOnError: boolean }): Promise<IFlowInput | {}>  {
+async function bingWebSearch(input: IFlowInput, args: { secret: CognigySecret, query: string, /*writeToContext: boolean,*/ store: string, stopOnError: boolean }): Promise<IFlowInput | {}>  {
     // Check if secret exists and contains correct parameters
     if (!args.secret || !args.secret.key) return Promise.reject("Secret not defined or invalid.");
     if (!args.query) return Promise.reject("No query defined.");
@@ -333,16 +333,15 @@ async function bingWebSearch(input: IFlowInput, args: { secret: CognigySecret, q
             res.on('data', part => body += part);
             res.on('end', () => {
                 result = JSON.parse(body);
-                // TODO: only print the 5 first results
-                if (args.writeToContext) input.actions.addToContext(args.store, result, "simple");
-                else input.input[args.store] = result;
+                // if (args.writeToContext) input.actions.addToContext(args.store, result, "simple");
+                input.input[args.store] = result;
                 resolve(input);
             });
             res.on('error', err => {
                 if (args.stopOnError) { reject(err.message); return; }
                 result = { "error": err.message };
-                if (args.writeToContext) input.context.getFullContext()[args.store] = result;
-                else input.input[args.store] = result;
+                //if (args.writeToContext) input.context.getFullContext()[args.store] = result;
+                input.input[args.store] = result;
                 resolve(input);
             })
         })
