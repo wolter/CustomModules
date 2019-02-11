@@ -1,5 +1,5 @@
 {
-  "name": "Microsoft Cognitive Services",
+  "name": "Microsoft-Cognitive-Services",
   "version": "1.0.0",
   "description": "Microsoft Cognitive Services Custom Module (Language, Search API)",
   "main": "module.js",
