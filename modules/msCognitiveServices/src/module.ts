@@ -392,3 +392,52 @@ async function bingNewsSearch(input: IFlowInput, args: { secret: CognigySecret, 
 
 // You have to export the function, otherwise it is not available
 module.exports.bingNewsSearch = bingNewsSearch;
+
+
+/**
+ * searches in the bing web search engine. The entire result is stored in the CognigyInput.
+ * @arg {SecretSelect} `secret` The configured secret to use
+ * @arg {CognigyScript} `term` The text to search in the news
+ * @arg {CognigyScript} `store` Where to store the result
+ * @arg {Boolean} `stopOnError` Whether to stop on error or continue
+ */
+async function bingImageSearch(input: IFlowInput, args: { secret: CognigySecret, term: string, store: string, stopOnError: boolean }): Promise<IFlowInput | {}>  {
+    // Check if secret exists and contains correct parameters
+    if (!args.secret || !args.secret.key) return Promise.reject("Secret not defined or invalid.");
+    if (!args.term) return Promise.reject("No image term defined.");
+
+    return new Promise((resolve, reject) => {
+        let result = {};
+
+        let accessKey = args.secret.key;
+
+        let request_params = {
+            method : 'GET',
+            hostname : 'api.cognitive.microsoft.com',
+            path : '/bing/v7.0/images/search' + '?q=' + encodeURIComponent(args.term),
+            headers : {
+                'Ocp-Apim-Subscription-Key' : accessKey,
+            }
+        };
+
+        let response_handler = function (response) {
+            let body = '';
+
+            response.on('data', function (d) {
+                body += d;
+            });
+
+            response.on('end', function () {
+                result = JSON.parse(body);
+                input.input[args.store] = result;
+                resolve(input);
+            });
+        };
+
+        let req = https.request(request_params, response_handler);
+        req.end();
+    });
+}
+
+// You have to export the function, otherwise it is not available
+module.exports.bingImageSearch = bingImageSearch;
