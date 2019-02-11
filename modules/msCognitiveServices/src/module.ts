@@ -306,7 +306,6 @@ async function namedEntityRecognition(input: IFlowInput, args: { secret: Cognigy
 module.exports.namedEntityRecognition = namedEntityRecognition;
 
 
-//  * @arg {Boolean} `writeToContext` Whether to write to Cognigy Context (true) or Input (false)
 /**
  * searches in the bing web search engine. The entire result is stored in the CognigyInput.
  * @arg {SecretSelect} `secret` The configured secret to use
@@ -333,14 +332,12 @@ async function bingWebSearch(input: IFlowInput, args: { secret: CognigySecret, q
             res.on('data', part => body += part);
             res.on('end', () => {
                 result = JSON.parse(body);
-                // if (args.writeToContext) input.actions.addToContext(args.store, result, "simple");
                 input.input[args.store] = result;
                 resolve(input);
             });
             res.on('error', err => {
                 if (args.stopOnError) { reject(err.message); return; }
                 result = { "error": err.message };
-                //if (args.writeToContext) input.context.getFullContext()[args.store] = result;
                 input.input[args.store] = result;
                 resolve(input);
             })
@@ -353,7 +350,7 @@ module.exports.bingWebSearch = bingWebSearch;
 
 
 /**
- * searches in the bing web search engine. The entire result is stored in the CognigyInput.
+ * searches in the bing news search engine. The entire result is stored in the CognigyInput.
  * @arg {SecretSelect} `secret` The configured secret to use
  * @arg {CognigyScript} `term` The text to search in the news
  * @arg {CognigyScript} `store` Where to store the result
@@ -382,7 +379,6 @@ async function bingNewsSearch(input: IFlowInput, args: { secret: CognigySecret, 
 
             res.on('end', function () {
                 result = JSON.parse(body);
-                // if (args.writeToContext) input.actions.addToContext(args.store, result, "simple");
                 input.input[args.store] = result;
                 resolve(input);
             });
@@ -395,7 +391,7 @@ module.exports.bingNewsSearch = bingNewsSearch;
 
 
 /**
- * searches in the bing web search engine. The entire result is stored in the CognigyInput.
+ * searches in the bing image search engine. The entire result is stored in the CognigyInput.
  * @arg {SecretSelect} `secret` The configured secret to use
  * @arg {CognigyScript} `term` The text to search in the news
  * @arg {CognigyScript} `store` Where to store the result
