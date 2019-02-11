@@ -331,4 +331,40 @@ async function bingWebSearch(input, args) {
 }
 // You have to export the function, otherwise it is not available
 module.exports.bingWebSearch = bingWebSearch;
+/**
+ * searches in the bing web search engine. The entire result is stored in the CognigyInput.
+ * @arg {SecretSelect} `secret` The configured secret to use
+ * @arg {CognigyScript} `term` The text to search in the news
+ * @arg {CognigyScript} `store` Where to store the result
+ * @arg {Boolean} `stopOnError` Whether to stop on error or continue
+ */
+async function bingNewsSearch(input, args) {
+    // Check if secret exists and contains correct parameters
+    if (!args.secret || !args.secret.key)
+        return Promise.reject("Secret not defined or invalid.");
+    if (!args.term)
+        return Promise.reject("No news term defined.");
+    return new Promise((resolve, reject) => {
+        let result = {};
+        let accessKey = args.secret.key;
+        https.get({
+            hostname: 'api.cognitive.microsoft.com',
+            path: '/bing/v7.0/news/search?q=' + encodeURIComponent(args.term),
+            headers: { 'Ocp-Apim-Subscription-Key': accessKey },
+        }, res => {
+            let body = '';
+            res.on('data', function (d) {
+                body += d;
+            });
+            res.on('end', function () {
+                result = JSON.parse(body);
+                // if (args.writeToContext) input.actions.addToContext(args.store, result, "simple");
+                input.input[args.store] = result;
+                resolve(input);
+            });
+        });
+    });
+}
+// You have to export the function, otherwise it is not available
+module.exports.bingNewsSearch = bingNewsSearch;
 //# sourceMappingURL=module.js.map
