@@ -11,6 +11,11 @@ This modules needs a CognigySecret to be defined and passed to the Nodes. The se
 
 - token
 
+- **optional**: loginUrl
+
+
+If the loginUrl is stored in the secret, Salesforce login to this url, e.g. 'https://test.salesforce.com'
+
   
 
 ## Node: createEntity
