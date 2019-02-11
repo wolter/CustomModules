@@ -1,4 +1,7 @@
 let https = require ('https');
+const request = require('request');
+const uuidv4 = require('uuid/v4');
+
 
 /**
  * finds spelling mistakes and predicts the correct word
@@ -313,7 +316,7 @@ module.exports.namedEntityRecognition = namedEntityRecognition;
  * @arg {CognigyScript} `store` Where to store the result
  * @arg {Boolean} `stopOnError` Whether to stop on error or continue
  */
-async function bingWebSearch(input: IFlowInput, args: { secret: CognigySecret, query: string, /*writeToContext: boolean,*/ store: string, stopOnError: boolean }): Promise<IFlowInput | {}>  {
+async function bingWebSearch(input: IFlowInput, args: { secret: CognigySecret, query: string, store: string, stopOnError: boolean }): Promise<IFlowInput | {}>  {
     // Check if secret exists and contains correct parameters
     if (!args.secret || !args.secret.key) return Promise.reject("Secret not defined or invalid.");
     if (!args.query) return Promise.reject("No query defined.");
@@ -437,3 +440,54 @@ async function bingImageSearch(input: IFlowInput, args: { secret: CognigySecret,
 
 // You have to export the function, otherwise it is not available
 module.exports.bingImageSearch = bingImageSearch;
+
+
+/**
+ * translates a given text in a chosen language.
+ * @arg {SecretSelect} `secret` The configured secret to use
+ * @arg {Select[af,ar,bn,bs,bg,yue,ca,zh-Hans,zh-Hant,hr,cs,da,nl,en,et,fj,fil,fi,fr,de,el,ht,he,hi,mww,hu,is,id,it,ja,sw,tlh,tlh-Qaak,ko,lv,lt,mg,ms,mt,nb,fa,pl,pt,otq,ro,ru,sm,sr-Cyrl,sr-Latn,sk,sl,es,sv,ty,ta,te,th,to,tr,uk,ur,vi,cy,yau]} `language` to which language it should translate
+ * @arg {CognigyScript} `text` The text to check
+ * @arg {Boolean} `writeToContext` Whether to write to Cognigy Context (true) or Input (false)
+ * @arg {CognigyScript} `store` Where to store the result
+ * @arg {Boolean} `stopOnError` Whether to stop on error or continue
+ */
+async function textTranslator(input: IFlowInput, args: { secret: CognigySecret, language: string, text: string, writeToContext: boolean, store: string, stopOnError: boolean }): Promise<IFlowInput | {}>  {
+    // Check if secret exists and contains correct parameters
+    if (!args.secret || !args.secret.key) return Promise.reject("Secret not defined or invalid.");
+    if (!args.text) return Promise.reject("No text defined.");
+
+    return new Promise((resolve, reject) => {
+        let result = {};
+
+        let accessKey = args.secret.key;
+
+        let options = {
+            method: 'POST',
+            baseUrl: 'https://api.cognitive.microsofttranslator.com/',
+            url: 'translate',
+            qs: {
+                'api-version': '3.0',
+                'to': args.language
+            },
+            headers: {
+                'Ocp-Apim-Subscription-Key': accessKey,
+                'Content-type': 'application/json',
+                'X-ClientTraceId': uuidv4().toString()
+            },
+            body: [{
+                'text': args.text
+            }],
+            json: true,
+        };
+
+        request(options, function(err, res, body){
+            result = body;
+            if (args.writeToContext) input.context.getFullContext()[args.store] = result;
+            else input.input[args.store] = result;
+            resolve(input);
+        });
+    });
+}
+
+// You have to export the function, otherwise it is not available
+module.exports.textTranslator = textTranslator;
