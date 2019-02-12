@@ -11,6 +11,11 @@ This modules needs a CognigySecret to be defined and passed to the Nodes. The se
 
 - token
 
+- **optional**: loginUrl
+
+
+If the loginUrl is stored in the secret, Salesforce login to this url, e.g. 'https://test.salesforce.com'
+
   
 
 ## Node: createEntity
@@ -20,9 +25,9 @@ All **Salesforce API Fields** are listed in the following PDF File:
 
 ### Option: Event
 
-Creates an **event** in the Salesforce calendar. The JSON in *Info JSON* shows an example.
+Creates an **event** in the Salesforce calendar. The JSON in *record JSON* shows an example.
 
-#### Info JSON
+#### Record JSON
 
 ```json
 {
@@ -37,9 +42,9 @@ Creates an **event** in the Salesforce calendar. The JSON in *Info JSON* shows a
 
 ### Option: Contact
 
-Creates a new **contact** in the **Contacts** Salesforce table. The JSON in *Info JSON* shows an example.
+Creates a new **contact** in the **Contacts** Salesforce table. The JSON in *Record JSON* shows an example.
 
-#### Info JSON
+#### Record JSON
 
 ```json 
 {
@@ -59,11 +64,11 @@ Creates a new **contact** in the **Contacts** Salesforce table. The JSON in *Inf
 }
 ```
 
-### Option: Account
+### Entity: Account
 
-Creates a new **account** in the **Accounts** Salesforce table. The JSON in *Info JSON* shows an example.
+Creates a new **account** in the **Accounts** Salesforce table. The JSON in *Record JSON* shows an example.
 
-#### Info JSON
+#### Record JSON
 
 ```json
 {
@@ -108,7 +113,7 @@ Retrieves the entity by searching for the given ID.
 
 ## Node: deleteEntity
 
-Deletes an entity by ID. Specify the type of entity in the **options**, such as **Contact**. The response looks like the following: 
+Deletes an entity by ID. Specify the type of **entity**, such as **Contact**. The response looks like the following: 
 
 ```json
     "id": "0031t00000D508kAAB",
