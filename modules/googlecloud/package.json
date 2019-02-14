@@ -1,0 +1,22 @@
+{
+	"name": "Google-Cloud",
+	"version": "1.1.0",
+	"description": "This module integrates Cognigy.AI with the Google Cloud Plattform",
+	"main": "build/module.js",
+	"scripts": {
+		"build": "tsc -p ."
+	},
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/Cognigy/CustomModules"
+	},
+	"author": "Cognigy GmbH",
+	"license": "MIT",
+	"devDependencies": {
+		"@types/node": "^10.12.26",
+		"typescript": "^3.1.6"
+	},
+	"dependencies": {
+		"google-translate": "^2.2.0"
+	}
+}
