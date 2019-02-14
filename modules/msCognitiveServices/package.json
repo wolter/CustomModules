@@ -1,10 +1,14 @@
 {
-  "name": "Microsoft-Cognitive-Services",
+  "name": "Microsoft-CS",
   "version": "1.0.0",
   "description": "Microsoft Cognitive Services Custom Module (Language, Search API)",
-  "main": "module.js",
+  "main": "build/module.js",
   "scripts": {
     "build": "tsc -p ."
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Cognigy/CustomModules"
   },
   "keywords": [
     "Microsoft",
