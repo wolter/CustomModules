@@ -1,7 +1,7 @@
 {
-  "name": "Microsoft-CS",
+  "name": "Azure-CS",
   "version": "1.0.0",
-  "description": "Microsoft Cognitive Services Custom Module (Language, Search API)",
+  "description": "Microsoft Azure Cognitive Services Custom Module (Language, Search API)",
   "main": "build/module.js",
   "scripts": {
     "build": "tsc -p ."
@@ -17,8 +17,12 @@
   ],
   "author": "Cognigy GmbH",
   "license": "MIT",
+  "devDependencies": {
+    "@types/node": "^10.12.20"
+  },
   "dependencies": {
-    "@types/node": "^10.12.20",
-    "https": "^1.0.0"
+    "https": "^1.0.0",
+    "request": "^2.88.0",
+    "uuid": "^3.3.2"
   }
 }
