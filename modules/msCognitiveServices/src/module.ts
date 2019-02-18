@@ -2,9 +2,8 @@ let https = require ('https');
 const request = require('request');
 const uuidv4 = require('uuid/v4');
 
-
 /**
- * finds spelling mistakes and predicts the correct word
+ * Finds spelling mistakes and predicts the correct word
  * @arg {SecretSelect} `secret` The configured secret to use
  * @arg {CognigyScript} `text` The text to check
  * @arg {Select[ar,zh-CN,zh-HK,zh-TW,da,nl-BE,nl-NL,en-AU,en-CA,en-IN,en-ID,en-MY,en-NZ,en-PH,en-ZA,en-GB,en-US,fi,fr-BE,fr-CA,fr-FR,fr-CH,de-AT,de-DE,de-CH,it,ja,ko,no,pl,pt-BR,pt-PT,ru,es-AR,es-CL,es-MX,es-ES,es-US,sv,tr]} `language` The texts language
@@ -20,41 +19,34 @@ async function spellCheck(input: IFlowInput, args: { secret: CognigySecret, text
     return new Promise((resolve, reject) => {
         let result = {};
 
-        let host = 'api.cognitive.microsoft.com';
-        let path = '/bing/v7.0/spellcheck';
+        const host = 'api.cognitive.microsoft.com';
+        const path = '/bing/v7.0/spellcheck';
+        const query_string = "?mkt=" + args.language + "&mode=proof";
 
-        // NOTE: Replace this example skey with a valid subscription key (see the Prequisites section above). Also note v5 and v7 require separate subscription keys.
-        let key = args.secret.key;
-
-        let mkt = args.language;
-        let mode = "proof";
-        let text = args.text;
-        let query_string = "?mkt=" + mkt + "&mode=" + mode;
-
-        let request_params = {
+        const request_params = {
             method : 'POST',
             hostname : host,
             path : path + query_string,
             headers : {
                 'Content-Type' : 'application/x-www-form-urlencoded',
-                'Content-Length' : text.length + 5,
-                'Ocp-Apim-Subscription-Key' : key,
+                'Content-Length' : args.text.length + 5,
+                'Ocp-Apim-Subscription-Key' : args.secret.key,
             }
         };
 
-        let response_handler = function (response) {
+        const response_handler = (response) => {
             let body = '';
-            response.on ('data', function (d) {
+            response.on('data', (d) => {
                 body += d;
             });
-            response.on ('end', function () {
+            response.on('end', () => {
                 result = JSON.parse(body);
 
                 if (args.writeToContext) input.context.getFullContext()[args.store] = result;
                 else input.input[args.store] = result;
                 resolve(input);
             });
-            response.on ('error', function (err) {
+            response.on('error', (err) => {
                 if (args.stopOnError) { reject(err.message); return; }
                 result = { "error": err.message };
                 if (args.writeToContext) input.context.getFullContext()[args.store] = result;
@@ -63,17 +55,12 @@ async function spellCheck(input: IFlowInput, args: { secret: CognigySecret, text
             });
         };
 
-        let req = https.request (request_params, response_handler);
-        req.write ("text=" + text);
+        const req = https.request(request_params, response_handler);
+        req.write ("text=" + args.text);
         req.end ();
-
-
     });
 }
-
-// You have to export the function, otherwise it is not available
 module.exports.spellCheck = spellCheck;
-
 
 /**
  * recognize the language of the given sentence
