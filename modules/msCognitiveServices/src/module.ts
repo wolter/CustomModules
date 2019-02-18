@@ -3,7 +3,7 @@ const request = require('request');
 const uuidv4 = require('uuid/v4');
 
 /**
- * Finds spelling mistakes and predicts the correct word
+ * Finds spelling mistakes and predicts the correct word.
  * @arg {SecretSelect} `secret` The configured secret to use
  * @arg {CognigyScript} `text` The text to check
  * @arg {Select[ar,zh-CN,zh-HK,zh-TW,da,nl-BE,nl-NL,en-AU,en-CA,en-IN,en-ID,en-MY,en-NZ,en-PH,en-ZA,en-GB,en-US,fi,fr-BE,fr-CA,fr-FR,fr-CH,de-AT,de-DE,de-CH,it,ja,ko,no,pl,pt-BR,pt-PT,ru,es-AR,es-CL,es-MX,es-ES,es-US,sv,tr]} `language` The texts language
@@ -63,7 +63,7 @@ async function spellCheck(input: IFlowInput, args: { secret: CognigySecret, text
 module.exports.spellCheck = spellCheck;
 
 /**
- * recognize the language of the given sentence
+ * Recognize the language of the given sentence.
  * @arg {SecretSelect} `secret` The configured secret to use
  * @arg {CognigyScript} `text` The text to check
  * @arg {Boolean} `writeToContext` Whether to write to Cognigy Context (true) or Input (false)
@@ -139,7 +139,7 @@ module.exports.recognizeLanguage = recognizeLanguage;
 
 
 /**
- * extracts keyphrases from a given sentence
+ * Extracts keyphrases from a given sentence.
  * @arg {SecretSelect} `secret` The configured secret to use
  * @arg {Select[en,es,de]} `language` The texts language
  * @arg {CognigyScript} `text` The text to check
@@ -215,7 +215,7 @@ module.exports.extractKeyphrases = extractKeyphrases;
 
 
 /**
- * finds entities in a given sentence
+ * Finds entities in a given sentence.
  * @arg {SecretSelect} `secret` The configured secret to use
  * @arg {Select[en,es,de]} `language` The texts language
  * @arg {CognigyScript} `text` The text to check
@@ -291,7 +291,7 @@ module.exports.namedEntityRecognition = namedEntityRecognition;
 
 
 /**
- * searches in the bing web search engine. The entire result is stored in the CognigyInput.
+ * Searches in the bing web search engine. The entire result is stored in the CognigyInput.
  * @arg {SecretSelect} `secret` The configured secret to use
  * @arg {CognigyScript} `query` The text to check
  * @arg {CognigyScript} `store` Where to store the result
@@ -334,7 +334,7 @@ module.exports.bingWebSearch = bingWebSearch;
 
 
 /**
- * searches in the bing news search engine. The entire result is stored in the CognigyInput.
+ * Searches in the bing news search engine. The entire result is stored in the CognigyInput.
  * @arg {SecretSelect} `secret` The configured secret to use
  * @arg {CognigyScript} `term` The text to search in the news
  * @arg {CognigyScript} `store` Where to store the result
@@ -375,7 +375,7 @@ module.exports.bingNewsSearch = bingNewsSearch;
 
 
 /**
- * searches in the bing image search engine. The entire result is stored in the CognigyInput.
+ * Searches in the bing image search engine. The entire result is stored in the CognigyInput.
  * @arg {SecretSelect} `secret` The configured secret to use
  * @arg {CognigyScript} `term` The text to search in the news
  * @arg {CognigyScript} `store` Where to store the result
@@ -424,7 +424,7 @@ module.exports.bingImageSearch = bingImageSearch;
 
 
 /**
- * translates a given text in a chosen language.
+ * Translates a given text in a chosen language.
  * @arg {SecretSelect} `secret` The configured secret to use
  * @arg {Select[af,ar,bn,bs,bg,yue,ca,zh-Hans,zh-Hant,hr,cs,da,nl,en,et,fj,fil,fi,fr,de,el,ht,he,hi,mww,hu,is,id,it,ja,sw,tlh,tlh-Qaak,ko,lv,lt,mg,ms,mt,nb,fa,pl,pt,otq,ro,ru,sm,sr-Cyrl,sr-Latn,sk,sl,es,sv,ty,ta,te,th,to,tr,uk,ur,vi,cy,yau]} `language` to which language it should translate
  * @arg {CognigyScript} `text` The text to check
