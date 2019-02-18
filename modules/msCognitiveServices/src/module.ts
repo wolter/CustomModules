@@ -84,8 +84,8 @@ async function recognizeLanguage(input: IFlowInput, args: { secret: CognigySecre
         // For example, if you obtained your access keys from the westus region, replace
         // "westcentralus" in the URI below with "westus".
 
-        let uri = 'westus.api.cognitive.microsoft.com';
-        let path = '/text/analytics/v2.0/languages';
+        const uri = 'westus.api.cognitive.microsoft.com';
+        const path = '/text/analytics/v2.0/languages';
 
         let response_handler = function (response) {
             let body = '';
@@ -161,8 +161,8 @@ async function extractKeyphrases(input: IFlowInput, args: { secret: CognigySecre
         // For example, if you obtained your access keys from the westus region, replace
         // "westcentralus" in the URI below with "westus".
 
-        let uri = 'westus.api.cognitive.microsoft.com';
-        let path = '/text/analytics/v2.0/keyPhrases';
+        const uri = 'westus.api.cognitive.microsoft.com';
+        const path = '/text/analytics/v2.0/keyPhrases';
 
         let response_handler = function (response) {
             let body = '';
@@ -237,8 +237,8 @@ async function namedEntityRecognition(input: IFlowInput, args: { secret: Cognigy
         // For example, if you obtained your access keys from the westus region, replace
         // "westcentralus" in the URI below with "westus".
 
-        let uri = 'westus.api.cognitive.microsoft.com';
-        let path = '/text/analytics/v2.1-preview/entities';
+        const uri = 'westus.api.cognitive.microsoft.com';
+        const path = '/text/analytics/v2.1-preview/entities';
 
         let response_handler = function (response) {
             let body = '';
