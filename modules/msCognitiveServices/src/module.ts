@@ -56,8 +56,8 @@ async function spellCheck(input: IFlowInput, args: { secret: CognigySecret, text
         };
 
         const req = https.request(request_params, response_handler);
-        req.write ("text=" + args.text);
-        req.end ();
+        req.write("text=" + args.text);
+        req.end();
     });
 }
 module.exports.spellCheck = spellCheck;
@@ -89,17 +89,17 @@ async function recognizeLanguage(input: IFlowInput, args: { secret: CognigySecre
 
         const response_handler = (response) => {
             let body = '';
-            response.on ('data', (d) => {
+            response.on('data', (d) => {
                 body += d;
             });
-            response.on ('end', () => {
+            response.on('end', () => {
                 // let body__ = JSON.stringify (body_, null, '  ');
                 result = JSON.parse(body);
                 if (args.writeToContext) input.context.getFullContext()[args.store] = result;
                 else input.input[args.store] = result;
                 resolve(input);
             });
-            response.on ('error', (err) => {
+            response.on('error', (err) => {
                 if (args.stopOnError) { reject(err.message); return; }
                 result = { "error": err.message };
                 if (args.writeToContext) input.context.getFullContext()[args.store] = result;
@@ -109,7 +109,7 @@ async function recognizeLanguage(input: IFlowInput, args: { secret: CognigySecre
         };
 
         const get_language = (documents) => {
-            let body = JSON.stringify (documents);
+            let body = JSON.stringify(documents);
 
             let request_params = {
                 method : 'POST',
@@ -121,15 +121,15 @@ async function recognizeLanguage(input: IFlowInput, args: { secret: CognigySecre
             };
 
             const req = https.request (request_params, response_handler);
-            req.write (body);
-            req.end ();
+            req.write(body);
+            req.end();
         };
 
         let documents = { 'documents': [
                 { 'id': '1', 'text': args.text }
             ]};
 
-        get_language (documents);
+        get_language(documents);
 
     });
 }
@@ -166,16 +166,16 @@ async function extractKeyphrases(input: IFlowInput, args: { secret: CognigySecre
 
         const response_handler = (response) => {
             let body = '';
-            response.on ('data', (d) => {
+            response.on('data', (d) => {
                 body += d;
             });
-            response.on ('end', () => {
+            response.on('end', () => {
                 result = JSON.parse(body);
                 if (args.writeToContext) input.context.getFullContext()[args.store] = result;
                 else input.input[args.store] = result;
                 resolve(input);
             });
-            response.on ('error', (err) => {
+            response.on('error', (err) => {
                 if (args.stopOnError) { reject(err.message); return; }
                 result = { "error": err.message };
                 if (args.writeToContext) input.context.getFullContext()[args.store] = result;
@@ -185,7 +185,7 @@ async function extractKeyphrases(input: IFlowInput, args: { secret: CognigySecre
         };
 
         const get_key_phrases = (documents) => {
-            let body = JSON.stringify (documents);
+            let body = JSON.stringify(documents);
 
             let request_params = {
                 method : 'POST',
@@ -196,8 +196,8 @@ async function extractKeyphrases(input: IFlowInput, args: { secret: CognigySecre
                 }
             };
 
-            const req = https.request (request_params, response_handler);
-            req.write (body);
+            const req = https.request(request_params, response_handler);
+            req.write(body);
             req.end ();
         };
 
@@ -205,7 +205,7 @@ async function extractKeyphrases(input: IFlowInput, args: { secret: CognigySecre
                 { 'id': '1', 'language': args.language, 'text': args.text }
             ]};
 
-        get_key_phrases (documents);
+        get_key_phrases(documents);
 
     });
 }
@@ -242,16 +242,16 @@ async function namedEntityRecognition(input: IFlowInput, args: { secret: Cognigy
 
         const response_handler = (response) => {
             let body = '';
-            response.on ('data', (d) => {
+            response.on('data', (d) => {
                 body += d;
             });
-            response.on ('end', () => {
+            response.on('end', () => {
                 result = JSON.parse(body);
                 if (args.writeToContext) input.context.getFullContext()[args.store] = result;
                 else input.input[args.store] = result;
                 resolve(input);
             });
-            response.on ('error', (err) => {
+            response.on('error', (err) => {
                 if (args.stopOnError) { reject(err.message); return; }
                 result = { "error": err.message };
                 if (args.writeToContext) input.context.getFullContext()[args.store] = result;
@@ -261,7 +261,7 @@ async function namedEntityRecognition(input: IFlowInput, args: { secret: Cognigy
         };
 
         const get_entities = (documents) => {
-            let body = JSON.stringify (documents);
+            let body = JSON.stringify(documents);
 
             let request_params = {
                 method : 'POST',
@@ -272,16 +272,16 @@ async function namedEntityRecognition(input: IFlowInput, args: { secret: Cognigy
                 }
             };
 
-            const req = https.request (request_params, response_handler);
-            req.write (body);
-            req.end ();
+            const req = https.request(request_params, response_handler);
+            req.write(body);
+            req.end();
         };
 
         let documents = { 'documents': [
                 { 'id': '1', 'language': args.language, 'text': args.text }
             ]};
 
-        get_entities (documents);
+        get_entities(documents);
 
     });
 }
