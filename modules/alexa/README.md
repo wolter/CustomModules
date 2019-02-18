@@ -24,6 +24,8 @@ Supported parameters for the permissions list are for instance:
 - Given Name (First Name): `alexa::profile:given_name:read`
 - Email Address: `alexa::profile:email:read`
 - Phone Number: `alexa::profile:mobile_number:read`
+#### [Amazon Pay](https://developer.amazon.com/docs/amazon-pay/integrate-skill-with-amazon-pay-v2.html)
+- Payment: `payments:autopay_consent`
 
 ## Node: callAlexaAPI
 
@@ -51,7 +53,7 @@ Usage is explained in the  **Alexa Skills Kit** developer [documentation](https:
 
 ## Node: setAbsoluteReminder
 
-Set an absolute reminder and gets a confirmation in a format of
+Set an absolute reminder and get a confirmation in a format of
 
 ```json
 {
@@ -71,7 +73,7 @@ Usage is explained in the  **Alexa Skills Kit** developer [documentation](https:
 
 ## Node: setRelativeReminder
 
-Set a realtive reminder and gets a confirmation in a format of
+Set a realtive reminder and get a confirmation in a format of
 
 ```json
 {
