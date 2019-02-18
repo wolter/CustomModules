@@ -11,6 +11,7 @@ This model needs several CognigySecrets to be defined and passed to the Nodes:
 
 **Text Analytics API**
 - key
+- region (e.g. westus)
 	- Nodes
 		- Named Entity Recognition
 		- Extract Keyphrases
@@ -52,7 +53,6 @@ Finds spelling mistakes in the **text** input and predicts the correct word:
           }
         ]
       },
-   ...
     ]
   }
 ```
@@ -161,7 +161,7 @@ This node only needs a **query** and a location to store the response. Since the
           "language": "de",
           "isNavigational": false
         },
-		...
+
 ```
 
 ## Node: Bing News Search
@@ -210,7 +210,6 @@ Such as the other search node you only need a **term** in this case and it will 
         "datePublished": "2019-02-11T13:59:00.0000000Z",
         "category": "Entertainment"
       },
-		...
 ```
 
 ## Node: Bing Image Search
@@ -230,7 +229,6 @@ This node searches for pictures related to a given **term**, in this case „hol
       "alterationMethod": "AM_JustChangeIt",
       "alterationType": "CombinedAlterationsChained"
     },
-	 ...
 ```
 
 ## Node: Text Translator

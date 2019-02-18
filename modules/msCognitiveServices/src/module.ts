@@ -72,7 +72,7 @@ module.exports.spellCheck = spellCheck;
  */
 async function recognizeLanguage(input: IFlowInput, args: { secret: CognigySecret, text: string, writeToContext: boolean, store: string, stopOnError: boolean }): Promise<IFlowInput | {}>  {
     // Check if secret exists and contains correct parameters
-    if (!args.secret || !args.secret.key) return Promise.reject("Secret not defined or invalid.");
+    if (!args.secret || !args.secret.key || !args.secret.region) return Promise.reject("Secret not defined or invalid.");
     if (!args.text) return Promise.reject("No text defined.");
 
     return new Promise((resolve, reject) => {
@@ -84,7 +84,7 @@ async function recognizeLanguage(input: IFlowInput, args: { secret: CognigySecre
         // For example, if you obtained your access keys from the westus region, replace
         // "westcentralus" in the URI below with "westus".
 
-        const uri = 'westus.api.cognitive.microsoft.com';
+        const uri = args.secret.region + '.api.cognitive.microsoft.com';
         const path = '/text/analytics/v2.0/languages';
 
         const response_handler = (response) => {
@@ -149,7 +149,7 @@ module.exports.recognizeLanguage = recognizeLanguage;
  */
 async function extractKeyphrases(input: IFlowInput, args: { secret: CognigySecret, language: string, text: string, writeToContext: boolean, store: string, stopOnError: boolean }): Promise<IFlowInput | {}>  {
     // Check if secret exists and contains correct parameters
-    if (!args.secret || !args.secret.key) return Promise.reject("Secret not defined or invalid.");
+    if (!args.secret || !args.secret.key || !args.secret.region) return Promise.reject("Secret not defined or invalid.");
     if (!args.text) return Promise.reject("No text defined.");
 
     return new Promise((resolve, reject) => {
@@ -161,7 +161,7 @@ async function extractKeyphrases(input: IFlowInput, args: { secret: CognigySecre
         // For example, if you obtained your access keys from the westus region, replace
         // "westcentralus" in the URI below with "westus".
 
-        const uri = 'westus.api.cognitive.microsoft.com';
+        const uri = args.secret.region + '.api.cognitive.microsoft.com';
         const path = '/text/analytics/v2.0/keyPhrases';
 
         const response_handler = (response) => {
@@ -225,7 +225,7 @@ module.exports.extractKeyphrases = extractKeyphrases;
  */
 async function namedEntityRecognition(input: IFlowInput, args: { secret: CognigySecret, language: string, text: string, writeToContext: boolean, store: string, stopOnError: boolean }): Promise<IFlowInput | {}>  {
     // Check if secret exists and contains correct parameters
-    if (!args.secret || !args.secret.key) return Promise.reject("Secret not defined or invalid.");
+    if (!args.secret || !args.secret.key || !args.secret.region) return Promise.reject("Secret not defined or invalid.");
     if (!args.text) return Promise.reject("No text defined.");
 
     return new Promise((resolve, reject) => {
@@ -237,7 +237,7 @@ async function namedEntityRecognition(input: IFlowInput, args: { secret: Cognigy
         // For example, if you obtained your access keys from the westus region, replace
         // "westcentralus" in the URI below with "westus".
 
-        const uri = 'westus.api.cognitive.microsoft.com';
+        const uri = args.secret.region + '.api.cognitive.microsoft.com';
         const path = '/text/analytics/v2.1-preview/entities';
 
         const response_handler = (response) => {
