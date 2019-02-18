@@ -87,7 +87,7 @@ async function recognizeLanguage(input: IFlowInput, args: { secret: CognigySecre
         const uri = 'westus.api.cognitive.microsoft.com';
         const path = '/text/analytics/v2.0/languages';
 
-        let response_handler = function (response) {
+        const response_handler = function (response) {
             let body = '';
             response.on ('data', function (d) {
                 body += d;
@@ -108,7 +108,7 @@ async function recognizeLanguage(input: IFlowInput, args: { secret: CognigySecre
             });
         };
 
-        let get_language = function (documents) {
+        const get_language = function (documents) {
             let body = JSON.stringify (documents);
 
             let request_params = {
@@ -120,7 +120,7 @@ async function recognizeLanguage(input: IFlowInput, args: { secret: CognigySecre
                 }
             };
 
-            let req = https.request (request_params, response_handler);
+            const req = https.request (request_params, response_handler);
             req.write (body);
             req.end ();
         };
@@ -164,7 +164,7 @@ async function extractKeyphrases(input: IFlowInput, args: { secret: CognigySecre
         const uri = 'westus.api.cognitive.microsoft.com';
         const path = '/text/analytics/v2.0/keyPhrases';
 
-        let response_handler = function (response) {
+        const response_handler = function (response) {
             let body = '';
             response.on ('data', function (d) {
                 body += d;
@@ -184,7 +184,7 @@ async function extractKeyphrases(input: IFlowInput, args: { secret: CognigySecre
             });
         };
 
-        let get_key_phrases = function (documents) {
+        const get_key_phrases = function (documents) {
             let body = JSON.stringify (documents);
 
             let request_params = {
@@ -196,7 +196,7 @@ async function extractKeyphrases(input: IFlowInput, args: { secret: CognigySecre
                 }
             };
 
-            let req = https.request (request_params, response_handler);
+            const req = https.request (request_params, response_handler);
             req.write (body);
             req.end ();
         };
@@ -240,7 +240,7 @@ async function namedEntityRecognition(input: IFlowInput, args: { secret: Cognigy
         const uri = 'westus.api.cognitive.microsoft.com';
         const path = '/text/analytics/v2.1-preview/entities';
 
-        let response_handler = function (response) {
+        const response_handler = function (response) {
             let body = '';
             response.on ('data', function (d) {
                 body += d;
@@ -260,7 +260,7 @@ async function namedEntityRecognition(input: IFlowInput, args: { secret: Cognigy
             });
         };
 
-        let get_entities = function (documents) {
+        const get_entities = function (documents) {
             let body = JSON.stringify (documents);
 
             let request_params = {
@@ -272,7 +272,7 @@ async function namedEntityRecognition(input: IFlowInput, args: { secret: Cognigy
                 }
             };
 
-            let req = https.request (request_params, response_handler);
+            const req = https.request (request_params, response_handler);
             req.write (body);
             req.end ();
         };
@@ -391,7 +391,7 @@ async function bingImageSearch(input: IFlowInput, args: { secret: CognigySecret,
 
         let accessKey = args.secret.key;
 
-        let request_params = {
+        const request_params = {
             method : 'GET',
             hostname : 'api.cognitive.microsoft.com',
             path : '/bing/v7.0/images/search' + '?q=' + encodeURIComponent(args.term),
@@ -400,7 +400,7 @@ async function bingImageSearch(input: IFlowInput, args: { secret: CognigySecret,
             }
         };
 
-        let response_handler = function (response) {
+        const response_handler = function (response) {
             let body = '';
 
             response.on('data', function (d) {
@@ -414,7 +414,7 @@ async function bingImageSearch(input: IFlowInput, args: { secret: CognigySecret,
             });
         };
 
-        let req = https.request(request_params, response_handler);
+        const req = https.request(request_params, response_handler);
         req.end();
     });
 }
@@ -442,7 +442,7 @@ async function textTranslator(input: IFlowInput, args: { secret: CognigySecret, 
 
         let accessKey = args.secret.key;
 
-        let options = {
+        const options = {
             method: 'POST',
             baseUrl: 'https://api.cognitive.microsofttranslator.com/',
             url: 'translate',
