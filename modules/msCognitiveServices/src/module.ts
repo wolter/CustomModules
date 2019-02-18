@@ -84,8 +84,6 @@ async function recognizeLanguage(input: IFlowInput, args: { secret: CognigySecre
         // For example, if you obtained your access keys from the westus region, replace
         // "westcentralus" in the URI below with "westus".
 
-        // NOTE: Free trial access keys are generated in the westcentralus region, so if you are using
-        // a free trial access key, you should not need to change this region.
         let uri = 'westus.api.cognitive.microsoft.com';
         let path = '/text/analytics/v2.0/languages';
 
@@ -163,8 +161,6 @@ async function extractKeyphrases(input: IFlowInput, args: { secret: CognigySecre
         // For example, if you obtained your access keys from the westus region, replace
         // "westcentralus" in the URI below with "westus".
 
-        // NOTE: Free trial access keys are generated in the westcentralus region, so if you are using
-        // a free trial access key, you should not need to change this region.
         let uri = 'westus.api.cognitive.microsoft.com';
         let path = '/text/analytics/v2.0/keyPhrases';
 
@@ -241,8 +237,6 @@ async function namedEntityRecognition(input: IFlowInput, args: { secret: Cognigy
         // For example, if you obtained your access keys from the westus region, replace
         // "westcentralus" in the URI below with "westus".
 
-        // NOTE: Free trial access keys are generated in the westcentralus region, so if you are using
-        // a free trial access key, you should not need to change this region.
         let uri = 'westus.api.cognitive.microsoft.com';
         let path = '/text/analytics/v2.1-preview/entities';
 
