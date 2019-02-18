@@ -87,19 +87,19 @@ async function recognizeLanguage(input: IFlowInput, args: { secret: CognigySecre
         const uri = 'westus.api.cognitive.microsoft.com';
         const path = '/text/analytics/v2.0/languages';
 
-        const response_handler = function (response) {
+        const response_handler = (response) => {
             let body = '';
-            response.on ('data', function (d) {
+            response.on ('data', (d) => {
                 body += d;
             });
-            response.on ('end', function () {
+            response.on ('end', () => {
                 // let body__ = JSON.stringify (body_, null, '  ');
                 result = JSON.parse(body);
                 if (args.writeToContext) input.context.getFullContext()[args.store] = result;
                 else input.input[args.store] = result;
                 resolve(input);
             });
-            response.on ('error', function (err) {
+            response.on ('error', (err) => {
                 if (args.stopOnError) { reject(err.message); return; }
                 result = { "error": err.message };
                 if (args.writeToContext) input.context.getFullContext()[args.store] = result;
@@ -108,7 +108,7 @@ async function recognizeLanguage(input: IFlowInput, args: { secret: CognigySecre
             });
         };
 
-        const get_language = function (documents) {
+        const get_language = (documents) => {
             let body = JSON.stringify (documents);
 
             let request_params = {
@@ -164,18 +164,18 @@ async function extractKeyphrases(input: IFlowInput, args: { secret: CognigySecre
         const uri = 'westus.api.cognitive.microsoft.com';
         const path = '/text/analytics/v2.0/keyPhrases';
 
-        const response_handler = function (response) {
+        const response_handler = (response) => {
             let body = '';
-            response.on ('data', function (d) {
+            response.on ('data', (d) => {
                 body += d;
             });
-            response.on ('end', function () {
+            response.on ('end', () => {
                 result = JSON.parse(body);
                 if (args.writeToContext) input.context.getFullContext()[args.store] = result;
                 else input.input[args.store] = result;
                 resolve(input);
             });
-            response.on ('error', function (err) {
+            response.on ('error', (err) => {
                 if (args.stopOnError) { reject(err.message); return; }
                 result = { "error": err.message };
                 if (args.writeToContext) input.context.getFullContext()[args.store] = result;
@@ -184,7 +184,7 @@ async function extractKeyphrases(input: IFlowInput, args: { secret: CognigySecre
             });
         };
 
-        const get_key_phrases = function (documents) {
+        const get_key_phrases = (documents) => {
             let body = JSON.stringify (documents);
 
             let request_params = {
@@ -240,18 +240,18 @@ async function namedEntityRecognition(input: IFlowInput, args: { secret: Cognigy
         const uri = 'westus.api.cognitive.microsoft.com';
         const path = '/text/analytics/v2.1-preview/entities';
 
-        const response_handler = function (response) {
+        const response_handler = (response) => {
             let body = '';
-            response.on ('data', function (d) {
+            response.on ('data', (d) => {
                 body += d;
             });
-            response.on ('end', function () {
+            response.on ('end', () => {
                 result = JSON.parse(body);
                 if (args.writeToContext) input.context.getFullContext()[args.store] = result;
                 else input.input[args.store] = result;
                 resolve(input);
             });
-            response.on ('error', function (err) {
+            response.on ('error', (err) => {
                 if (args.stopOnError) { reject(err.message); return; }
                 result = { "error": err.message };
                 if (args.writeToContext) input.context.getFullContext()[args.store] = result;
@@ -260,7 +260,7 @@ async function namedEntityRecognition(input: IFlowInput, args: { secret: Cognigy
             });
         };
 
-        const get_entities = function (documents) {
+        const get_entities = (documents) => {
             let body = JSON.stringify (documents);
 
             let request_params = {
@@ -357,11 +357,11 @@ async function bingNewsSearch(input: IFlowInput, args: { secret: CognigySecret, 
         }, res => {
             let body = '';
 
-            res.on('data', function (d) {
+            res.on('data',(d) => {
                 body += d;
             });
 
-            res.on('end', function () {
+            res.on('end',  () => {
                 result = JSON.parse(body);
                 input.input[args.store] = result;
                 resolve(input);
@@ -400,14 +400,14 @@ async function bingImageSearch(input: IFlowInput, args: { secret: CognigySecret,
             }
         };
 
-        const response_handler = function (response) {
+        const response_handler = (response) => {
             let body = '';
 
-            response.on('data', function (d) {
+            response.on('data', (d) => {
                 body += d;
             });
 
-            response.on('end', function () {
+            response.on('end', () => {
                 result = JSON.parse(body);
                 input.input[args.store] = result;
                 resolve(input);
@@ -461,7 +461,7 @@ async function textTranslator(input: IFlowInput, args: { secret: CognigySecret, 
             json: true,
         };
 
-        request(options, function(err, res, body){
+        request(options, (err, res, body) => {
             result = body;
             if (args.writeToContext) input.context.getFullContext()[args.store] = result;
             else input.input[args.store] = result;
