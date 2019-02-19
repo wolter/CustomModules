@@ -12,6 +12,7 @@ This model needs several CognigySecrets to be defined and passed to the Nodes:
 **Text Analytics API**
 - key
 - region (e.g. westus)
+    - You must use the same region in your REST API call as you used to obtain your access keys.
 	- Nodes
 		- Named Entity Recognition
 		- Extract Keyphrases
