@@ -14,7 +14,7 @@
 	"author": "Cognigy GmbH",
 	"license": "MIT",
 	"devDependencies": {
-		"@types/node": "^10.12.5",
+		"@types/node": "^10.12.26",
 		"typescript": "^3.1.6"
 	},
 	"dependencies": {
