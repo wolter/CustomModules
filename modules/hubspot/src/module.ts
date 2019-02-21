@@ -18,6 +18,7 @@ async function findContactByEmail(input: IFlowInput, args: { secret: CognigySecr
 
 	return new Promise((resolve, reject) => {
 		hubspot.contacts.getByEmail(args.email, (err, res) => {
+
 			if (err) {
 				// if an error was triggered, either reject or write error to store
 				if (args.stopOnError) { reject(err); return; }
@@ -25,9 +26,13 @@ async function findContactByEmail(input: IFlowInput, args: { secret: CognigySecr
 			} else {
 				const properties = (args.properties) ? args.properties.split(",") : [];
 				if (properties.indexOf("vid") === -1) properties.push("vid");
-				Object.keys(res).forEach((key) => {
+
+				Object.keys(res["properties"]).forEach((key) => {
+
 					// if key isn't in the defined properties, delete it
-					if (properties.indexOf(key) === -1) delete res[key];
+					if (properties.indexOf(key) === -1) {
+						delete res["properties"][key]
+					}
 					else if (key === "properties") {
 						// if the key is properties, remove versions
 						Object.keys(res[key]).forEach((propkey) => {
@@ -37,6 +42,7 @@ async function findContactByEmail(input: IFlowInput, args: { secret: CognigySecr
 				});
 				result = res;
 			}
+
 			return Promise.resolve(result);
 		})
 			.catch((err) => {
@@ -159,9 +165,9 @@ async function searchContact(input: IFlowInput, args: { secret: CognigySecret, q
 				if (properties.indexOf("vid") === -1) properties.push("vid");
 				if (contacts) {
 					contacts.forEach((res) => {
-						Object.keys(res).forEach((key) => {
+						Object.keys(res["properties"]).forEach((key) => {
 							// if key isn't in the defined properties, delete it
-							if (properties.indexOf(key) === -1) delete res[key];
+							if (properties.indexOf(key) === -1) delete res["properties"][key];
 							else if (key === "properties") {
 								// if the key is properties, remove versions
 								Object.keys(res[key]).forEach((propkey) => {
@@ -216,9 +222,9 @@ async function findCompanyByDomain(input: IFlowInput, args: { secret: CognigySec
 
 				if (res && Array.isArray(res) && res.length > 0) {
 					res.forEach((company) => {
-						Object.keys(company).forEach((key) => {
+						Object.keys(company["properties"]).forEach((key) => {
 							// if key isn't in the defined properties, delete it
-							if (properties.indexOf(key) === -1) delete company[key];
+							if (properties.indexOf(key) === -1) delete company["properties"][key];
 							else if (key === "properties") {
 								// if the key is properties, remove versions
 								Object.keys(company[key]).forEach((propkey) => {
