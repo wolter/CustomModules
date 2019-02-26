@@ -18,6 +18,33 @@ If the loginUrl is stored in the secret, Salesforce login to this url, e.g. 'htt
 
   
 
+# Node: soqlQuery 
+
+Takes a **soql query string** and searches for the results in **Salesforce**. An example query would be the following: 
+
+```sql
+SELECT Firstname FROM CONTACT
+```
+
+The output will be a JSON that includes all firstnames from your Salesforce contacts: 
+
+```json
+"sql": {
+    "totalSize": 33,
+    "done": true,
+    "records": [
+      {
+        "attributes": {
+          "type": "Contact",
+          "url": "/services/data/v42.0/sobjects/Contact/..."
+        },
+        "FirstName": "Max"
+      },
+     
+```
+
+
+
 ## Node: createEntity
 
 All **Salesforce API Fields** are listed in the following PDF File: 
