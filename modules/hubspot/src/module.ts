@@ -14,6 +14,7 @@ async function findContactByEmail(input: IFlowInput, args: { secret: CognigySecr
 	if (!args.email) return Promise.reject("No email defined.");
 
 	const hubspot = new Hubspot({ apiKey: args.secret.apiKey });
+	if (hubspot.qs && typeof hubspot.qs === 'object') hubspot.qs["propertyMode"] = 'value_only';
 	let result = {};
 
 	return new Promise((resolve, reject) => {
@@ -74,6 +75,7 @@ async function updateContact(input: IFlowInput, args: { secret: CognigySecret, v
 	if (!args.data) return Promise.reject("No data defined.");
 
 	const hubspot = new Hubspot({ apiKey: args.secret.apiKey });
+	if (hubspot.qs && typeof hubspot.qs === 'object') hubspot.qs["propertyMode"] = 'value_only';
 	let result = {};
 
 	return new Promise((resolve, reject) => {
