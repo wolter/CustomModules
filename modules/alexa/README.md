@@ -1,5 +1,9 @@
 Adds [Amazon Alexe](https://developer.amazon.com/docs/ask-overviews/build-skills-with-the-alexa-skills-kit.html) specific features to Cognigy.AI
 
+Please note, you still need to set add needed interfaces and  permissions for a Alexa Skill in the Alexa Skills Kit Developer Console and to make sure the user gave his consent using the Permissions-Node.
+
+Using Alexa one can't debug the conversation's context in Cognigy directly. Therefore, for testing purpose we recommend to either log debug information manually (`actions.log("debug", info);`) or to send those info back to Alexa via temporary Say-Nodes.
+
 ## Node: respondWithPermissionCard
 
 Create an **ask for permission consent** card.
@@ -29,7 +33,7 @@ Supported parameters for the permissions list are for instance:
 
 ## Node: callAlexaAPI
 
-Call Alexa API in a generic manner. Mainly for testing purpose.
+Call Alexa API in a generic manner and implicitly handle the authentication (using the Alexa consent token `input.data.context.System.user.permissions.consentToken`). Mainly for testing purpose.
 
 ## Node: getDeviceAddress
 
@@ -49,6 +53,10 @@ Get current's device address depending on the settings in a format of
 
 ```
 
+The result will be stored in either the Cognigy context (`cc`) or input object (`ci`). 
+
+Handles implicitly the authentication (using the Alexa consent token `input.data.context.System.user.permissions.consentToken`).
+
 Usage is explained in the  **Alexa Skills Kit** developer [documentation](https://developer.amazon.com/docs/custom-skills/device-address-api.html).
 
 ## Node: setAbsoluteReminder
@@ -66,7 +74,11 @@ Set an absolute reminder and get a confirmation in a format of
 }
 ```
 
+The result will be stored in either the Cognigy context (`cc`) or input object (`ci`).
+
 Setting the timezone can be done with [moment.js](https://momentjs.com/), which is available in CognigyScript like `scheduled_reminder = moment('2019-02-18T20:00:00').format('YYYY-MM-DD[T]HH:mm:ss');`. Furthermore, you find the supported timezones at https://en.wikipedia.org/wiki/List_of_tz_database_time_zones. It's also good to know you can set a onetime reminder with ONCE (or "none"), a daily one with DAILY, or a WEEKLY reminder. Setting a weekly reminder also requires to activate at least one weekday.
+
+Handles implicitly the authentication (using the Alexa API access token `input.data.context.System.apiAccessToken`).
 
 Usage is explained in the  **Alexa Skills Kit** developer [documentation](https://developer.amazon.com/docs/smapi/alexa-reminders-overview.html).
 
@@ -85,4 +97,9 @@ Set a realtive reminder and get a confirmation in a format of
     "href": "string"
 }
 ```
+
+The result will be stored in either the Cognigy context (`cc`) or input object (`ci`).
+
+Handles implicitly the authentication (using the Alexa API access token `input.data.context.System.apiAccessToken`).
+
 Usage is explained in the  **Alexa Skills Kit** developer [documentation](https://developer.amazon.com/docs/smapi/alexa-reminders-overview.html).
