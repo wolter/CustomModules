@@ -33,7 +33,7 @@ Supported parameters for the permissions list are for instance:
 
 ## Node: callAlexaAPI
 
-Call Alexa API in a generic manner and implicitly handle the authentication (using the Alexa consent token `input.data.context.System.user.permissions.consentToken`). Mainly for testing purpose.
+Call Alexa API in a generic manner and set the authentication token implicitly (using the Alexa API access token `ci.data.context.System.apiAccessToken`). Mainly for testing purpose.
 
 ## Node: getDeviceAddress
 
@@ -53,9 +53,21 @@ Get current's device address depending on the settings in a format of
 
 ```
 
-The result will be stored in either the Cognigy context (`cc`) or input object (`ci`). 
+The result will be stored in either the Cognigy context (`cc.STORE`) or input object (`ci.STORE`) using the store name givin in the node's settings.
 
 Handles implicitly the authentication (using the Alexa consent token `input.data.context.System.user.permissions.consentToken`).
+
+Errors are in a format of 
+
+```json
+{
+    "type": "TYPE",
+    "message": "message"
+}
+```
+
+In case of an error, this is stored in either the Cognigy context (`cc.STORE.error`) or input object (`ci.STORE.error`). 
+
 
 Usage is explained in the  **Alexa Skills Kit** developer [documentation](https://developer.amazon.com/docs/custom-skills/device-address-api.html).
 
@@ -74,11 +86,22 @@ Set an absolute reminder and get a confirmation in a format of
 }
 ```
 
-The result will be stored in either the Cognigy context (`cc`) or input object (`ci`).
+The result will be stored in either the Cognigy context (`cc.STORE`) or input object (`ci.STORE`) using the store name givin in the node's settings.
 
 Setting the timezone can be done with [moment.js](https://momentjs.com/), which is available in CognigyScript like `scheduled_reminder = moment('2019-02-18T20:00:00').format('YYYY-MM-DD[T]HH:mm:ss');`. Furthermore, you find the supported timezones at https://en.wikipedia.org/wiki/List_of_tz_database_time_zones. It's also good to know you can set a onetime reminder with ONCE (or "none"), a daily one with DAILY, or a WEEKLY reminder. Setting a weekly reminder also requires to activate at least one weekday.
 
 Handles implicitly the authentication (using the Alexa API access token `input.data.context.System.apiAccessToken`).
+
+Errors are in a format of 
+
+```json
+{
+    "code": "CODE",
+    "message": "message"
+}
+```
+
+In case of an error, this is stored in either the Cognigy context (`cc.STORE.error`) or input object (`ci.STORE.error`). 
 
 Usage is explained in the  **Alexa Skills Kit** developer [documentation](https://developer.amazon.com/docs/smapi/alexa-reminders-overview.html).
 
@@ -98,8 +121,19 @@ Set a realtive reminder and get a confirmation in a format of
 }
 ```
 
-The result will be stored in either the Cognigy context (`cc`) or input object (`ci`).
+The result will be stored in either the Cognigy context (`cc.STORE`) or input object (`ci.STORE`) using the store name givin in the node's settings.
 
 Handles implicitly the authentication (using the Alexa API access token `input.data.context.System.apiAccessToken`).
+
+Errors are in a format of 
+
+```json
+{
+    "code": "CODE",
+    "message": "message"
+}
+```
+
+In case of an error, this is stored in either the Cognigy context (`cc.STORE.error`) or input object (`ci.STORE.error`). 
 
 Usage is explained in the  **Alexa Skills Kit** developer [documentation](https://developer.amazon.com/docs/smapi/alexa-reminders-overview.html).

@@ -66,8 +66,7 @@ async function callAlexaAPI(input: IFlowInput, args: { path:string, payload:any,
 
     try {
 
-        const token: string = input.data.context.System.user.permissions.consentToken;
-        const deviceId: string = input.data.context.System.device.deviceId;
+        const token: string = input.data.context.System.apiAccessToken;
         const apiEndpoint: string = input.data.context.System.apiEndpoint;
 
         // Update these options with the details of the web service you would like to call
@@ -125,7 +124,7 @@ async function getDeviceAddress(input: IFlowInput, args: { writeToContext: boole
 
     try {
 
-        const token: string = input.data.context.System.user.permissions.consentToken;
+        const token: string = input.data.context.System.apiAccessToken;
         const deviceId: string = input.data.context.System.device.deviceId;
         const apiEndpoint: string = input.data.context.System.apiEndpoint;
 
