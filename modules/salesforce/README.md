@@ -29,7 +29,7 @@ SELECT Firstname FROM CONTACT
 The output will be a JSON that includes all firstnames from your Salesforce contacts: 
 
 ```json
-"sql": {
+"contacts": {
     "totalSize": 33,
     "done": true,
     "records": [
