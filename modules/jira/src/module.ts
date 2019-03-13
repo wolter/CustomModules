@@ -60,8 +60,8 @@ async function getTicketStatus(input: IFlowInput, args: { secret: CognigySecret,
         resolve(input);
       } else {
         let result = {
-          ticket: issue.key,
-          status: issue.fields.status
+          ticket: issue.key ? issue.key : "not given",
+          status: issue.fields.status ? issue.fields.status : "not given"
         }
         input.context.getFullContext()[args.store] = result;
         resolve(input);
@@ -108,8 +108,8 @@ async function getTicketAssignee(input: IFlowInput, args: { secret: CognigySecre
         resolve(input);
       } else {
         let result = {
-          ticket: issue.key,
-          status: issue.fields.assignee
+          ticket: issue.key ? issue.key : "not given",
+          status: issue.fields.assignee ? issue.fields.assignee : "not given"
         }
         input.context.getFullContext()[args.store] = result;
         resolve(input);
@@ -156,8 +156,8 @@ async function getTicketPriority(input: IFlowInput, args: { secret: CognigySecre
         resolve(input);
       } else {
         let result = {
-          ticket: issue.key,
-          status: issue.fields.priority
+          ticket: issue.key ? issue.key : "not given",
+          status: issue.fields.priority ? issue.fields.priority : "not given"
         }
         input.context.getFullContext()[args.store] = result;
         resolve(input);
@@ -204,8 +204,8 @@ async function getTicketResolution(input: IFlowInput, args: { secret: CognigySec
         resolve(input);
       } else {
         let result = {
-          ticket: issue.key,
-          status: issue.fields.resolution
+          ticket: issue.key ? issue.key : "not given",
+          status: issue.fields.resolution ? issue.fields.resolution : "not given"
         }
         input.context.getFullContext()[args.store] = result;
         resolve(input);
@@ -252,8 +252,8 @@ async function getTicketReporter(input: IFlowInput, args: { secret: CognigySecre
         resolve(input);
       } else {
         let result = {
-          ticket: issue.key,
-          status: issue.fields.reporter
+          ticket: issue.key ? issue.key : "not given",
+          status: issue.fields.reporter ? issue.fields.reporter : "not given"
         }
         input.context.getFullContext()[args.store] = result;
         resolve(input);
@@ -300,8 +300,8 @@ async function getTicketComments(input: IFlowInput, args: { secret: CognigySecre
         resolve(input);
       } else {
         let result = {
-          ticket: issue.key,
-          status: issue.fields.comment
+          ticket: issue.key ? issue.key : "not given",
+          status: issue.fields.comment ? issue.fields.comment : "not given"
         }
         input.context.getFullContext()[args.store] = result;
         resolve(input);
@@ -348,8 +348,8 @@ async function getTicketWatchers(input: IFlowInput, args: { secret: CognigySecre
         resolve(input);
       } else {
         let result = {
-          ticket: issue.key,
-          status: issue.fields.watches
+          ticket: issue.key ? issue.key : "not given",
+          status: issue.fields.watches ? issue.fields.watches : "not given"
         }
         input.context.getFullContext()[args.store] = result;
         resolve(input);
@@ -395,24 +395,56 @@ async function getTicketSummary(input: IFlowInput, args: { secret: CognigySecret
         resolve(input);
       } else {
         try {
-          let result = {
-            ticket: issue.key ? issue.key : "not given",
-            type: issue.fields.issuetype.name ? issue.fields.issuetype.name : "not given",
-            project: issue.fields.project.name ? issue.fields.project.name : "not given",
-            status: issue.fields.status.name ? issue.fields.status.name : "not given",
-            assignedTo: issue.fields.assignee.emailAddress ? issue.fields.assignee.emailAddress : "not given",
-            reportedBy: issue.fields.reporter.emailAddress ? issue.fields.reporter.emailAddress : "not given",
-            resolution: issue.fields.resolution.name ? issue.fields.resolution.name : "not given",
-            comments: issue.fields.comment.comments ? issue.fields.comment.comments : "not given"
-          }
-          input.context.getFullContext()[args.store] = result;
-          resolve(input);
+          result.ticket = issue.key
         } catch (e) {
-          if (args.stopOnError) { reject(error.message); return; }
-          result = { "error": e.message };
-          input.context.getFullContext()[args.store] = result;
-          resolve(input);
+          result.ticket = "not given"
         }
+
+        try {
+          result.type = issue.fields.issuetype.name
+        } catch (e) {
+          result.type = "not given"
+        }
+
+        try {
+          result.project = issue.fields.project.name
+        } catch (e) {
+          result.project = "not given"
+        }
+
+        try {
+          result.status = issue.fields.status.name
+        } catch (e) {
+          result.status = "not given"
+        }
+
+        try {
+          result.assignedTo = issue.fields.assignee.emailAddress
+        } catch (e) {
+          result.assignedTo = "not given"
+        }
+
+        try {
+          result.reportedBy = issue.fields.reporter.emailAddress
+        } catch (e) {
+          result.reportedBy = "not given"
+        }
+
+        try {
+          result.resolution = issue.fields.resolution.name
+        } catch (e) {
+          result.resolution = "not given"
+        }
+
+        try {
+          result.comments = issue.fields.comment.comments
+        } catch (e) {
+          result.comments = "not given"
+        }
+
+        input.context.getFullContext()[args.store] = result;
+        resolve(input);
+
       }
     });
   });
