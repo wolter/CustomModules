@@ -16,11 +16,10 @@ This modules needs a CognigySecret to be defined and passed to the Nodes. The se
 
 If the loginUrl is stored in the secret, Salesforce login to this url, e.g. 'https://test.salesforce.com'
 
-  
 
 # Node: soqlQuery 
 
-Takes a **soql query string** and searches for the results in **Salesforce**. An example query would be the following: 
+Takes a [SOQL query string](https://developer.salesforce.com/docs/atlas.en-us.soql_sosl.meta/soql_sosl/sforce_api_calls_soql.htm) and searches for the results in **Salesforce**. An example query would be the following: 
 
 ```sql
 SELECT Firstname FROM CONTACT
@@ -43,14 +42,12 @@ The output will be a JSON that includes all firstnames from your Salesforce cont
      
 ```
 
-
-
 ## Node: createEntity
 
 All **Salesforce API Fields** are listed in the following PDF File: 
 [Salesforce API Fields](https://resources.docs.salesforce.com/206/latest/en-us/sfdc/pdf/salesforce_field_names_reference.pdf)
 
-### Option: Event
+### Entity: Event
 
 Creates an **event** in the Salesforce calendar. The JSON in *record JSON* shows an example.
 
@@ -67,7 +64,7 @@ Creates an **event** in the Salesforce calendar. The JSON in *record JSON* shows
 }
 ```
 
-### Option: Contact
+### Entity: Contact
 
 Creates a new **contact** in the **Contacts** Salesforce table. The JSON in *Record JSON* shows an example.
 
