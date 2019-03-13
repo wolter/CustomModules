@@ -43,7 +43,7 @@ This package provides several nodes to retrieve ticket information from Jira, us
 - reporter
 - comments
 - watchers
-- summery
+- summary
 
 
 Retrieves information on the ticket number and returns it in the following format: 
