@@ -14,10 +14,10 @@
 	"author": "Cognigy GmbH",
 	"license": "MIT",
 	"devDependencies": {
-		"@types/node": "^10.12.26",
-		"typescript": "^3.1.6"
+		"@types/node": "10.12.26",
+		"typescript": "3.1.6"
 	},
 	"dependencies": {
-		"jira-connector": "^2.10.0"
+		"jira-connector": "2.10.0"
 	}
 }

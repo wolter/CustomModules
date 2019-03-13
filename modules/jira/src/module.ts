@@ -39,35 +39,7 @@ async function getTicketStatus(input: IFlowInput, args: { secret: CognigySecret,
   if (!args.secret || !args.secret.username || !args.secret.password || !args.secret.domain) return Promise.reject("Secret not defined or invalid.");
   if (!args.ticket) return Promise.reject("No ticket defined. Please define a ticket like AB-1234");
 
-  return new Promise((resolve, reject) => {
-    let result = {};
-
-    const jira = new JiraClient({
-      host: args.secret.domain,
-      basic_auth: {
-        username: args.secret.username,
-        password: args.secret.password
-      }
-    });
-
-    jira.issue.getIssue({
-      issueKey: args.ticket
-    }, function (error, issue) {
-      if (error) {
-        if (args.stopOnError) { reject(error.message); return; }
-        result = { "error": error.message };
-        input.context.getFullContext()[args.store] = result;
-        resolve(input);
-      } else {
-        let result = {
-          ticket: issue.key ? issue.key : null,
-          status: issue.fields.status ? issue.fields.status : null
-        }
-        input.context.getFullContext()[args.store] = result;
-        resolve(input);
-      }
-    });
-  });
+  return await processJiraIssue(input, args, "status")
 }
 
 module.exports.getTicketStatus = getTicketStatus;
@@ -87,35 +59,7 @@ async function getTicketAssignee(input: IFlowInput, args: { secret: CognigySecre
   if (!args.secret || !args.secret.username || !args.secret.password || !args.secret.domain) return Promise.reject("Secret not defined or invalid.");
   if (!args.ticket) return Promise.reject("No ticket defined. Please define a ticket like AB-1234");
 
-  return new Promise((resolve, reject) => {
-    let result = {};
-
-    const jira = new JiraClient({
-      host: args.secret.domain,
-      basic_auth: {
-        username: args.secret.username,
-        password: args.secret.password
-      }
-    });
-
-    jira.issue.getIssue({
-      issueKey: args.ticket
-    }, function (error, issue) {
-      if (error) {
-        if (args.stopOnError) { reject(error.message); return; }
-        result = { "error": error.message };
-        input.context.getFullContext()[args.store] = result;
-        resolve(input);
-      } else {
-        let result = {
-          ticket: issue.key ? issue.key : null,
-          status: issue.fields.assignee ? issue.fields.assignee : null
-        }
-        input.context.getFullContext()[args.store] = result;
-        resolve(input);
-      }
-    });
-  });
+  return await processJiraIssue(input, args, "assignee")
 }
 
 module.exports.getTicketAssignee = getTicketAssignee;
@@ -135,35 +79,7 @@ async function getTicketPriority(input: IFlowInput, args: { secret: CognigySecre
   if (!args.secret || !args.secret.username || !args.secret.password || !args.secret.domain) return Promise.reject("Secret not defined or invalid.");
   if (!args.ticket) return Promise.reject("No ticket defined. Please define a ticket like AB-1234");
 
-  return new Promise((resolve, reject) => {
-    let result = {};
-
-    const jira = new JiraClient({
-      host: args.secret.domain,
-      basic_auth: {
-        username: args.secret.username,
-        password: args.secret.password
-      }
-    });
-
-    jira.issue.getIssue({
-      issueKey: args.ticket
-    }, function (error, issue) {
-      if (error) {
-        if (args.stopOnError) { reject(error.message); return; }
-        result = { "error": error.message };
-        input.context.getFullContext()[args.store] = result;
-        resolve(input);
-      } else {
-        let result = {
-          ticket: issue.key ? issue.key : null,
-          status: issue.fields.priority ? issue.fields.priority : null
-        }
-        input.context.getFullContext()[args.store] = result;
-        resolve(input);
-      }
-    });
-  });
+  return await processJiraIssue(input, args, "priority")
 }
 
 module.exports.getTicketPriority = getTicketPriority;
@@ -183,35 +99,7 @@ async function getTicketResolution(input: IFlowInput, args: { secret: CognigySec
   if (!args.secret || !args.secret.username || !args.secret.password || !args.secret.domain) return Promise.reject("Secret not defined or invalid.");
   if (!args.ticket) return Promise.reject("No ticket defined. Please define a ticket like AB-1234");
 
-  return new Promise((resolve, reject) => {
-    let result = {};
-
-    const jira = new JiraClient({
-      host: args.secret.domain,
-      basic_auth: {
-        username: args.secret.username,
-        password: args.secret.password
-      }
-    });
-
-    jira.issue.getIssue({
-      issueKey: args.ticket
-    }, function (error, issue) {
-      if (error) {
-        if (args.stopOnError) { reject(error.message); return; }
-        result = { "error": error.message };
-        input.context.getFullContext()[args.store] = result;
-        resolve(input);
-      } else {
-        let result = {
-          ticket: issue.key ? issue.key : null,
-          status: issue.fields.resolution ? issue.fields.resolution : null
-        }
-        input.context.getFullContext()[args.store] = result;
-        resolve(input);
-      }
-    });
-  });
+  return await processJiraIssue(input, args, "resolution")
 }
 
 module.exports.getTicketResolution = getTicketResolution;
@@ -231,35 +119,7 @@ async function getTicketReporter(input: IFlowInput, args: { secret: CognigySecre
   if (!args.secret || !args.secret.username || !args.secret.password || !args.secret.domain) return Promise.reject("Secret not defined or invalid.");
   if (!args.ticket) return Promise.reject("No ticket defined. Please define a ticket like AB-1234");
 
-  return new Promise((resolve, reject) => {
-    let result = {};
-
-    const jira = new JiraClient({
-      host: args.secret.domain,
-      basic_auth: {
-        username: args.secret.username,
-        password: args.secret.password
-      }
-    });
-
-    jira.issue.getIssue({
-      issueKey: args.ticket
-    }, function (error, issue) {
-      if (error) {
-        if (args.stopOnError) { reject(error.message); return; }
-        result = { "error": error.message };
-        input.context.getFullContext()[args.store] = result;
-        resolve(input);
-      } else {
-        let result = {
-          ticket: issue.key ? issue.key : null,
-          status: issue.fields.reporter ? issue.fields.reporter : null
-        }
-        input.context.getFullContext()[args.store] = result;
-        resolve(input);
-      }
-    });
-  });
+  return await processJiraIssue(input, args, "reporter")
 }
 
 module.exports.getTicketReporter = getTicketReporter;
@@ -279,35 +139,7 @@ async function getTicketComments(input: IFlowInput, args: { secret: CognigySecre
   if (!args.secret || !args.secret.username || !args.secret.password || !args.secret.domain) return Promise.reject("Secret not defined or invalid.");
   if (!args.ticket) return Promise.reject("No ticket defined. Please define a ticket like AB-1234");
 
-  return new Promise((resolve, reject) => {
-    let result = {};
-
-    const jira = new JiraClient({
-      host: args.secret.domain,
-      basic_auth: {
-        username: args.secret.username,
-        password: args.secret.password
-      }
-    });
-
-    jira.issue.getIssue({
-      issueKey: args.ticket
-    }, function (error, issue) {
-      if (error) {
-        if (args.stopOnError) { reject(error.message); return; }
-        result = { "error": error.message };
-        input.context.getFullContext()[args.store] = result;
-        resolve(input);
-      } else {
-        let result = {
-          ticket: issue.key ? issue.key : null,
-          status: issue.fields.comment ? issue.fields.comment : null
-        }
-        input.context.getFullContext()[args.store] = result;
-        resolve(input);
-      }
-    });
-  });
+  return await processJiraIssue(input, args, "comment");
 }
 
 module.exports.getTicketComments = getTicketComments;
@@ -327,35 +159,7 @@ async function getTicketWatchers(input: IFlowInput, args: { secret: CognigySecre
   if (!args.secret || !args.secret.username || !args.secret.password || !args.secret.domain) return Promise.reject("Secret not defined or invalid.");
   if (!args.ticket) return Promise.reject("No ticket defined. Please define a ticket like AB-1234");
 
-  return new Promise((resolve, reject) => {
-    let result = {};
-
-    const jira = new JiraClient({
-      host: args.secret.domain,
-      basic_auth: {
-        username: args.secret.username,
-        password: args.secret.password
-      }
-    });
-
-    jira.issue.getIssue({
-      issueKey: args.ticket
-    }, function (error, issue) {
-      if (error) {
-        if (args.stopOnError) { reject(error.message); return; }
-        result = { "error": error.message };
-        input.context.getFullContext()[args.store] = result;
-        resolve(input);
-      } else {
-        let result = {
-          ticket: issue.key ? issue.key : null,
-          status: issue.fields.watches ? issue.fields.watches : null
-        }
-        input.context.getFullContext()[args.store] = result;
-        resolve(input);
-      }
-    });
-  });
+  return await processJiraIssue(input, args, "watches")
 }
 
 module.exports.getTicketWatchers = getTicketWatchers;
@@ -394,57 +198,41 @@ async function getTicketSummary(input: IFlowInput, args: { secret: CognigySecret
         input.context.getFullContext()[args.store] = result;
         resolve(input);
       } else {
-        try {
-          result.ticket = issue.key
-        } catch (e) {
-          result.ticket = null
+        if (!issue || typeof issue !== "object" || Object.keys(issue).length === 0) {
+          Promise.reject("Error while getting Jira issue. No issue was found");
         }
 
         try {
-          result.type = issue.fields.issuetype.name
-        } catch (e) {
-          result.type = null
-        }
+          result.ticket = issue.key || null;
 
-        try {
-          result.project = issue.fields.project.name
-        } catch (e) {
-          result.project = null
-        }
+          result.type = issue.fields && issue.fields.issuetype &&
+            issue.fields.issuetype.name || null;
 
-        try {
-          result.status = issue.fields.status.name
-        } catch (e) {
-          result.status = null
-        }
+          result.project = issue.fields && issue.fields.project &&
+            issue.fields.project.name || null;
 
-        try {
-          result.assignedTo = issue.fields.assignee.emailAddress
-        } catch (e) {
-          result.assignedTo = null
-        }
+          result.status = issue.fields && issue.fields.status &&
+            issue.fields.status.name || null;
 
-        try {
-          result.reportedBy = issue.fields.reporter.emailAddress
-        } catch (e) {
-          result.reportedBy = null
-        }
+          result.assignedTo = issue.fields && issue.fields.assignee &&
+            issue.fields.assignee.emailAddress || null;
 
-        try {
-          result.resolution = issue.fields.resolution.name
-        } catch (e) {
-          result.resolution = null
-        }
+          result.reportedBy = issue.fields && issue.fields.reporter &&
+            issue.fields.reporter.emailAddress || null;
 
-        try {
-          result.comments = issue.fields.comment.comments
-        } catch (e) {
-          result.comments = null
+          result.resolution = issue.fields && issue.fields.resolution &&
+            issue.fields.resolution.name || null;
+
+          result.comments = issue.fields && issue.fields.comment &&
+            issue.fields.comment.comments || null;
+
+        } catch (err) {
+          input.actions.log(`Error while getting ticket summary. Error was: ${err}`, undefined);
+          Promise.reject("Error while getting ticket summary");
         }
 
         input.context.getFullContext()[args.store] = result;
         resolve(input);
-
       }
     });
   });
@@ -497,6 +285,47 @@ async function getAllTicketInfo(input: IFlowInput, args: { secret: CognigySecret
 module.exports.getAllTicketInfo = getAllTicketInfo;
 
 
+async function processJiraIssue(input: IFlowInput, args: { [key: string]: any; }, fieldName: string) {
 
+  const jira = new JiraClient({
+    host: args.secret.domain,
+    basic_auth: {
+      username: args.secret.username,
+      password: args.secret.password
+    }
+  });
+  return new Promise((resolve, reject) => {
 
+    jira.issue.getIssue({
+      issueKey: args.ticket
+    }, function (error, issue) {
+      try {
+        if (error) {
+          if (args.stopOnError) {
+            reject(error.message);
+            return;
+          }
 
+          const result = { "error": error.message };
+          input.context.getFullContext()[args.store] = result;
+          resolve(input);
+
+        } else {
+          if (!issue) {
+            reject("Error while getting Jira issue. No issue was found");
+          }
+
+          const result = {
+            ticket: issue.key || null,
+            status: issue.fields && issue.fields[fieldName] || null
+          }
+
+          input.context.getFullContext()[args.store] = result;
+          resolve(input);
+        }
+      } catch (err) {
+        reject(err);
+      }
+    });
+  });
+}
