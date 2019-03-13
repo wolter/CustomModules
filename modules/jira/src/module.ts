@@ -192,11 +192,22 @@ async function getTicketSummary(input: IFlowInput, args: { secret: CognigySecret
     jira.issue.getIssue({
       issueKey: args.ticket
     }, function (error, issue) {
-      if (error) {
-        if (args.stopOnError) { reject(error.message); return; }
-        result = { "error": error.message };
+      if (error && error.errorMessages) {
+        const errorMessage = Array.isArray(error.errorMessages) ?
+          error.errorMessages[0] : error.errorMessage;
+
+        if (args.stopOnError) {
+          reject(errorMessage);
+          return;
+        }
+
+        const result = { "error": errorMessage };
         input.context.getFullContext()[args.store] = result;
         resolve(input);
+
+      } else if (error) {
+        input.actions.log("error", "JIRA API has changed");
+        reject("Error while getting Jira issue.");
       } else {
         if (!issue || typeof issue !== "object" || Object.keys(issue).length === 0) {
           Promise.reject("Error while getting Jira issue. No issue was found");
@@ -269,12 +280,26 @@ async function getAllTicketInfo(input: IFlowInput, args: { secret: CognigySecret
     jira.issue.getIssue({
       issueKey: args.ticket
     }, function (error, issue) {
-      if (error) {
-        if (args.stopOnError) { reject(error.message); return; }
-        result = { "error": error.message };
+      if (error && error.errorMessages) {
+        const errorMessage = Array.isArray(error.errorMessages) ?
+          error.errorMessages[0] : error.errorMessage;
+
+        if (args.stopOnError) {
+          reject(errorMessage);
+          return;
+        }
+
+        const result = { "error": errorMessage };
         input.context.getFullContext()[args.store] = result;
         resolve(input);
+
+      } else if (error) {
+        input.actions.log("error", "JIRA API has changed");
+        reject("Error while getting Jira issue.");
       } else {
+        if (!issue) {
+          reject("Error while getting Jira issue. No issue was found");
+        }
         input.context.getFullContext()[args.store] = issue;
         resolve(input);
       }
@@ -300,16 +325,22 @@ async function processJiraIssue(input: IFlowInput, args: { [key: string]: any; }
       issueKey: args.ticket
     }, function (error, issue) {
       try {
-        if (error) {
+        if (error && error.errorMessages) {
+          const errorMessage = Array.isArray(error.errorMessages) ?
+            error.errorMessages[0] : error.errorMessage;
+
           if (args.stopOnError) {
-            reject(error.message);
+            reject(errorMessage);
             return;
           }
 
-          const result = { "error": error.message };
+          const result = { "error": errorMessage };
           input.context.getFullContext()[args.store] = result;
           resolve(input);
 
+        } else if (error) {
+          input.actions.log("error", "JIRA API has changed");
+          reject("Error while getting Jira issue.");
         } else {
           if (!issue) {
             reject("Error while getting Jira issue. No issue was found");
