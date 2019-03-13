@@ -1,4 +1,3 @@
-
 const JiraClient = require('jira-connector');
 
 /**
@@ -9,14 +8,11 @@ const JiraClient = require('jira-connector');
  */
 async function extractTicket(input: IFlowInput, args: {  secret: CognigySecret, writeToContext: boolean, storeTicket: string, stopOnError: boolean }): Promise<IFlowInput | {}> {
 
-  
   return new Promise((resolve, reject) => {
 
     const pattern = /[a-zA-Z]+-\d+/g;
-
     let match = input.input.text.match(pattern);
     
-
     if(match) {
         if (args.writeToContext) input.context.getFullContext()[args.storeTicket] = match[0];
         else input.input[args.storeTicket] = match[0];
@@ -68,9 +64,6 @@ async function getTicketStatus(input: IFlowInput, args: { secret: CognigySecret,
           else input.input[args.store] = result;
           resolve(input);
         } else {
-
-          //
-
           let result = { 
             ticket: issue.key,
             status: issue.fields.status
@@ -122,9 +115,6 @@ async function getTicketAssignee(input: IFlowInput, args: { secret: CognigySecre
           else input.input[args.store] = result;
           resolve(input);
         } else {
-
-          //
-
           let result = { 
             ticket: issue.key,
             status: issue.fields.assignee
@@ -176,9 +166,6 @@ async function getTicketPriority(input: IFlowInput, args: { secret: CognigySecre
           else input.input[args.store] = result;
           resolve(input);
         } else {
-
-          //
-
           let result = { 
             ticket: issue.key,
             status: issue.fields.priority
@@ -230,9 +217,6 @@ async function getTicketResolution(input: IFlowInput, args: { secret: CognigySec
           else input.input[args.store] = result;
           resolve(input);
         } else {
-
-          //
-
           let result = { 
             ticket: issue.key,
             status: issue.fields.resolution
@@ -284,9 +268,6 @@ async function getTicketReporter(input: IFlowInput, args: { secret: CognigySecre
           else input.input[args.store] = result;
           resolve(input);
         } else {
-
-          //
-
           let result = { 
             ticket: issue.key,
             status: issue.fields.reporter
@@ -300,6 +281,57 @@ async function getTicketReporter(input: IFlowInput, args: { secret: CognigySecre
 }
 
 module.exports.getTicketReporter = getTicketReporter;
+
+
+/**
+ * Returns comments on this ticket, if it has any. 
+ * @arg {SecretSelect} `secret` The configured secret to use
+ * @arg {CognigyScript} `ticket` The ticket number e.g. ABC-1234
+ * @arg {Boolean} `writeToContext` Whether to write to Cognigy Context (true) or Input (false)
+ * @arg {CognigyScript} `store` Where to store the result
+ * @arg {Boolean} `stopOnError` Whether to stop on error or continue
+ */
+
+async function getTicketComments(input: IFlowInput, args: { secret: CognigySecret, ticket: string, writeToContext: boolean, store: string, stopOnError: boolean }): Promise<IFlowInput | {}> {
+
+  // Check if secret exists and contains correct parameters
+  if (!args.secret || !args.secret.username || !args.secret.password  || !args.secret.domain) return Promise.reject("Secret not defined or invalid.");
+  if (!args.ticket) return Promise.reject("No ticket defined. Please define a ticket like AB-1234");
+
+  return new Promise((resolve, reject) => {
+    let result = {};
+
+    const jira = new JiraClient( {
+      host: args.secret.domain,
+      basic_auth: {
+          username: args.secret.username,
+          password: args.secret.password
+        }
+    });
+
+    jira.issue.getIssue({
+      issueKey: args.ticket
+    }, function(error, issue) {
+        if(error) {
+          if (args.stopOnError) { reject(error.message); return; }
+          result = { "error": error.message };
+          if (args.writeToContext) input.context.getFullContext()[args.store] = result;
+          else input.input[args.store] = result;
+          resolve(input);
+        } else {
+          let result = { 
+            ticket: issue.key,
+            status: issue.fields.comment
+          }
+          if (args.writeToContext) input.context.getFullContext()[args.store] = result;
+          else input.input[args.store] = result;
+          resolve(input);
+        }
+    });
+  });
+}
+
+module.exports.getTicketComments = getTicketComments;
 
 
 /**
@@ -338,9 +370,6 @@ async function getTicketWatchers(input: IFlowInput, args: { secret: CognigySecre
           else input.input[args.store] = result;
           resolve(input);
         } else {
-
-          //
-
           let result = { 
             ticket: issue.key,
             status: issue.fields.watches
