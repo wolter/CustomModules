@@ -60,7 +60,9 @@ async function spellCheck(input: IFlowInput, args: { secret: CognigySecret, text
         req.end();
     });
 }
+
 module.exports.spellCheck = spellCheck;
+
 
 /**
  * Recognize the language of the given sentence.
@@ -77,12 +79,7 @@ async function recognizeLanguage(input: IFlowInput, args: { secret: CognigySecre
 
     return new Promise((resolve, reject) => {
         let result = {};
-
         let accessKey = args.secret.key;
-
-        // You must use the same region in your REST API call as you used to obtain your access keys.
-        // For example, if you obtained your access keys from the westus region, replace
-        // "westcentralus" in the URI below with "westus".
 
         const uri = args.secret.region + '.api.cognitive.microsoft.com';
         const path = '/text/analytics/v2.0/languages';
@@ -93,7 +90,6 @@ async function recognizeLanguage(input: IFlowInput, args: { secret: CognigySecre
                 body += d;
             });
             response.on('end', () => {
-                // let body__ = JSON.stringify (body_, null, '  ');
                 result = JSON.parse(body);
                 if (args.writeToContext) input.context.getFullContext()[args.store] = result;
                 else input.input[args.store] = result;
@@ -134,7 +130,6 @@ async function recognizeLanguage(input: IFlowInput, args: { secret: CognigySecre
     });
 }
 
-// You have to export the function, otherwise it is not available
 module.exports.recognizeLanguage = recognizeLanguage;
 
 
@@ -154,12 +149,7 @@ async function extractKeyphrases(input: IFlowInput, args: { secret: CognigySecre
 
     return new Promise((resolve, reject) => {
         let result = {};
-
         let accessKey = args.secret.key;
-
-        // You must use the same region in your REST API call as you used to obtain your access keys.
-        // For example, if you obtained your access keys from the westus region, replace
-        // "westcentralus" in the URI below with "westus".
 
         const uri = args.secret.region + '.api.cognitive.microsoft.com';
         const path = '/text/analytics/v2.0/keyPhrases';
@@ -210,7 +200,6 @@ async function extractKeyphrases(input: IFlowInput, args: { secret: CognigySecre
     });
 }
 
-// You have to export the function, otherwise it is not available
 module.exports.extractKeyphrases = extractKeyphrases;
 
 
@@ -230,12 +219,7 @@ async function namedEntityRecognition(input: IFlowInput, args: { secret: Cognigy
 
     return new Promise((resolve, reject) => {
         let result = {};
-
         let accessKey = args.secret.key;
-
-        // You must use the same region in your REST API call as you used to obtain your access keys.
-        // For example, if you obtained your access keys from the westus region, replace
-        // "westcentralus" in the URI below with "westus".
 
         const uri = args.secret.region + '.api.cognitive.microsoft.com';
         const path = '/text/analytics/v2.1-preview/entities';
@@ -286,7 +270,6 @@ async function namedEntityRecognition(input: IFlowInput, args: { secret: Cognigy
     });
 }
 
-// You have to export the function, otherwise it is not available
 module.exports.namedEntityRecognition = namedEntityRecognition;
 
 
@@ -304,7 +287,6 @@ async function bingWebSearch(input: IFlowInput, args: { secret: CognigySecret, q
 
     return new Promise((resolve, reject) => {
         let result = {};
-
         let accessKey = args.secret.key;
 
         https.get({
@@ -329,7 +311,6 @@ async function bingWebSearch(input: IFlowInput, args: { secret: CognigySecret, q
     });
 }
 
-// You have to export the function, otherwise it is not available
 module.exports.bingWebSearch = bingWebSearch;
 
 
@@ -370,7 +351,6 @@ async function bingNewsSearch(input: IFlowInput, args: { secret: CognigySecret, 
     });
 }
 
-// You have to export the function, otherwise it is not available
 module.exports.bingNewsSearch = bingNewsSearch;
 
 
@@ -388,7 +368,6 @@ async function bingImageSearch(input: IFlowInput, args: { secret: CognigySecret,
 
     return new Promise((resolve, reject) => {
         let result = {};
-
         let accessKey = args.secret.key;
 
         const request_params = {
@@ -419,7 +398,6 @@ async function bingImageSearch(input: IFlowInput, args: { secret: CognigySecret,
     });
 }
 
-// You have to export the function, otherwise it is not available
 module.exports.bingImageSearch = bingImageSearch;
 
 
@@ -439,7 +417,6 @@ async function textTranslator(input: IFlowInput, args: { secret: CognigySecret, 
 
     return new Promise((resolve, reject) => {
         let result = {};
-
         let accessKey = args.secret.key;
 
         const options = {
@@ -470,5 +447,4 @@ async function textTranslator(input: IFlowInput, args: { secret: CognigySecret, 
     });
 }
 
-// You have to export the function, otherwise it is not available
 module.exports.textTranslator = textTranslator;
