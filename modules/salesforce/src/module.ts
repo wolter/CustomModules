@@ -53,6 +53,7 @@ module.exports.SOQLQuery = SOQLQuery;
  * @arg {CognigyScript} `store` Where to store the result
  * @arg {Boolean} `stopOnError` Whether to stop on error or continue
  */
+
 async function createEntity(input: IFlowInput, args: { secret: CognigySecret, entity: string, record: string, writeToContext: boolean, store: string, stopOnError: boolean }): Promise<IFlowInput | {}> {
 
   // Check if secret exists and contains correct parameters
@@ -62,6 +63,14 @@ async function createEntity(input: IFlowInput, args: { secret: CognigySecret, en
   return new Promise((resolve, reject) => {
     let result = {};
     let conn = new jsforce.Connection();
+
+    if (args.secret.loginUrl) { 
+      conn = new jsforce.Connection({
+        loginUrl: args.secret.loginUrl
+      });
+    }else{
+      conn = new jsforce.Connection();
+    }
 
     conn.login(args.secret.username, args.secret.password + args.secret.token, function(err, res) {
       if (err) {
@@ -110,6 +119,14 @@ async function retrieveEntity(input: IFlowInput, args: { secret: CognigySecret, 
     let result = {};
     let conn = new jsforce.Connection();
 
+    if (args.secret.loginUrl) {
+      conn = new jsforce.Connection({
+        loginUrl: args.secret.loginUrl
+      });
+    }else{
+      conn = new jsforce.Connection();
+    }
+
     conn.login(args.secret.username, args.secret.password + args.secret.token, function(err, res) {
       if (err) {
         if (args.stopOnError) { reject(err.message); return; }
@@ -156,6 +173,14 @@ async function deleteEntity(input: IFlowInput, args: { secret: CognigySecret, en
   return new Promise((resolve, reject) => {
     let result = {};
     let conn = new jsforce.Connection();
+
+    if (args.secret.loginUrl) {
+      conn = new jsforce.Connection({
+        loginUrl: args.secret.loginUrl
+      });
+    }else{
+      conn = new jsforce.Connection();
+    }
 
 
     conn.login(args.secret.username, args.secret.password + args.secret.token, function(err, res) {
@@ -206,6 +231,14 @@ async function updateEntity(input: IFlowInput, args: { secret: CognigySecret, en
   return new Promise((resolve, reject) => {
     let result = {};
     let conn = new jsforce.Connection();
+
+    if (args.secret.loginUrl) {
+      conn = new jsforce.Connection({
+        loginUrl: args.secret.loginUrl
+      });
+    }else{
+      conn = new jsforce.Connection();
+    }
 
     conn.login(args.secret.username, args.secret.password + args.secret.token, function(err, res) {
       if (err) {
