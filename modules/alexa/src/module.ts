@@ -26,7 +26,7 @@ function isAlexa(input: IFlowInput): Boolean {
 /**
  * Create an "ask for permission consent" card using a list of permissions such as alexa::alerts:reminders:skill:readwrite, read::alexa:device:all:address etc.
  *
- * @arg {CognigyScriptArray} `permissions` Permissions to confirm by the user. See documentation for possible values.
+ * @arg {CognigyScriptArray} `permissions` Permissions to confirm by the user.
  */
 async function respondWithPermissionCard(input: IFlowInput, args: { permissions: Array<string> }): Promise<IFlowInput | {}> {
     let jsonPayload: any = {
