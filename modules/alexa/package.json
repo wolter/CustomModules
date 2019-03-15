@@ -2,9 +2,10 @@
 	"name": "Alexa",
 	"version": "1.0.0",
 	"description": "Alexa Module",
-	"author": "Sascha Wolter",
+	"author": "Cognigy GmbH",
 	"keywords": [],
 	"main": "build/module.js",
+	"license": "MIT",
 	"devDependencies": {
 		"@types/request-promise": "^4.1.42",
 		"@types/node": "^10.12.5",

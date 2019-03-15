@@ -1,6 +1,6 @@
 import * as request_promise from 'request-promise';
 
-function handleError(input: IFlowInput, error: Error, stopOnError: boolean, writeToContext: boolean, store: string): IFlowInput | {} {
+function _handleError(input: IFlowInput, error: Error, stopOnError: boolean, writeToContext: boolean, store: string): IFlowInput | {} {
 
     input.actions.log("error", error.message);
 
@@ -18,7 +18,7 @@ function handleError(input: IFlowInput, error: Error, stopOnError: boolean, writ
 
 }
 
-function isAlexa(input: IFlowInput): Boolean {
+function _isAlexa(input: IFlowInput): Boolean {
     // Check current channel...
     return (input.input.channel === "alexa");
 }
@@ -29,7 +29,7 @@ function isAlexa(input: IFlowInput): Boolean {
  * @arg {CognigyScriptArray} `permissions` Permissions to confirm by the user.
  */
 async function respondWithPermissionCard(input: IFlowInput, args: { permissions: Array<string> }): Promise<IFlowInput | {}> {
-    let jsonPayload: any = {
+    const jsonPayload: any = {
         _cognigy: {
             _alexa: {
                 response: {
@@ -59,13 +59,12 @@ module.exports.respondWithPermissionCard = respondWithPermissionCard;
 async function callAlexaAPI(input: IFlowInput, args: { path: string, payload: any, method: string, writeToContext: boolean, store: string, stopOnError: boolean }): Promise<IFlowInput | {}> {
 
     // Check current channel...
-    if (!isAlexa(input)) {
+    if (!_isAlexa(input)) {
         const error: Error = new Error("Wrong channel. Channel must be Amazon Alexa.");
-        return handleError(input, error, false, args.writeToContext, args.store);
+        return _handleError(input, error, false, args.writeToContext, args.store);
     }
 
     try {
-
         const token: string = input.data.context.System.apiAccessToken;
         const apiEndpoint: string = input.data.context.System.apiEndpoint;
 
@@ -99,9 +98,8 @@ async function callAlexaAPI(input: IFlowInput, args: { path: string, payload: an
         if (args.writeToContext) input.context.getFullContext()[args.store] = result;
         else input.input[args.store] = result;
         return input;
-
     } catch (error) {
-        return handleError(input, error.error, args.stopOnError, args.writeToContext, args.store);
+        return _handleError(input, error.error, args.stopOnError, args.writeToContext, args.store);
     }
 }
 
@@ -117,13 +115,12 @@ module.exports.callAlexaAPI = callAlexaAPI;
 async function getDeviceAddress(input: IFlowInput, args: { writeToContext: boolean, store: string, stopOnError: boolean }): Promise<IFlowInput | {}> {
 
     // Check current channel...
-    if (!isAlexa(input)) {
+    if (!_isAlexa(input)) {
         const error: Error = new Error("Wrong channel. Channel must be Amazon Alexa.");
-        return handleError(input, error, false, args.writeToContext, args.store);
+        return _handleError(input, error, false, args.writeToContext, args.store);
     }
 
     try {
-
         const token: string = input.data.context.System.apiAccessToken;
         const deviceId: string = input.data.context.System.device.deviceId;
         const apiEndpoint: string = input.data.context.System.apiEndpoint;
@@ -142,7 +139,7 @@ async function getDeviceAddress(input: IFlowInput, args: { writeToContext: boole
         return input;
 
     } catch (error) {
-        return handleError(input, error.error, args.stopOnError, args.writeToContext, args.store);
+        return _handleError(input, error.error, args.stopOnError, args.writeToContext, args.store);
     }
 }
 
@@ -161,13 +158,12 @@ module.exports.getDeviceAddress = getDeviceAddress;
 async function setRelativeReminder(input: IFlowInput, args: { writeToContext: boolean, store: string, text: string, offsetInSeconds: number, pushNotification: boolean, stopOnError: boolean }): Promise<IFlowInput | {}> {
 
     // Check current channel...
-    if (!isAlexa(input)) {
+    if (!_isAlexa(input)) {
         const error: Error = new Error("Wrong channel. Channel must be Amazon Alexa.");
-        return handleError(input, error, false, args.writeToContext, args.store);
+        return _handleError(input, error, false, args.writeToContext, args.store);
     }
 
     try {
-
         const token: string = input.data.context.System.apiAccessToken;
         const apiEndpoint: string = input.data.context.System.apiEndpoint;
 
@@ -208,9 +204,8 @@ async function setRelativeReminder(input: IFlowInput, args: { writeToContext: bo
         if (args.writeToContext) input.context.getFullContext()[args.store] = result;
         else input.input[args.store] = result;
         return input;
-
     } catch (error) {
-        return handleError(input, error.error, args.stopOnError, args.writeToContext, args.store);
+        return _handleError(input, error.error, args.stopOnError, args.writeToContext, args.store);
     }
 }
 
@@ -244,16 +239,15 @@ async function setAbsoluteReminder(input: IFlowInput, args: {
 }): Promise<IFlowInput | {}> {
 
     // Check current channel...
-    if (!isAlexa(input)) {
+    if (!_isAlexa(input)) {
         const error: Error = new Error("Wrong channel. Channel must be Amazon Alexa.");
-        return handleError(input, error, false, args.writeToContext, args.store);
+        return _handleError(input, error, false, args.writeToContext, args.store);
     }
 
     try {
 
         const token: string = input.data.context.System.apiAccessToken;
         const apiEndpoint: string = input.data.context.System.apiEndpoint;
-        const days: Array<string> = new Array<string>();
         const locale: string = input.data.request.locale;
         const requestTime: string = input.data.request.timestamp;
 
@@ -279,7 +273,7 @@ async function setAbsoluteReminder(input: IFlowInput, args: {
                 if (args.sunday) recurrence.byDay.push("SU");
                 break;
             default:
-            // nothing
+                recurrence = undefined;
         }
 
         const body: any = {
@@ -288,7 +282,7 @@ async function setAbsoluteReminder(input: IFlowInput, args: {
                 type: "SCHEDULED_ABSOLUTE",
                 scheduledTime: args.scheduledTime,
                 timeZoneId: args.timeZoneId,
-                recurrence: recurrence,
+                recurrence: recurrence
             },
             alertInfo: {
                 spokenInfo: {
@@ -318,7 +312,7 @@ async function setAbsoluteReminder(input: IFlowInput, args: {
         return input;
 
     } catch (error) {
-        return handleError(input, error.error, args.stopOnError, args.writeToContext, args.store);
+        return _handleError(input, error.error, args.stopOnError, args.writeToContext, args.store);
     }
 }
 
