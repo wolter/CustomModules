@@ -6,11 +6,11 @@
 	"keywords": [],
 	"main": "build/module.js",
 	"devDependencies": {
+		"@types/request-promise": "^4.1.42",
 		"@types/node": "^10.12.5",
 		"typescript": "^3.1.6"
 	},
 	"dependencies": {
-		"@types/request-promise": "^4.1.42",
 		"request": "^2.88.0",
 		"request-promise": "^4.2.2"
 	}
