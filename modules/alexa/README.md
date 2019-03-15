@@ -1,4 +1,4 @@
-Adds [Amazon Alexe](https://developer.amazon.com/docs/ask-overviews/build-skills-with-the-alexa-skills-kit.html) specific features to Cognigy.AI
+Adds [Amazon Alexe](https://developer.amazon.com/docs/ask-overviews/build-skills-with-the-alexa-skills-kit.html) specific features as Flow Nodes to Cognigy.AI
 
 Please note, you still need to set add needed interfaces and  permissions for a Alexa Skill in the Alexa Skills Kit Developer Console and to make sure the user gave his consent using the Permissions-Node.
 

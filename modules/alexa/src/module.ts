@@ -35,7 +35,7 @@ async function respondWithPermissionCard(input: IFlowInput, args: { permissions:
                 response: {
                     card: {
                         type: "AskForPermissionsConsent",
-                        permissions: args.permissions,
+                        permissions: args.permissions
                     }
                 }
             }
