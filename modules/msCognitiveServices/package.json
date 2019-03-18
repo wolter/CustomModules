@@ -23,8 +23,8 @@
     "typescript": "^3.3.3"
   },
   "dependencies": {
-    "https": "^1.0.0",
-    "request": "^2.88.0",
-    "uuid": "^3.3.2"
+    "https": "1.0.0",
+    "request": "2.88.0",
+    "uuid": "3.3.2"
   }
 }
