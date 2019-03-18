@@ -1,4 +1,4 @@
-let https = require ('https');
+let https = require('https');
 const request = require('request');
 const uuidv4 = require('uuid/v4');
 
@@ -10,7 +10,7 @@ const uuidv4 = require('uuid/v4');
  * @arg {CognigyScript} `store` Where to store the result
  * @arg {Boolean} `stopOnError` Whether to stop on error or continue
  */
-async function spellCheck(input: IFlowInput, args: { secret: CognigySecret, text: string, language: string, store: string, stopOnError: boolean }): Promise<IFlowInput | {}>  {
+async function spellCheck(input: IFlowInput, args: { secret: CognigySecret, text: string, language: string, store: string, stopOnError: boolean }): Promise<IFlowInput | {}> {
     // Check if secret exists and contains correct parameters
     if (!args.secret || !args.secret.key) return Promise.reject("Secret not defined or invalid.");
     if (!args.text) return Promise.reject("No text defined.");
@@ -23,13 +23,13 @@ async function spellCheck(input: IFlowInput, args: { secret: CognigySecret, text
         const query_string = "?mkt=" + args.language + "&mode=proof";
 
         const request_params = {
-            method : 'POST',
-            hostname : host,
-            path : path + query_string,
-            headers : {
-                'Content-Type' : 'application/x-www-form-urlencoded',
-                'Content-Length' : args.text.length + 5,
-                'Ocp-Apim-Subscription-Key' : args.secret.key,
+            method: 'POST',
+            hostname: host,
+            path: path + query_string,
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+                'Content-Length': args.text.length + 5,
+                'Ocp-Apim-Subscription-Key': args.secret.key,
             }
         };
 
@@ -39,10 +39,16 @@ async function spellCheck(input: IFlowInput, args: { secret: CognigySecret, text
                 body += d;
             });
             response.on('end', () => {
-                result = JSON.parse(body);
-
-                input.context.getFullContext()[args.store] = result;
-                resolve(input);
+                try {
+                    result = JSON.parse(body);
+                    input.context.getFullContext()[args.store] = result;
+                    resolve(input);
+                } catch (e) {
+                    if (args.stopOnError) { reject(e.message); return; }
+                    result = { "error": e.message };
+                    input.context.getFullContext()[args.store] = result;
+                    resolve(input);
+                }
             });
             response.on('error', (err) => {
                 if (args.stopOnError) { reject(err.message); return; }
@@ -68,9 +74,9 @@ module.exports.spellCheck = spellCheck;
  * @arg {CognigyScript} `store` Where to store the result
  * @arg {Boolean} `stopOnError` Whether to stop on error or continue
  */
-async function recognizeLanguage(input: IFlowInput, args: { secret: CognigySecret, text: string, store: string, stopOnError: boolean }): Promise<IFlowInput | {}>  {
+async function recognizeLanguage(input: IFlowInput, args: { secret: CognigySecret, text: string, store: string, stopOnError: boolean }): Promise<IFlowInput | {}> {
     // Check if secret exists and contains correct parameters
-    if (!args.secret || !args.secret.key || !args.secret.region) return Promise.reject("Secret not defined or invalid.");
+    if (!args.secret || !args.secret.key || !args.secret.region) return Promise.reject("Secret not defined or invalid.");
     if (!args.text) return Promise.reject("No text defined.");
 
     return new Promise((resolve, reject) => {
@@ -86,9 +92,16 @@ async function recognizeLanguage(input: IFlowInput, args: { secret: CognigySecre
                 body += d;
             });
             response.on('end', () => {
-                result = JSON.parse(body);
-                input.context.getFullContext()[args.store] = result;
-                resolve(input);
+                try {
+                    result = JSON.parse(body);
+                    input.context.getFullContext()[args.store] = result;
+                    resolve(input);
+                } catch (e) {
+                    if (args.stopOnError) { reject(e.message); return; }
+                    result = { "error": e.message };
+                    input.context.getFullContext()[args.store] = result;
+                    resolve(input);
+                }
             });
             response.on('error', (err) => {
                 if (args.stopOnError) { reject(err.message); return; }
@@ -102,22 +115,24 @@ async function recognizeLanguage(input: IFlowInput, args: { secret: CognigySecre
             let body = JSON.stringify(documents);
 
             let request_params = {
-                method : 'POST',
-                hostname : uri,
-                path : path,
-                headers : {
-                    'Ocp-Apim-Subscription-Key' : accessKey,
+                method: 'POST',
+                hostname: uri,
+                path: path,
+                headers: {
+                    'Ocp-Apim-Subscription-Key': accessKey,
                 }
             };
 
-            const req = https.request (request_params, response_handler);
+            const req = https.request(request_params, response_handler);
             req.write(body);
             req.end();
         };
 
-        let documents = { 'documents': [
+        let documents = {
+            'documents': [
                 { 'id': '1', 'text': args.text }
-            ]};
+            ]
+        };
 
         get_language(documents);
 
@@ -135,7 +150,7 @@ module.exports.recognizeLanguage = recognizeLanguage;
  * @arg {CognigyScript} `store` Where to store the result
  * @arg {Boolean} `stopOnError` Whether to stop on error or continue
  */
-async function extractKeyphrases(input: IFlowInput, args: { secret: CognigySecret, language: string, text: string, store: string, stopOnError: boolean }): Promise<IFlowInput | {}>  {
+async function extractKeyphrases(input: IFlowInput, args: { secret: CognigySecret, language: string, text: string, store: string, stopOnError: boolean }): Promise<IFlowInput | {}> {
     // Check if secret exists and contains correct parameters
     if (!args.secret || !args.secret.key || !args.secret.region) return Promise.reject("Secret not defined or invalid.");
     if (!args.text) return Promise.reject("No text defined.");
@@ -153,9 +168,16 @@ async function extractKeyphrases(input: IFlowInput, args: { secret: CognigySecre
                 body += d;
             });
             response.on('end', () => {
-                result = JSON.parse(body);
-                input.context.getFullContext()[args.store] = result;
-                resolve(input);
+                try {
+                    result = JSON.parse(body);
+                    input.context.getFullContext()[args.store] = result;
+                    resolve(input);
+                } catch (e) {
+                    if (args.stopOnError) { reject(e.message); return; }
+                    result = { "error": e.message };
+                    input.context.getFullContext()[args.store] = result;
+                    resolve(input);
+                }
             });
             response.on('error', (err) => {
                 if (args.stopOnError) { reject(err.message); return; }
@@ -169,22 +191,24 @@ async function extractKeyphrases(input: IFlowInput, args: { secret: CognigySecre
             let body = JSON.stringify(documents);
 
             let request_params = {
-                method : 'POST',
-                hostname : uri,
-                path : path,
-                headers : {
-                    'Ocp-Apim-Subscription-Key' : accessKey,
+                method: 'POST',
+                hostname: uri,
+                path: path,
+                headers: {
+                    'Ocp-Apim-Subscription-Key': accessKey,
                 }
             };
 
             const req = https.request(request_params, response_handler);
             req.write(body);
-            req.end ();
+            req.end();
         };
 
-        let documents = { 'documents': [
+        let documents = {
+            'documents': [
                 { 'id': '1', 'language': args.language, 'text': args.text }
-            ]};
+            ]
+        };
 
         get_key_phrases(documents);
 
@@ -202,9 +226,9 @@ module.exports.extractKeyphrases = extractKeyphrases;
  * @arg {CognigyScript} `store` Where to store the result
  * @arg {Boolean} `stopOnError` Whether to stop on error or continue
  */
-async function namedEntityRecognition(input: IFlowInput, args: { secret: CognigySecret, language: string, text: string, store: string, stopOnError: boolean }): Promise<IFlowInput | {}>  {
+async function namedEntityRecognition(input: IFlowInput, args: { secret: CognigySecret, language: string, text: string, store: string, stopOnError: boolean }): Promise<IFlowInput | {}> {
     // Check if secret exists and contains correct parameters
-    if (!args.secret || !args.secret.key || !args.secret.region) return Promise.reject("Secret not defined or invalid.");
+    if (!args.secret || !args.secret.key || !args.secret.region) return Promise.reject("Secret not defined or invalid.");
     if (!args.text) return Promise.reject("No text defined.");
 
     return new Promise((resolve, reject) => {
@@ -220,9 +244,16 @@ async function namedEntityRecognition(input: IFlowInput, args: { secret: Cognigy
                 body += d;
             });
             response.on('end', () => {
-                result = JSON.parse(body);
-                input.context.getFullContext()[args.store] = result;
-                resolve(input);
+                try {
+                    result = JSON.parse(body);
+                    input.context.getFullContext()[args.store] = result;
+                    resolve(input);
+                } catch (e) {
+                    if (args.stopOnError) { reject(e.message); return; }
+                    result = { "error": e.message };
+                    input.context.getFullContext()[args.store] = result;
+                    resolve(input);
+                }
             });
             response.on('error', (err) => {
                 if (args.stopOnError) { reject(err.message); return; }
@@ -236,11 +267,11 @@ async function namedEntityRecognition(input: IFlowInput, args: { secret: Cognigy
             let body = JSON.stringify(documents);
 
             let request_params = {
-                method : 'POST',
-                hostname : uri,
-                path : path,
-                headers : {
-                    'Ocp-Apim-Subscription-Key' : accessKey,
+                method: 'POST',
+                hostname: uri,
+                path: path,
+                headers: {
+                    'Ocp-Apim-Subscription-Key': accessKey,
                 }
             };
 
@@ -249,9 +280,11 @@ async function namedEntityRecognition(input: IFlowInput, args: { secret: Cognigy
             req.end();
         };
 
-        let documents = { 'documents': [
+        let documents = {
+            'documents': [
                 { 'id': '1', 'language': args.language, 'text': args.text }
-            ]};
+            ]
+        };
 
         get_entities(documents);
 
@@ -268,7 +301,7 @@ module.exports.namedEntityRecognition = namedEntityRecognition;
  * @arg {CognigyScript} `store` Where to store the result
  * @arg {Boolean} `stopOnError` Whether to stop on error or continue
  */
-async function bingWebSearch(input: IFlowInput, args: { secret: CognigySecret, query: string, store: string, stopOnError: boolean }): Promise<IFlowInput | {}>  {
+async function bingWebSearch(input: IFlowInput, args: { secret: CognigySecret, query: string, store: string, stopOnError: boolean }): Promise<IFlowInput | {}> {
     // Check if secret exists and contains correct parameters
     if (!args.secret || !args.secret.key) return Promise.reject("Secret not defined or invalid.");
     if (!args.query) return Promise.reject("No query defined.");
@@ -279,15 +312,23 @@ async function bingWebSearch(input: IFlowInput, args: { secret: CognigySecret, q
 
         https.get({
             hostname: 'api.cognitive.microsoft.com',
-            path:     '/bing/v7.0/search?q=' + encodeURIComponent(args.query),
-            headers:  { 'Ocp-Apim-Subscription-Key': accessKey },
+            path: '/bing/v7.0/search?q=' + encodeURIComponent(args.query),
+            headers: { 'Ocp-Apim-Subscription-Key': accessKey },
         }, res => {
             let body = '';
             res.on('data', part => body += part);
             res.on('end', () => {
-                result = JSON.parse(body);
-                input.input[args.store] = result;
-                resolve(input);
+                try {
+                    result = JSON.parse(body);
+                    input.input[args.store] = result;
+                    resolve(input);
+                } catch (e) {
+                    if (args.stopOnError) { reject(e.message); return; }
+                    result = { "error": e.message };
+                    input.input[args.store] = result;
+                    resolve(input);
+                }
+
             });
             res.on('error', err => {
                 if (args.stopOnError) { reject(err.message); return; }
@@ -309,7 +350,7 @@ module.exports.bingWebSearch = bingWebSearch;
  * @arg {CognigyScript} `store` Where to store the result
  * @arg {Boolean} `stopOnError` Whether to stop on error or continue
  */
-async function bingNewsSearch(input: IFlowInput, args: { secret: CognigySecret, term: string, store: string, stopOnError: boolean }): Promise<IFlowInput | {}>  {
+async function bingNewsSearch(input: IFlowInput, args: { secret: CognigySecret, term: string, store: string, stopOnError: boolean }): Promise<IFlowInput | {}> {
     // Check if secret exists and contains correct parameters
     if (!args.secret || !args.secret.key) return Promise.reject("Secret not defined or invalid.");
     if (!args.term) return Promise.reject("No news term defined.");
@@ -321,19 +362,25 @@ async function bingNewsSearch(input: IFlowInput, args: { secret: CognigySecret, 
 
         https.get({
             hostname: 'api.cognitive.microsoft.com',
-            path:     '/bing/v7.0/news/search?q=' + encodeURIComponent(args.term),
-            headers:  { 'Ocp-Apim-Subscription-Key': accessKey },
+            path: '/bing/v7.0/news/search?q=' + encodeURIComponent(args.term),
+            headers: { 'Ocp-Apim-Subscription-Key': accessKey },
         }, res => {
             let body = '';
-
-            res.on('data',(d) => {
+            res.on('data', (d) => {
                 body += d;
             });
+            res.on('end', () => {
+                try {
+                    result = JSON.parse(body);
+                    input.input[args.store] = result;
+                    resolve(input);
+                } catch (e) {
+                    if (args.stopOnError) { reject(e.message); return; }
+                    result = { "error": e.message };
+                    input.input[args.store] = result;
+                    resolve(input);
+                }
 
-            res.on('end',  () => {
-                result = JSON.parse(body);
-                input.input[args.store] = result;
-                resolve(input);
             });
         })
     });
@@ -349,7 +396,7 @@ module.exports.bingNewsSearch = bingNewsSearch;
  * @arg {CognigyScript} `store` Where to store the result
  * @arg {Boolean} `stopOnError` Whether to stop on error or continue
  */
-async function bingImageSearch(input: IFlowInput, args: { secret: CognigySecret, term: string, store: string, stopOnError: boolean }): Promise<IFlowInput | {}>  {
+async function bingImageSearch(input: IFlowInput, args: { secret: CognigySecret, term: string, store: string, stopOnError: boolean }): Promise<IFlowInput | {}> {
     // Check if secret exists and contains correct parameters
     if (!args.secret || !args.secret.key) return Promise.reject("Secret not defined or invalid.");
     if (!args.term) return Promise.reject("No image term defined.");
@@ -359,11 +406,11 @@ async function bingImageSearch(input: IFlowInput, args: { secret: CognigySecret,
         let accessKey = args.secret.key;
 
         const request_params = {
-            method : 'GET',
-            hostname : 'api.cognitive.microsoft.com',
-            path : '/bing/v7.0/images/search' + '?q=' + encodeURIComponent(args.term),
-            headers : {
-                'Ocp-Apim-Subscription-Key' : accessKey,
+            method: 'GET',
+            hostname: 'api.cognitive.microsoft.com',
+            path: '/bing/v7.0/images/search' + '?q=' + encodeURIComponent(args.term),
+            headers: {
+                'Ocp-Apim-Subscription-Key': accessKey,
             }
         };
 
@@ -375,9 +422,16 @@ async function bingImageSearch(input: IFlowInput, args: { secret: CognigySecret,
             });
 
             response.on('end', () => {
-                result = JSON.parse(body);
-                input.input[args.store] = result;
-                resolve(input);
+                try {
+                    result = JSON.parse(body);
+                    input.input[args.store] = result;
+                    resolve(input);
+                } catch (e) {
+                    if (args.stopOnError) { reject(e.message); return; }
+                    result = { "error": e.message };
+                    input.input[args.store] = result;
+                    resolve(input);
+                }
             });
         };
 
@@ -397,7 +451,7 @@ module.exports.bingImageSearch = bingImageSearch;
  * @arg {CognigyScript} `store` Where to store the result
  * @arg {Boolean} `stopOnError` Whether to stop on error or continue
  */
-async function textTranslator(input: IFlowInput, args: { secret: CognigySecret, language: string, text: string, store: string, stopOnError: boolean }): Promise<IFlowInput | {}>  {
+async function textTranslator(input: IFlowInput, args: { secret: CognigySecret, language: string, text: string, store: string, stopOnError: boolean }): Promise<IFlowInput | {}> {
     // Check if secret exists and contains correct parameters
     if (!args.secret || !args.secret.key) return Promise.reject("Secret not defined or invalid.");
     if (!args.text) return Promise.reject("No text defined.");
@@ -426,9 +480,17 @@ async function textTranslator(input: IFlowInput, args: { secret: CognigySecret, 
         };
 
         request(options, (err, res, body) => {
-            result = body;
-            input.context.getFullContext()[args.store] = result;
-            resolve(input);
+            try {
+                result = body;
+                input.context.getFullContext()[args.store] = result;
+                resolve(input);
+            } catch (e) {
+                if (args.stopOnError) { reject(e.message); return; }
+                result = { "error": e.message };
+                input.input[args.store] = result;
+                resolve(input);
+            }
+
         });
     });
 }
