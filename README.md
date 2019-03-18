@@ -1,13 +1,23 @@
-# Cognigy Integration Framework
+# Cognigy Integration Framework Modules
 In Cognigy.AI, Conversational AIs are configured in so-called Flows, which contain the NLP/NLU configuration and then a decision tree to formulate the output to the user or trigger actions in third party systems. 
 
 The Cognigy Integration Framework enables anyone to build JavaScript modules and to expose these are Nodes within a Cognigy Flow. There are no restrictions on NPMs or functionality.
 
 On shared environments (e.g. SaaS, Demo), Cognigy will review the modules before publishing them.
 
-This repository contains the existing Custom Modules which can be used as blueprints for further developments.
+This repository contains the source code of existing Custom Modules which can be used as blueprints for further developments.
 
 All Cognigy Custom Modules are provided under the MIT license.
+
+## Installation
+All modules in this repository are provided as [TypeScript](https://www.typescriptlang.org/) source code which can be transpiled to JavaScript. In order to use them in your Cognigy.AI installation, you need to perform the following steps:
+
+1. Clone the repository
+2. Navigate to a module folder (e.g. modules/salesforce), run `npm install` to install dependencies and `tsc` to transpile the module from TypeScript to JavaScript
+3. Zip the root of the module and the /build folder
+4. Upload the zipped module into your Cognigy.AI installation through the [Cognigy Integration Framework manager](https://docs.cognigy.com/docs/integration-framework#section-4-upload-your-module).
+
+>In shared Cognigy.AI environments only Cognigy-approved Custom Modules may be uploaded.
 
 ## Best Practices
 In order to guarantee a uniform user experiences, we have set up a number of best practices
