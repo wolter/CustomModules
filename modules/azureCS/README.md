@@ -4,7 +4,7 @@ Integrates Cognigy with the Microsoft Azure Cognitive Services ([Cognitive Servi
 ## Secrets
 This model needs several **CognigySecrets** to be defined and passed to the Nodes. To include these APIs into Cognigy you need the **API Token** and create a Cognigy Secret for each of these APIs.
 
-You will require the following secrets for the individual Nodes:
+You will require the following Secrets for the respective Nodes:
 
 - **Spellcheck**
   - key (API Key)
