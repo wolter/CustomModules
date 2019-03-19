@@ -1,42 +1,20 @@
-# Microsoft Cognitive Services
-Integrates Cognigy with the Microsoft Cognitive Services ([Cognitive Services | Microsoft Azure](https://azure.microsoft.com/de-de/services/cognitive-services/))
+# Microsoft Azure Cognitive Services
+Integrates Cognigy with the Microsoft Azure Cognitive Services ([Cognitive Services | Microsoft Azure](https://azure.microsoft.com/de-de/services/cognitive-services/))
 
-## Secret
+## Secrets
 This model needs several **CognigySecrets** to be defined and passed to the Nodes. To include these APIs into Cognigy you need the **API Token** and create a Cognigy Secret for each of these APIs.
 
-- **Cognitive Services API**
-  - You need this for the **SpellCheck** Node
-  - Secrets:
-    - key: "key"
-    - value: <API Key>
-- **Text Analytics API**
-  - This you need for the following Nodes: 
-    - **Named Entity Recognition**
-    - **Extract Keyphrases**
-    - **Recognize Language**
-    - Secrets:
-      - 1.
-        - key: "key"
-        - value: <API Key>
-      - 2.
-        - key: "region"
-        - value: <Azure Region>
-- **Bing Search API**
-  - With this API you can use the Search Nodes: 
-    - **Bing Web Search**
-    - **Bing News Search**
-    - Secrets:
-      - key: "key"
-      - value: <API Key>
-- **Translator Text API***
-  - The Translator API is used for the **Text Translator** Node
-  - Secrets
-    - key: "key"
-    - value: <API Key>
+You will require the following secrets for the individual Nodes:
 
-
-
-
+- **Spellcheck**
+  - key (API Key)
+- **Named Entity Recognition**, **Extract Keyphrases**, **Recognize Language**
+  - key (API Key)
+  - region (Azure Region)
+- **Bing Web Search**, **Bing News Search**
+  - key (API Key)
+- **Text Translator**
+  - key (API Key)
 
 ## Node: Spell Check
  [Resource](https://docs.microsoft.com/de-de/azure/cognitive-services/bing-spell-check/quickstarts/nodejs) 
