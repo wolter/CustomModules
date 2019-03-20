@@ -496,3 +496,79 @@ async function textTranslator(input: IFlowInput, args: { secret: CognigySecret, 
 }
 
 module.exports.textTranslator = textTranslator;
+
+
+/**
+ * Returns the sentiment of a given sentence.
+ * @arg {SecretSelect} `secret` The configured secret to use
+ * @arg {CognigyScript} `text` The text to analyse
+ * @arg {Select[af,ar,bn,bs,bg,yue,ca,zh-Hans,zh-Hant,hr,cs,da,nl,en,et,fj,fil,fi,fr,de,el,ht,he,hi,mww,hu,is,id,it,ja,sw,tlh,tlh-Qaak,ko,lv,lt,mg,ms,mt,nb,fa,pl,pt,otq,ro,ru,sm,sr-Cyrl,sr-Latn,sk,sl,es,sv,ty,ta,te,th,to,tr,uk,ur,vi,cy,yau]} `language` the language of the given text
+ * @arg {CognigyScript} `store` Where to store the result
+ * @arg {Boolean} `stopOnError` Whether to stop on error or continue
+ */
+async function sentimentAnalysis(input: IFlowInput, args: { secret: CognigySecret, text: string, language: string, store: string, stopOnError: boolean }): Promise<IFlowInput | {}> {
+    // Check if secret exists and contains correct parameters
+    if (!args.secret || !args.secret.key || !args.secret.region) return Promise.reject("Secret not defined or invalid.");
+    if (!args.text) return Promise.reject("No text defined.");
+    if (!args.language) return Promise.reject("No language defined.");
+
+    return new Promise((resolve, reject) => {
+        let result = {};
+        let accessKey = args.secret.key;
+
+        const uri = args.secret.region + '.api.cognitive.microsoft.com';
+        const path = '/text/analytics/v2.0/sentiment';
+
+        const response_handler = (response) => {
+            let body = '';
+            response.on('data', (d) => {
+                body += d;
+            });
+            response.on('end', () => {
+                try {
+                    result = JSON.parse(body);
+                    input.context.getFullContext()[args.store] = result;
+                    resolve(input);
+                } catch (e) {
+                    if (args.stopOnError) { reject(e.message); return; }
+                    result = { "error": e.message };
+                    input.context.getFullContext()[args.store] = result;
+                    resolve(input);
+                }
+            });
+            response.on('error', (err) => {
+                if (args.stopOnError) { reject(err.message); return; }
+                result = { "error": err.message };
+                input.context.getFullContext()[args.store] = result;
+                resolve(input);
+            });
+        };
+
+        let get_sentiments = function (documents) {
+            let body = JSON.stringify(documents);
+
+            let request_params = {
+                method: 'POST',
+                hostname: uri,
+                path: path,
+                headers: {
+                    'Ocp-Apim-Subscription-Key': accessKey,
+                }
+            };
+
+            let req = https.request(request_params, response_handler);
+            req.write(body);
+            req.end();
+        }
+
+        let documents = {
+            'documents': [
+                { 'id': '1', 'language': args.language, 'text': args.text },
+            ]
+        };
+
+        get_sentiments(documents);
+    });
+}
+
+module.exports.sentimentAnalysis = sentimentAnalysis;
