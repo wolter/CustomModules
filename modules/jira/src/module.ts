@@ -1,5 +1,25 @@
 const JiraClient = require('jira-connector');
 
+
+/**
+ * Creates a Ticket in Jira
+ * @arg {SecretSelect} `secret` The configured secret to use
+ * @arg {CognigyScript} `summary` The summary of the new ticket
+ * @arg {CognigyScript} `projectId` The summary of the new ticket
+ * @arg {CognigyScript} `store` Where to store the result
+ * @arg {Boolean} `stopOnError` Whether to stop on error or continue
+ */
+
+async function createTicket(input: IFlowInput, args: { secret: CognigySecret, summary: string, projectId: string, store: string, stopOnError: boolean }): Promise<IFlowInput | {}> {
+  return new Promise((resolve, reject) => {
+
+  });
+
+}
+
+module.exports.createTicket = createTicket;
+
+
 /**
  * This function takes the input text and automatically extracts a ticket number (e.g. SB-2 or TIF-1234). You select where to store it. 
  * @arg {CognigyScript} `storeTicket` Where to store the result
