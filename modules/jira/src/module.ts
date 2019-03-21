@@ -10,14 +10,38 @@ const JiraClient = require('jira-connector');
  * @arg {Boolean} `stopOnError` Whether to stop on error or continue
  */
 
-async function createTicket(input: IFlowInput, args: { secret: CognigySecret, summary: string, projectId: string, store: string, stopOnError: boolean }): Promise<IFlowInput | {}> {
+async function createTicket2(input: IFlowInput, args: { secret: CognigySecret, summary: string, projectId: string, store: string, stopOnError: boolean }): Promise<IFlowInput | {}> {
   return new Promise((resolve, reject) => {
+    let reslut: any = {}
+
+    const jira = new JiraClient({
+      host: args.secret.domain,
+      basic_auth: {
+        username: args.secret.username,
+        password: args.secret.password
+      }
+    });
+
+    jira.issue.createIssue({
+      fields: {
+        summary: args.summary,
+        project: {
+          id: args.projectId
+        }
+      }
+    }, (error, issue) => {
+      if (error){
+        reject(error)
+      }
+      input.context.getFullContext()[args.store] = issue;
+    });
+
 
   });
 
 }
 
-module.exports.createTicket = createTicket;
+module.exports.createTicket2 = createTicket2;
 
 
 /**
