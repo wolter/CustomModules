@@ -1,0 +1,12 @@
+{
+	"name": "Logging",
+	"version": "1.0.0",
+	"description": "This module adds a logging node to Cognigy.AI.",
+	"author": "Cognigy GmbH",
+	"license": "MIT",
+	"keywords": [],
+	"main": "build/module.js",
+	"dependencies": {
+		"@types/node": "^10.12.18"
+	}
+}

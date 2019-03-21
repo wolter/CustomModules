@@ -9,7 +9,13 @@ This repository contains the source code of existing Custom Modules which can be
 
 All Cognigy Custom Modules are provided under the MIT license.
 
-## Installation
+## Installation (Download)
+We are providing all modules as ready-to-install zipped releases.
+
+1. Download the module you'd like to install from our [Releases](https://github.com/Cognigy/CustomModules/releases) page.
+2. Upload the zipped module into your Cognigy.AI installation through the [Cognigy Integration Framework manager](https://docs.cognigy.com/docs/integration-framework#section-4-upload-your-module).
+
+## Installation (Source)
 All modules in this repository are provided as [TypeScript](https://www.typescriptlang.org/) source code which can be transpiled to JavaScript. In order to use them in your Cognigy.AI installation, you need to perform the following steps:
 
 1. Clone the repository
