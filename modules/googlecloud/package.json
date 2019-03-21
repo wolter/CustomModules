@@ -1,9 +1,10 @@
 {
 	"name": "Google-Cloud",
-	"version": "1.1.0",
+	"version": "1.0.0",
 	"description": "This module integrates Cognigy.AI with the Google Cloud Plattform",
 	"main": "build/module.js",
 	"scripts": {
+		
 		"build": "tsc -p ."
 	},
 	"repository": {
