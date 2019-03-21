@@ -6,11 +6,12 @@ const JiraClient = require('jira-connector');
  * @arg {SecretSelect} `secret` The configured secret to use
  * @arg {CognigyScript} `summary` The summary of the new ticket
  * @arg {CognigyScript} `projectId` The summary of the new ticket
+ * @arg {CognigyScript} `epicname` The epicname of the new ticket
  * @arg {CognigyScript} `store` Where to store the result
  * @arg {Boolean} `stopOnError` Whether to stop on error or continue
  */
 
-async function createTicket2(input: IFlowInput, args: { secret: CognigySecret, summary: string, projectId: string, store: string, stopOnError: boolean }): Promise<IFlowInput | {}> {
+async function createTicket2(input: IFlowInput, args: { secret: CognigySecret, summary: string, projectId: string, epicname: string, store: string, stopOnError: boolean }): Promise<IFlowInput | {}> {
   return new Promise((resolve, reject) => {
     let reslut: any = {}
 
@@ -25,14 +26,34 @@ async function createTicket2(input: IFlowInput, args: { secret: CognigySecret, s
     jira.issue.createIssue({
       fields: {
         summary: args.summary,
+        issuetype: {
+          id: args.projectId
+        },
         project: {
           id: args.projectId
-        }
+        },
+        customfield_10011: args.epicname
+        // description: {
+        //   type: "doc",
+        //   version: 1,
+        //   content: [
+        //     {
+        //       type: "paragraph",
+        //       content: [
+        //         {
+        //           text: args.description,
+        //           type: "text"
+        //         }
+        //       ]
+        //     }
+        //   ]
+        // }
       }
     }, (error, issue) => {
       if (error){
         reject(error)
       }
+      input.actions.output("", issue);
       input.context.getFullContext()[args.store] = issue;
     });
 
