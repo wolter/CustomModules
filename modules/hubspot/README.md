@@ -5,9 +5,8 @@ This module is based on node-hubspot (https://www.npmjs.com/package/hubspot)
 ### Secret
 This modules needs a CognigySecret to be defined and passed to the Nodes. The secret must have the following keys:
 
-- apiKey
-
-
+- **key**:  apiKey
+- **value**: Your Hubspot <API KEY>
 
 **Properties**
 
@@ -25,12 +24,23 @@ If you just type **properties** into the properties field, the API will return a
 You need the **Email** address. Optional, you can use **Properties** for more information. Then it returns the following information: 
 
 ```json
-  "contact": {
-    "vid": 3240051
+"contact": {
+    "vid": 123445,
+    "canonical-vid": 123445,
+    "merged-vids": [],
+    "portal-id": 27123836,
+    "is-contact": true,
+    "profile-token": "AO...",
+    "profile-url": "https://app.hubspot.com/contacts/2761836/contact/123445",
+    "properties": {
+      "firstname": {
+        "value": "Max"
+      }
+    },
   }
 ```
 
-# Node: updateContact & createCompany
+# Node: updateContact & updateCompany
 
 [Contact](https://developers.hubspot.com/docs/methods/contacts/update_contact)
 [Company](https://developers.hubspot.com/docs/methods/companies/update_company)
@@ -53,6 +63,19 @@ Updates a existing **Contact** or a **Company** in Hubspot. You need the **Hubsp
 }
 ```
 
+To update a company, you have to use a little different JSON: 
+
+```json
+{
+  "properties": [
+    {
+      "name": "name",
+      "value": "New Company Name"
+    }
+  ]
+}
+```
+
 # Node: createContact & createCompany
 
 [Contact](https://developers.hubspot.com/docs/methods/contacts/create_contact)
@@ -64,13 +87,8 @@ Creating a **Contact** or a **Company** is nearly the same. You need the followi
 {
   "properties": [
     {
-      "property": "name",
-      "value": {
-        "$cs": {
-          "script": "cc.newContact.contact_firstname.value",
-          "type": "string"
-        }
-      }
+      "property": "firstname",
+      "value": "CM TEST"
     }
   ]
 }
@@ -131,8 +149,6 @@ If you only know the **domain** of a company, such as the website (eg. google.co
   ]
 }
 ```
-
-
 
 # Node: createEngagement
 
