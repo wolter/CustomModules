@@ -1,0 +1,3 @@
+Simple custom moodule with a node for logging purpose. You need to set the log level (info, error,debug) and the message in the Node. The message might also contain CognigyScript.
+
+Furthermore, we included an experimental feature without any guaranty for logging directly to your browser console using a WebBrowser. You can usually access the console via F12 (Developer Tools). Please note, the message for direct browser logging can be either a JSON-object (i.e. {{JSON.stringify(ci)}}) or a string in quotes (you have to set the quotes here like "Hello World").

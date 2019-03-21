@@ -10,5 +10,6 @@ modules/service-endpoint/gactions
 coverage/
 *.zip
 .idea
+*.bat
 
 /**/.DS_Store
