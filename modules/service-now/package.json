@@ -4,7 +4,9 @@
 	"description": "Integrates Service-Now with Cognigy.AI",
 	"main": "build/module.js",
 	"scripts": {
-		"build": "tsc -p ."
+		"transpile": "tsc -p .",
+		"zip": "zip serviceNow.zip build/* package.json package-lock.json README.md icon.png icon-large.png",
+		"build": "npm run transpile && npm run zip"
 	},
 	"repository": {
 		"type": "git",
