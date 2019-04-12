@@ -104,7 +104,7 @@ async function DeleteFromTable(input: IFlowInput, args: { secret: CognigySecret,
     return new Promise((resolve, reject) => {
         let result = {};
 
-        axios.post(`https://dev66923.service-now.com/api/now/table/${args.tableName}/${args.sysId}`,{}, {
+        axios.delete(`https://dev66923.service-now.com/api/now/table/${args.tableName}/${args.sysId}`, {
             headers: {
                 'Allow': 'application/json',
                 'Content-Type': 'application/json'
@@ -115,7 +115,7 @@ async function DeleteFromTable(input: IFlowInput, args: { secret: CognigySecret,
             },
         })
             .then(function (response) {
-                result = response.data.result
+                result = "succefully deleted entry with id " + args.sysId;
                 input.context.getFullContext()[args.store] = result
                 resolve(input)
             })
