@@ -1,11 +1,11 @@
 const axios = require('axios')
 
 /**
- * Describes the function
+ * Gets the information of a chosen table
  * @arg {SecretSelect} `secret` The configured secret to use
  * @arg {CognigyScript} `tableName` The name of the table you want to query
  * @arg {CognigyScriptArray} `columns` The columns you want to show
- * @arg {Number} `limit` Where to store the result
+ * @arg {Number} `limit` The limit of the shown results
  * @arg {Boolean} `stopOnError` Whether to stop on error or continue
  * @arg {CognigyScript} `store` Where to store the result
  */
@@ -44,10 +44,10 @@ module.exports.GETFromTable = GETFromTable;
 
 
 /**
- * Describes the function
+ * Inserts a new row into the chosen Service Now table
  * @arg {SecretSelect} `secret` The configured secret to use
- * @arg {CognigyScript} `tableName` The name of the table you want to query
- * @arg {JSON} `data` The short description you want to add
+ * @arg {CognigyScript} `tableName` The name of the table you want to edit
+ * @arg {JSON} `data` The data of the row you want to add
  * @arg {Boolean} `stopOnError` Whether to stop on error or continue
  * @arg {CognigyScript} `store` Where to store the result
  */
@@ -85,4 +85,5 @@ async function POSTToTable(input: IFlowInput, args: { secret: CognigySecret, tab
 }
 
 module.exports.POSTToTable = POSTToTable;
+
 
