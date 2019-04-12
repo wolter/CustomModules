@@ -42,3 +42,47 @@ async function GETFromTable(input: IFlowInput, args: { secret: CognigySecret, ta
 
 module.exports.GETFromTable = GETFromTable;
 
+
+/**
+ * Describes the function
+ * @arg {SecretSelect} `secret` The configured secret to use
+ * @arg {CognigyScript} `tableName` The name of the table you want to query
+ * @arg {JSON} `data` The short description you want to add
+ * @arg {Boolean} `stopOnError` Whether to stop on error or continue
+ * @arg {CognigyScript} `store` Where to store the result
+ */
+async function POSTToTable(input: IFlowInput, args: { secret: CognigySecret, tableName: string, data: JSON, stopOnError: boolean, store: string}): Promise<IFlowInput | {}> {
+
+    // Check if secret exists and contains correct parameters
+    if (!args.secret || !args.secret.username || !args.secret.password) return Promise.reject("Secret not defined or invalid.");
+    if (!args.tableName) return Promise.reject("No table name defined.");
+
+    return new Promise((resolve, reject) => {
+        let result = {};
+
+        axios.post(`https://dev66923.service-now.com/api/now/table/${args.tableName}`,     
+            args.data, {
+            headers: {
+                'Allow': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            auth: {
+                username: args.secret.username,
+                password: args.secret.password
+            },
+        })
+            .then(function (response) {
+                result = response.data.result
+                input.context.getFullContext()[args.store] = result
+                resolve(input)
+            })
+            .catch(function (error) {
+                if (args.stopOnError) { reject(error.message); return; }
+                else result = { "error": error.message };
+                resolve(input)
+            })
+    });
+}
+
+module.exports.POSTToTable = POSTToTable;
+
