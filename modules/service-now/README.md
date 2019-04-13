@@ -4,7 +4,12 @@ Integrates the Service Now Software with Cognigy.AI.
 
 Table Node Source: https://developer.servicenow.com/app.do#!/rest_api_doc?v=madrid&id=c_TableAPI
 
+**Secrets**
+You have to define three secrets to use this Custom Module: 
 
+- username
+- password
+- instance (e.g. https://dev12345.service-now.com)
 
 ## Node: GETFromTable
 
