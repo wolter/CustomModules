@@ -9,7 +9,7 @@ const axios = require('axios')
  * @arg {Boolean} `stopOnError` Whether to stop on error or continue
  * @arg {CognigyScript} `store` Where to store the result
  */
-async function GETFromTable(input: IFlowInput, args: { secret: CognigySecret, tableName: string, columns: string[], limit: number, stopOnError: boolean, store: string}): Promise<IFlowInput | {}> {
+async function GETFromTable(input: IFlowInput, args: { secret: CognigySecret, tableName: string, columns: string[], limit: number, stopOnError: boolean, store: string }): Promise<IFlowInput | {}> {
 
     // Check if secret exists and contains correct parameters
     if (!args.secret || !args.secret.username || !args.secret.password) return Promise.reject("Secret not defined or invalid.");
@@ -51,7 +51,7 @@ module.exports.GETFromTable = GETFromTable;
  * @arg {Boolean} `stopOnError` Whether to stop on error or continue
  * @arg {CognigyScript} `store` Where to store the result
  */
-async function POSTToTable(input: IFlowInput, args: { secret: CognigySecret, tableName: string, data: JSON, stopOnError: boolean, store: string}): Promise<IFlowInput | {}> {
+async function POSTToTable(input: IFlowInput, args: { secret: CognigySecret, tableName: string, data: JSON, stopOnError: boolean, store: string }): Promise<IFlowInput | {}> {
 
     // Check if secret exists and contains correct parameters
     if (!args.secret || !args.secret.username || !args.secret.password) return Promise.reject("Secret not defined or invalid.");
@@ -61,17 +61,17 @@ async function POSTToTable(input: IFlowInput, args: { secret: CognigySecret, tab
     return new Promise((resolve, reject) => {
         let result = {};
 
-        axios.post(`https://dev66923.service-now.com/api/now/table/${args.tableName}`,     
+        axios.post(`https://dev66923.service-now.com/api/now/table/${args.tableName}`,
             args.data, {
-            headers: {
-                'Allow': 'application/json',
-                'Content-Type': 'application/json'
-            },
-            auth: {
-                username: args.secret.username,
-                password: args.secret.password
-            },
-        })
+                headers: {
+                    'Allow': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                auth: {
+                    username: args.secret.username,
+                    password: args.secret.password
+                },
+            })
             .then(function (response) {
                 result = response.data.result
                 input.context.getFullContext()[args.store] = result
@@ -85,7 +85,9 @@ async function POSTToTable(input: IFlowInput, args: { secret: CognigySecret, tab
     });
 }
 
+
 module.exports.POSTToTable = POSTToTable;
+
 
 /**
  * Updates a row from the chosen Service Now table
@@ -96,7 +98,7 @@ module.exports.POSTToTable = POSTToTable;
  * @arg {Boolean} `stopOnError` Whether to stop on error or continue
  * @arg {CognigyScript} `store` Where to store the result
  */
-async function PatchRecordInTable(input: IFlowInput, args: { secret: CognigySecret, tableName: string, data: JSON, sysId: JSON, stopOnError: boolean, store: string}): Promise<IFlowInput | {}> {
+async function PatchRecordInTable(input: IFlowInput, args: { secret: CognigySecret, tableName: string, data: JSON, sysId: JSON, stopOnError: boolean, store: string }): Promise<IFlowInput | {}> {
 
     // Check if secret exists and contains correct parameters
     if (!args.secret || !args.secret.username || !args.secret.password) return Promise.reject("Secret not defined or invalid.");
@@ -107,18 +109,18 @@ async function PatchRecordInTable(input: IFlowInput, args: { secret: CognigySecr
     return new Promise((resolve, reject) => {
         let result = {};
 
-        axios.patch(`https://dev66923.service-now.com/api/now/table/${args.tableName}/${args.sysId}`, 
+        axios.patch(`https://dev66923.service-now.com/api/now/table/${args.tableName}/${args.sysId}`,
             args.data
-        , {
-            headers: {
-                'Allow': 'application/json',
-                'Content-Type': 'application/json'
-            },
-            auth: {
-                username: args.secret.username,
-                password: args.secret.password
-            },
-        })
+            , {
+                headers: {
+                    'Allow': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                auth: {
+                    username: args.secret.username,
+                    password: args.secret.password
+                },
+            })
             .then(function (response) {
                 result = response.data.result;
                 input.context.getFullContext()[args.store] = result
@@ -143,7 +145,7 @@ module.exports.PatchRecordInTable = PatchRecordInTable;
  * @arg {Boolean} `stopOnError` Whether to stop on error or continue
  * @arg {CognigyScript} `store` Where to store the result
  */
-async function DeleteFromTable(input: IFlowInput, args: { secret: CognigySecret, tableName: string, sysId: JSON, stopOnError: boolean, store: string}): Promise<IFlowInput | {}> {
+async function DeleteFromTable(input: IFlowInput, args: { secret: CognigySecret, tableName: string, sysId: JSON, stopOnError: boolean, store: string }): Promise<IFlowInput | {}> {
 
     // Check if secret exists and contains correct parameters
     if (!args.secret || !args.secret.username || !args.secret.password) return Promise.reject("Secret not defined or invalid.");
