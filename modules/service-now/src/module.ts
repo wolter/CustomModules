@@ -147,6 +147,7 @@ async function DeleteFromTable(input: IFlowInput, args: { secret: CognigySecret,
     // Check if secret exists and contains correct parameters
     if (!args.secret || !args.secret.username || !args.secret.password) return Promise.reject("Secret not defined or invalid.");
     if (!args.tableName) return Promise.reject("No table name defined.");
+    if (!args.sysId) return Promise.reject("No sys id defined.");
 
     return new Promise((resolve, reject) => {
         let result = {};
