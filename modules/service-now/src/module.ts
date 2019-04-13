@@ -12,13 +12,13 @@ const axios = require('axios')
 async function GETFromTable(input: IFlowInput, args: { secret: CognigySecret, tableName: string, columns: string[], limit: number, stopOnError: boolean, store: string }): Promise<IFlowInput | {}> {
 
     // Check if secret exists and contains correct parameters
-    if (!args.secret || !args.secret.username || !args.secret.password) return Promise.reject("Secret not defined or invalid.");
+    if (!args.secret || !args.secret.username || !args.secret.password || !args.secret.instance) return Promise.reject("Secret not defined or invalid.");
     if (!args.tableName) return Promise.reject("No table name defined.");
 
     return new Promise((resolve, reject) => {
         let result = {};
 
-        axios.get(`https://dev66923.service-now.com/api/now/table/${args.tableName}?sysparm_fields=${args.columns}&sysparm_limit=${args.limit}`, {
+        axios.get(`${args.secret.instance}/api/now/table/${args.tableName}?sysparm_fields=${args.columns}&sysparm_limit=${args.limit}`, {
             headers: {
                 'Allow': 'application/json'
             },
@@ -54,14 +54,14 @@ module.exports.GETFromTable = GETFromTable;
 async function POSTToTable(input: IFlowInput, args: { secret: CognigySecret, tableName: string, data: JSON, stopOnError: boolean, store: string }): Promise<IFlowInput | {}> {
 
     // Check if secret exists and contains correct parameters
-    if (!args.secret || !args.secret.username || !args.secret.password) return Promise.reject("Secret not defined or invalid.");
+    if (!args.secret || !args.secret.username || !args.secret.password || !args.secret.instance) return Promise.reject("Secret not defined or invalid.");
     if (!args.tableName) return Promise.reject("No table name defined.");
     if (!args.data) return Promise.reject("No data to post defined.");
 
     return new Promise((resolve, reject) => {
         let result = {};
 
-        axios.post(`https://dev66923.service-now.com/api/now/table/${args.tableName}`,
+        axios.post(`${args.secret.instance}/api/now/table/${args.tableName}`,
             args.data, {
                 headers: {
                     'Allow': 'application/json',
@@ -101,7 +101,7 @@ module.exports.POSTToTable = POSTToTable;
 async function PatchRecordInTable(input: IFlowInput, args: { secret: CognigySecret, tableName: string, data: JSON, sysId: JSON, stopOnError: boolean, store: string }): Promise<IFlowInput | {}> {
 
     // Check if secret exists and contains correct parameters
-    if (!args.secret || !args.secret.username || !args.secret.password) return Promise.reject("Secret not defined or invalid.");
+    if (!args.secret || !args.secret.username || !args.secret.password || !args.secret.instance) return Promise.reject("Secret not defined or invalid.");
     if (!args.tableName) return Promise.reject("No table name defined.");
     if (!args.data) return Promise.reject("No data to update defined.");
     if (!args.sysId) return Promise.reject("No sys id defined.");
@@ -109,7 +109,7 @@ async function PatchRecordInTable(input: IFlowInput, args: { secret: CognigySecr
     return new Promise((resolve, reject) => {
         let result = {};
 
-        axios.patch(`https://dev66923.service-now.com/api/now/table/${args.tableName}/${args.sysId}`,
+        axios.patch(`${args.secret.instance}/api/now/table/${args.tableName}/${args.sysId}`,
             args.data
             , {
                 headers: {
@@ -148,14 +148,14 @@ module.exports.PatchRecordInTable = PatchRecordInTable;
 async function DeleteFromTable(input: IFlowInput, args: { secret: CognigySecret, tableName: string, sysId: JSON, stopOnError: boolean, store: string }): Promise<IFlowInput | {}> {
 
     // Check if secret exists and contains correct parameters
-    if (!args.secret || !args.secret.username || !args.secret.password) return Promise.reject("Secret not defined or invalid.");
+    if (!args.secret || !args.secret.username || !args.secret.password || !args.secret.instance) return Promise.reject("Secret not defined or invalid.");
     if (!args.tableName) return Promise.reject("No table name defined.");
     if (!args.sysId) return Promise.reject("No sys id defined.");
 
     return new Promise((resolve, reject) => {
         let result = {};
 
-        axios.delete(`https://dev66923.service-now.com/api/now/table/${args.tableName}/${args.sysId}`, {
+        axios.delete(`${args.secret.instance}/api/now/table/${args.tableName}/${args.sysId}`, {
             headers: {
                 'Allow': 'application/json',
                 'Content-Type': 'application/json'
@@ -192,12 +192,12 @@ module.exports.DeleteFromTable = DeleteFromTable;
 async function GETAttachments(input: IFlowInput, args: { secret: CognigySecret, limit: string, query: string, stopOnError: boolean, store: string }): Promise<IFlowInput | {}> {
 
     // Check if secret exists and contains correct parameters
-    if (!args.secret || !args.secret.username || !args.secret.password) return Promise.reject("Secret not defined or invalid.");
+    if (!args.secret || !args.secret.username || !args.secret.password || !args.secret.instance) return Promise.reject("Secret not defined or invalid.");
 
     return new Promise((resolve, reject) => {
         let result = {};
 
-        axios.get(`https://dev66923.service-now.com/api/now/attachment?sysparm_limit=${args.limit}&sysparm_query=${args.query}`, {
+        axios.get(`${args.secret.instance}/api/now/attachment?sysparm_limit=${args.limit}&sysparm_query=${args.query}`, {
             headers: {
                 'Accept': 'application/json',
             },
