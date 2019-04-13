@@ -180,3 +180,43 @@ async function DeleteFromTable(input: IFlowInput, args: { secret: CognigySecret,
 
 module.exports.DeleteFromTable = DeleteFromTable;
 
+
+/**
+ * Gets attachments from Service Now
+ * @arg {SecretSelect} `secret` The configured secret to use
+ * @arg {CognigyScript} `limit` How many results you want to show
+ * @arg {CognigyScript} `query` A search query, e.g. 'file_name=attachment.doc'
+ * @arg {Boolean} `stopOnError` Whether to stop on error or continue
+ * @arg {CognigyScript} `store` Where to store the result
+ */
+async function GETAttachments(input: IFlowInput, args: { secret: CognigySecret, limit: string, query: string, stopOnError: boolean, store: string }): Promise<IFlowInput | {}> {
+
+    // Check if secret exists and contains correct parameters
+    if (!args.secret || !args.secret.username || !args.secret.password) return Promise.reject("Secret not defined or invalid.");
+
+    return new Promise((resolve, reject) => {
+        let result = {};
+
+        axios.get(`https://dev66923.service-now.com/api/now/attachment?sysparm_limit=${args.limit}&sysparm_query=${args.query}`, {
+            headers: {
+                'Accept': 'application/json',
+            },
+            auth: {
+                username: args.secret.username,
+                password: args.secret.password
+            },
+        })
+            .then(function (response) {
+                result = response;
+                input.context.getFullContext()[args.store] = result
+                resolve(input)
+            })
+            .catch(function (error) {
+                if (args.stopOnError) { reject(error.message); return; }
+                else result = { "error": error.message };
+                resolve(input)
+            })
+    });
+}
+
+module.exports.GETAttachments = GETAttachments;
