@@ -87,7 +87,7 @@ async function POSTToTable(input: IFlowInput, args: { secret: CognigySecret, tab
 module.exports.POSTToTable = POSTToTable;
 
 /**
- * Deletes a row from the chosen Service Now table
+ * Updates a row from the chosen Service Now table
  * @arg {SecretSelect} `secret` The configured secret to use
  * @arg {CognigyScript} `tableName` The name of the table you want to query
  * @arg {JSON} `data` The updated data for the chosen entry
