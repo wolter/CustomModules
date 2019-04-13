@@ -56,6 +56,7 @@ async function POSTToTable(input: IFlowInput, args: { secret: CognigySecret, tab
     // Check if secret exists and contains correct parameters
     if (!args.secret || !args.secret.username || !args.secret.password) return Promise.reject("Secret not defined or invalid.");
     if (!args.tableName) return Promise.reject("No table name defined.");
+    if (!args.data) return Promise.reject("No data to post defined.");
 
     return new Promise((resolve, reject) => {
         let result = {};
