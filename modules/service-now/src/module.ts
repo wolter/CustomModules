@@ -27,12 +27,12 @@ async function GETFromTable(input: IFlowInput, args: { secret: CognigySecret, ta
                 password: args.secret.password
             }
         })
-            .then(function (response) {
+            .then((response) => {
                 result = response.data.result
                 input.context.getFullContext()[args.store] = result
                 resolve(input)
             })
-            .catch(function (error) {
+            .catch((error) => {
                 if (args.stopOnError) { reject(error.message); return; }
                 else result = { "error": error.message };
                 resolve(input)
@@ -72,12 +72,12 @@ async function POSTToTable(input: IFlowInput, args: { secret: CognigySecret, tab
                     password: args.secret.password
                 },
             })
-            .then(function (response) {
+            .then((response) => {
                 result = response.data.result
                 input.context.getFullContext()[args.store] = result
                 resolve(input)
             })
-            .catch(function (error) {
+            .catch((error) => {
                 if (args.stopOnError) { reject(error.message); return; }
                 else result = { "error": error.message };
                 resolve(input)
@@ -121,12 +121,12 @@ async function PatchRecordInTable(input: IFlowInput, args: { secret: CognigySecr
                     password: args.secret.password
                 },
             })
-            .then(function (response) {
+            .then((response) => {
                 result = response.data.result;
                 input.context.getFullContext()[args.store] = result
                 resolve(input)
             })
-            .catch(function (error) {
+            .catch((error) => {
                 if (args.stopOnError) { reject(error.message); return; }
                 else result = { "error": error.message };
                 resolve(input)
@@ -165,12 +165,12 @@ async function DeleteFromTable(input: IFlowInput, args: { secret: CognigySecret,
                 password: args.secret.password
             },
         })
-            .then(function (response) {
+            .then(() => {
                 result = "succefully deleted entry with id " + args.sysId;
                 input.context.getFullContext()[args.store] = result
                 resolve(input)
             })
-            .catch(function (error) {
+            .catch((error) => {
                 if (args.stopOnError) { reject(error.message); return; }
                 else result = { "error": error.message };
                 resolve(input)
@@ -206,12 +206,12 @@ async function GETAttachments(input: IFlowInput, args: { secret: CognigySecret, 
                 password: args.secret.password
             },
         })
-            .then(function (response) {
+            .then((response) => {
                 result = response;
                 input.context.getFullContext()[args.store] = result
                 resolve(input)
             })
-            .catch(function (error) {
+            .catch((error) => {
                 if (args.stopOnError) { reject(error.message); return; }
                 else result = { "error": error.message };
                 resolve(input)
