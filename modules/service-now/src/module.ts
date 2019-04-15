@@ -200,6 +200,7 @@ async function GETAttachments(input: IFlowInput, args: { secret: CognigySecret, 
         axios.get(`${args.secret.instance}/api/now/attachment?sysparm_limit=${args.limit}&sysparm_query=${args.query}`, {
             headers: {
                 'Accept': 'application/json',
+                'Content-Type': 'application/json'
             },
             auth: {
                 username: args.secret.username,
@@ -207,8 +208,7 @@ async function GETAttachments(input: IFlowInput, args: { secret: CognigySecret, 
             },
         })
             .then((response) => {
-                result = response;
-                input.context.getFullContext()[args.store] = result
+                input.context.getFullContext()[args.store] = response.data.result
                 resolve(input)
             })
             .catch((error) => {
