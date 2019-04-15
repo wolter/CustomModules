@@ -109,6 +109,7 @@ With this node you can reach your Service Now Attachments and store them to your
   - How many results you want to store, e.g. 1
 - query
   - A query to filter your attachments, e.g. file_name=document.doc
+  - [Read more here](<https://developer.servicenow.com/app.do#!/rest_api_doc?v=madrid&id=r_AttachmentAPI-GET>)
 
 The result will look like the following: 
 
