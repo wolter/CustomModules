@@ -220,3 +220,44 @@ async function GETAttachments(input: IFlowInput, args: { secret: CognigySecret, 
 }
 
 module.exports.GETAttachments = GETAttachments;
+
+
+/**
+ * Gets an attachment by Id
+ * @arg {SecretSelect} `secret` The configured secret to use
+ * @arg {CognigyScript} `sysId` The id of the attachment you want to reach
+ * @arg {Boolean} `stopOnError` Whether to stop on error or continue
+ * @arg {CognigyScript} `store` Where to store the result
+ */
+async function GETAttachmentById(input: IFlowInput, args: { secret: CognigySecret, sysId: string, stopOnError: boolean, store: string }): Promise<IFlowInput | {}> {
+
+    // Check if secret exists and contains correct parameters
+    if (!args.secret || !args.secret.username || !args.secret.password || !args.secret.instance) return Promise.reject("Secret not defined or invalid.");
+    if (!args.sysId) return  Promise.reject("No sysId defined");
+
+    return new Promise((resolve, reject) => {
+        let result = {};
+
+        axios.get(`${args.secret.instance}/api/now/attachment/${args.sysId}`, {
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            auth: {
+                username: args.secret.username,
+                password: args.secret.password
+            },
+        })
+            .then((response) => {
+                input.context.getFullContext()[args.store] = response.data.result
+                resolve(input)
+            })
+            .catch((error) => {
+                if (args.stopOnError) { reject(error.message); return; }
+                else result = { "error": error.message };
+                resolve(input)
+            })
+    });
+}
+
+module.exports.GETAttachmentById = GETAttachmentById;
