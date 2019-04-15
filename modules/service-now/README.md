@@ -142,3 +142,6 @@ The result will look like the following:
 
 
 
+## Node: GETAttachmentById
+
+If you don't want to get all attachments, you can reach one by it's specifiy **sysId** by using this node here. You can get the sysId by executing the **GETAttachments** node. The result will look like the above one.
