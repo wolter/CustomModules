@@ -63,7 +63,7 @@ This Node deletes the entry with the given **sysId** and returns a success messa
 
 
 
-## PatchRecordInTable
+## Node: PatchRecordInTable
 
 This node updates an entry in your chosen Service Now table. You have to define the **sysId** and the **data** to update. If you don't know the sysId of your entry, just execute the **GetFromTable** Node of this Custom Module and take a look into the **CognigyContext**. 
 
@@ -98,3 +98,46 @@ As response you will get a JSON object, which looks like:
 ```
 
 If you now open your updated table in your **Service Now Instance** you will see the difference. 
+
+
+
+## Node: GETAttachments
+
+With this node you can reach your Service Now Attachments and store them to your CognigyContext. For this, there are two parameters you can use: 
+
+- limit
+  - How many results you want to store, e.g. 1
+- query
+  - A query to filter your attachments, e.g. file_name=document.doc
+
+The result will look like the following: 
+
+```json
+"attachments": [
+    {
+      "size_bytes": "3549",
+      "file_name": "image",
+      "sys_mod_count": "0",
+      "average_image_color": "",
+      "image_width": "",
+      "sys_updated_on": "2092-01-24 02:00:31",
+      "sys_tags": "",
+      "table_name": "ZZ_YYdb_image",
+      "sys_id": "0987654321234567890o987654323456789",
+      "image_height": "",
+      "sys_updated_by": "mark.odonnell",
+      "download_link": "https://12345678.service-now.com/api/now/attachment/0987654321234567890o987654323456789/file",
+      "content_type": "image/png",
+      "sys_created_on": "2019-01-24 02:00:31",
+      "size_compressed": "3215",
+      "compressed": "true",
+      "state": "",
+      "table_sys_id": "0987654321234567890o987654323456789",
+      "chunk_size_bytes": "",
+      "sys_created_by": "max.mustermann"
+    }
+  ]
+```
+
+
+
