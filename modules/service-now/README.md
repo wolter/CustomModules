@@ -145,3 +145,16 @@ The result will look like the following:
 ## Node: GETAttachmentById
 
 If you don't want to get all attachments, you can reach one by it's specifiy **sysId** by using this node here. You can get the sysId by executing the **GETAttachments** node. The result will look like the above one.
+
+
+
+## Node: DeleteAttachment
+
+With this node you can easily delete an attachment. You have to type in the attachment's **sysId** to get the success message: 
+
+```json
+{
+  "deleted": "succefully deleted attachment with id 1894eef4ef331000914304167b2256c2",
+}
+```
+
