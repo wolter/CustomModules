@@ -1,4 +1,5 @@
-const axios = require('axios')
+const axios = require('axios');
+const fs = require('fs');
 
 /**
  * Gets the information of a chosen table
@@ -261,6 +262,56 @@ async function GETAttachmentById(input: IFlowInput, args: { secret: CognigySecre
 }
 
 module.exports.GETAttachmentById = GETAttachmentById;
+
+
+/**
+ * Posts an attachment to a specific entry in a specific table
+ * @arg {SecretSelect} `secret` The configured secret to use
+ * @arg {CognigyScript} `tableName` The name of the table you want to query
+ * @arg {CognigyScript} `tableSysId` The id of the entry in the given table where the attachment will be stored
+ * @arg {CognigyScript} `fileName` The full filename, e.g. attachment.docx
+ * @arg {CognigyScript} `fileLocation` Where the file is stored now, e.g. AWS S3 bucket etc.
+
+ * @arg {Boolean} `stopOnError` Whether to stop on error or continue
+ * @arg {CognigyScript} `store` Where to store the result
+ */
+async function POSTAttachment(input: IFlowInput, args: { secret: CognigySecret, tableName: string, tableSysId: string, fileName: string, fileLocation: string, stopOnError: boolean, store: string }): Promise<IFlowInput | {}> {
+
+    // Check if secret exists and contains correct parameters
+    if (!args.secret || !args.secret.username || !args.secret.password || !args.secret.instance) return Promise.reject("Secret not defined or invalid.");
+    if (!args.tableSysId) return  Promise.reject("No sysId defined");
+    if (!args.fileName) return  Promise.reject("No fileName defined");
+    if (!args.tableName) return  Promise.reject("No table defined");
+    if (!args.fileLocation) return  Promise.reject("No file location defined");
+
+    return new Promise((resolve, reject) => {
+        let result = {};
+
+        axios.post(`${args.secret.instance}/api/now/attachment/file?table_name=${args.tableName}&table_sys_id=${args.tableSysId}&file_name=${args.fileName}`, 
+            fs.createReadStream(args.fileLocation)
+        ,{
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'multipart/form-data'
+            },
+            auth: {
+                username: args.secret.username,
+                password: args.secret.password
+            },
+        })
+            .then((response) => {
+                input.context.getFullContext()[args.store] = response.data.result;
+                resolve(input)
+            })
+            .catch((error) => {
+                if (args.stopOnError) { reject(error.message); return; }
+                else result = { "error": error.message };
+                resolve(input)
+            })
+    });
+}
+
+module.exports.POSTAttachment = POSTAttachment;
 
 
 /**
