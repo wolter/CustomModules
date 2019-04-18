@@ -1,5 +1,6 @@
 const axios = require('axios');
-const fileDownload = require('js-file-download');
+const http = require('https');
+
 
 /**
  * Gets the information of a chosen table
@@ -284,40 +285,34 @@ async function POSTAttachment(input: IFlowInput, args: { secret: CognigySecret, 
     if (!args.tableName) return Promise.reject("No table defined");
     if (!args.fileLocation) return Promise.reject("No file location defined");
 
+
     return new Promise((resolve, reject) => {
         let result = {};
 
         // get file from location
-        axios.get(args.fileLocation)
-            .then((res) => {
-                axios.post(`${args.secret.instance}/api/now/attachment/file?table_name=${args.tableName}&table_sys_id=${args.tableSysId}&file_name=${args.fileName}`,
-                    fileDownload(res.data, args.fileName)
-                    , {
-                        headers: {
-                            'Accept': 'application/json',
-                            'Content-Type': 'multipart/form-data'
-                        },
-                        auth: {
-                            username: args.secret.username,
-                            password: args.secret.password
-                        },
-                    })
-                    .then((response) => {
-                        input.context.getFullContext()[args.store] = response.data.result;
-                        resolve(input)
-                    })
-                    .catch((error) => {
-                        if (args.stopOnError) { reject(error.message); return; }
-                        else result = { "error": error.message };
-                        resolve(input)
-                    })
-            }).catch((err) => {
-                if (args.stopOnError) { reject(err.message); return; }
-                else result = { "error": err.message };
-                resolve(input)
-            })
-
-
+        const request = http.get(args.fileLocation, (response) => {
+            axios.post(`${args.secret.instance}/api/now/attachment/file?table_name=${args.tableName}&table_sys_id=${args.tableSysId}&file_name=${args.fileName}`,
+                response
+                , {
+                    headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'multipart/form-data'
+                    },
+                    auth: {
+                        username: args.secret.username,
+                        password: args.secret.password
+                    },
+                })
+                .then((response) => {
+                    input.context.getFullContext()[args.store] = response.data.result
+                    resolve(input)
+                })
+                .catch((error) => {
+                    if (args.stopOnError) { reject(error.message); return; }
+                    else result = { "error": error.message };
+                    resolve(input)
+                })
+        });
     });
 }
 
