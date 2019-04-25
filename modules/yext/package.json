@@ -1,5 +1,5 @@
 {
-  "name": "yext",
+  "name": "Yext",
   "version": "1.0.0",
   "description": "Integrates Yext with the Cognigy.AI",
   "main": "build/module.js",
