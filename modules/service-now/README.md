@@ -158,3 +158,44 @@ With this node you can easily delete an attachment. You have to type in the atta
 }
 ```
 
+## Node: PostAttachment
+
+Post an attachment to a specific table entry, such as entry X in table `problem`, where you need the following: 
+
+- table entry `sys_id`
+- location of the attacchment, e.g. AWS S3 url 
+- the file name
+
+If you now open your Service Now instance, you will see the attachment in the history of your entry.
+
+The response will look like the following:
+
+The `table_sys_id` is the entrie's id and the `sys_id` is the id of the new attachment.
+
+```json
+{
+  "posted": {
+    "size_bytes": "21",
+    "file_name": "lol.py",
+    "sys_mod_count": "0",
+    "average_image_color": "",
+    "image_width": "",
+    "sys_updated_on": "2019-04-25 08:49:32",
+    "sys_tags": "",
+    "table_name": "problem",
+    "sys_id": "71f37451db01330045da2bfa4b961968",
+    "image_height": "",
+    "sys_updated_by": "admin",
+    "download_link": "https://123456.service-now.com/api/now/attachment/71f37451db01330045da2bfa4b961968/file",
+    "content_type": "multipart/form-data",
+    "sys_created_on": "2019-04-25 08:49:32",
+    "size_compressed": "41",
+    "compressed": "true",
+    "state": "",
+    "table_sys_id": "3fd37451db01330045da2bfa4b96198e",
+    "chunk_size_bytes": "734003",
+    "sys_created_by": "admin"
+  }
+}
+```
+
