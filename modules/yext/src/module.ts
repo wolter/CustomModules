@@ -4,7 +4,7 @@ const axios = require('axios');
 /**
  * Gets the information of a chosen table
  * @arg {SecretSelect} `secret` The configured secret to use
- * @arg {Select[Locations,Products]} `entity` The entity you want to get from Yext
+ * @arg {Select[Locations,Events,Products,Assets,Entities,Folders,Menus,Bios]} `entity` The entity you want to get from Yext
  * @arg {CognigyScript} `api_version` The version you want to use, e.g. 20190424 (a date)
  * @arg {Boolean} `stopOnError` Whether to stop on error or continue
  * @arg {CognigyScript} `store` Where to store the result
