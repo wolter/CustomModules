@@ -100,7 +100,7 @@ module.exports.POSTToTable = POSTToTable;
  * @arg {Boolean} `stopOnError` Whether to stop on error or continue
  * @arg {CognigyScript} `store` Where to store the result
  */
-async function PatchRecordInTable(input: IFlowInput, args: { secret: CognigySecret, tableName: string, data: JSON, sysId: JSON, stopOnError: boolean, store: string }): Promise<IFlowInput | {}> {
+async function PatchRecordInTable(input: IFlowInput, args: { secret: CognigySecret, tableName: string, data: JSON, sysId: string, stopOnError: boolean, store: string }): Promise<IFlowInput | {}> {
 
     // Check if secret exists and contains correct parameters
     if (!args.secret || !args.secret.username || !args.secret.password || !args.secret.instance) return Promise.reject("Secret not defined or invalid.");
@@ -147,7 +147,7 @@ module.exports.PatchRecordInTable = PatchRecordInTable;
  * @arg {Boolean} `stopOnError` Whether to stop on error or continue
  * @arg {CognigyScript} `store` Where to store the result
  */
-async function DeleteFromTable(input: IFlowInput, args: { secret: CognigySecret, tableName: string, sysId: JSON, stopOnError: boolean, store: string }): Promise<IFlowInput | {}> {
+async function DeleteFromTable(input: IFlowInput, args: { secret: CognigySecret, tableName: string, sysId: string, stopOnError: boolean, store: string }): Promise<IFlowInput | {}> {
 
     // Check if secret exists and contains correct parameters
     if (!args.secret || !args.secret.username || !args.secret.password || !args.secret.instance) return Promise.reject("Secret not defined or invalid.");
