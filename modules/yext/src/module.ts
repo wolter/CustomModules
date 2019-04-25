@@ -14,15 +14,13 @@ async function GetEntity(input: IFlowInput, args: { secret: CognigySecret, entit
     // Check if secret exists and contains correct parameters
     if (!args.secret || !args.secret.api_key) return Promise.reject("Secret not defined or invalid.");
     if (!args.entity) return Promise.reject("No entity defined.");
-    if (!args.api_version) return Promise.reject("No version defined.");
 
+    let version = args.api_version || "20190424"
 
     return new Promise((resolve, reject) => {
         let result = {};
         
-        input.actions.output(args.entity.toLowerCase(), null)
-
-        axios.get(`https://api.yext.com/v2/accounts/me/${args.entity.toLowerCase()}?api_key=${args.secret.api_key}&v=${args.api_version}`, {
+        axios.get(`https://api.yext.com/v2/accounts/me/${args.entity.toLowerCase()}?api_key=${args.secret.api_key}&v=${version}`, {
             headers: {
                 'Allow': 'application/json'
             }
