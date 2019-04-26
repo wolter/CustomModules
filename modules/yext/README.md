@@ -1,6 +1,6 @@
 # Yext Custom Module
 
-This Custom Module integrates [Yext.com](www.yext.com) with Cognigy.
+This Custom Module integrates [Yext.com](https://www.yext.de/) with Cognigy.
 
 **Secrets**
 
