@@ -1,3 +1,25 @@
+# Yext Custom Module
+
+This Custom Module integrates [Yext.com](www.yext.com) with Cognigy.
+
+**Secrets**
+
+- api_key
+  - You need the **Knowledge API Key** from your [Yext Developer](https://developer.yext.com/) Account. There you have to create a new application and add this API to get the key.
+
+
+
+## Node: GetEntity
+
+With this node you can get all entries of a chosen entity, such as `Locations` or `Events`, where the output will be a list of results.
+
+
+
+## Node: GetEntityById
+
+If you don't want to handle all results of a chosen entity, you can filter them by Id, to get only one output. Therefore you have to find out the Id. The Best way is to execute the **GetEntity** node before.
+
+
 
 ## Node: GetLocationsByFilter
 
@@ -18,6 +40,8 @@ The result will be a list of all found locations:
             "id": "f1412123-ec76-4da5-957e-9dd55e457a5a",
             "uid": "EvlrGJ",
 ```
+
+
 
 ## Node: CreateLocation
 
