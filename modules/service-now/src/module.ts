@@ -18,7 +18,6 @@ async function GETFromTable(input: IFlowInput, args: { secret: CognigySecret, ta
     if (!args.tableName) return Promise.reject("No table name defined.");
 
     return new Promise((resolve, reject) => {
-        let result = {};
 
         axios.get(`${args.secret.instance}/api/now/table/${args.tableName}?sysparm_fields=${args.columns}&sysparm_limit=${args.limit}`, {
             headers: {
@@ -30,13 +29,12 @@ async function GETFromTable(input: IFlowInput, args: { secret: CognigySecret, ta
             }
         })
             .then((response) => {
-                result = response.data.result;
-                input.context.getFullContext()[args.store] = result;
+                input.context.getFullContext()[args.store] = response.data.result;
                 resolve(input);
             })
             .catch((error) => {
                 if (args.stopOnError) { reject(error.message); return; }
-                else result = { "error": error.message };
+                else input.context.getFullContext()[args.store] = { "error": error.message };
                 resolve(input);
             })
     });
@@ -61,7 +59,6 @@ async function POSTToTable(input: IFlowInput, args: { secret: CognigySecret, tab
     if (!args.data) return Promise.reject("No data to post defined.");
 
     return new Promise((resolve, reject) => {
-        let result = {};
 
         axios.post(`${args.secret.instance}/api/now/table/${args.tableName}`,
             args.data, {
@@ -75,13 +72,12 @@ async function POSTToTable(input: IFlowInput, args: { secret: CognigySecret, tab
                 },
             })
             .then((response) => {
-                result = response.data.result;
-                input.context.getFullContext()[args.store] = result;
+                input.context.getFullContext()[args.store] = response.data.result;
                 resolve(input);
             })
             .catch((error) => {
                 if (args.stopOnError) { reject(error.message); return; }
-                else result = { "error": error.message };
+                else input.context.getFullContext()[args.store] = { "error": error.message };
                 resolve(input);
             })
     });
@@ -109,7 +105,6 @@ async function PatchRecordInTable(input: IFlowInput, args: { secret: CognigySecr
     if (!args.sysId) return Promise.reject("No sys id defined.");
 
     return new Promise((resolve, reject) => {
-        let result = {};
 
         axios.patch(`${args.secret.instance}/api/now/table/${args.tableName}/${args.sysId}`,
             args.data
@@ -124,13 +119,12 @@ async function PatchRecordInTable(input: IFlowInput, args: { secret: CognigySecr
                 },
             })
             .then((response) => {
-                result = response.data.result;
-                input.context.getFullContext()[args.store] = result;
+                input.context.getFullContext()[args.store] = response.data.result;
                 resolve(input);
             })
             .catch((error) => {
                 if (args.stopOnError) { reject(error.message); return; }
-                else result = { "error": error.message };
+                else input.context.getFullContext()[args.store] = { "error": error.message };
                 resolve(input);
             })
     });
@@ -174,7 +168,7 @@ async function DeleteFromTable(input: IFlowInput, args: { secret: CognigySecret,
             })
             .catch((error) => {
                 if (args.stopOnError) { reject(error.message); return; }
-                else result = { "error": error.message };
+                else input.context.getFullContext()[args.store] = { "error": error.message };
                 resolve(input);
             })
     });
@@ -197,7 +191,6 @@ async function GETAttachments(input: IFlowInput, args: { secret: CognigySecret, 
     if (!args.secret || !args.secret.username || !args.secret.password || !args.secret.instance) return Promise.reject("Secret not defined or invalid.");
 
     return new Promise((resolve, reject) => {
-        let result = {};
 
         axios.get(`${args.secret.instance}/api/now/attachment?sysparm_limit=${args.limit}&sysparm_query=${args.query}`, {
             headers: {
@@ -215,7 +208,7 @@ async function GETAttachments(input: IFlowInput, args: { secret: CognigySecret, 
             })
             .catch((error) => {
                 if (args.stopOnError) { reject(error.message); return; }
-                else result = { "error": error.message };
+                else input.context.getFullContext()[args.store] = { "error": error.message };
                 resolve(input);
             })
     });
@@ -238,7 +231,6 @@ async function GETAttachmentById(input: IFlowInput, args: { secret: CognigySecre
     if (!args.sysId) return Promise.reject("No sysId defined");
 
     return new Promise((resolve, reject) => {
-        let result = {};
 
         axios.get(`${args.secret.instance}/api/now/attachment/${args.sysId}`, {
             headers: {
@@ -256,7 +248,7 @@ async function GETAttachmentById(input: IFlowInput, args: { secret: CognigySecre
             })
             .catch((error) => {
                 if (args.stopOnError) { reject(error.message); return; }
-                else result = { "error": error.message };
+                else input.context.getFullContext()[args.store] = { "error": error.message };
                 resolve(input);
             })
     });
@@ -287,7 +279,6 @@ async function POSTAttachment(input: IFlowInput, args: { secret: CognigySecret, 
 
 
     return new Promise((resolve, reject) => {
-        let result = {};
 
         // get file from location
         const request = http.get(args.fileLocation, (response) => {
@@ -309,7 +300,7 @@ async function POSTAttachment(input: IFlowInput, args: { secret: CognigySecret, 
                 })
                 .catch((error) => {
                     if (args.stopOnError) { reject(error.message); return; }
-                    else result = { "error": error.message };
+                    else input.context.getFullContext()[args.store] = { "error": error.message };
                     resolve(input);
                 })
         });
@@ -352,7 +343,7 @@ async function DeleteAttachment(input: IFlowInput, args: { secret: CognigySecret
             })
             .catch((error) => {
                 if (args.stopOnError) { reject(error.message); return; }
-                else result = { "error": error.message };
+                else input.context.getFullContext()[args.store] = { "error": error.message };
                 resolve(input);
             })
     });
