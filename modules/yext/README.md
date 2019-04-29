@@ -8,6 +8,11 @@ This Custom Module integrates [Yext.com](https://www.yext.de/) with Cognigy.
   - You need the **Knowledge API Key** from your [Yext Developer](https://developer.yext.com/) Account. There you have to create a new application and add this API to get the key.
 
 
+**Categories**
+
+In Yext you use categories to sort your branches, thus you can filter your locations e.g. by the categoryId. To get all these categories, you have to GET this API Url: 
+
+- `https://api.yext.com/v2/categories?api_key=<API_KEY>&v=20190424`
 
 ## Node: GetEntity
 
