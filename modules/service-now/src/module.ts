@@ -1,5 +1,5 @@
 import axios from 'axios';
-const http = require('https');
+import * as http from 'https';
 
 
 /**
