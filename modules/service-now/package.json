@@ -4,7 +4,7 @@
 	"description": "Integrates Service-Now with Cognigy.AI",
 	"main": "build/module.js",
 	"scripts": {
-		"transpile": "tsc -p .",
+		"transpile": "tsc -p . && tslint -c tslint.json 'src/module.ts'",
 		"zip": "zip serviceNow.zip build/* package.json package-lock.json README.md icon.png icon-large.png",
 		"build": "npm run transpile && npm run zip"
 	},
@@ -16,6 +16,7 @@
 	"license": "MIT",
 	"devDependencies": {
 		"@types/node": "^10.12.5",
+		"tslint": "^5.16.0",
 		"typescript": "^3.1.6"
 	},
 	"dependencies": {
