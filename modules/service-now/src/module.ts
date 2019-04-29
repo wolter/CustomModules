@@ -324,7 +324,6 @@ async function DeleteAttachment(input: IFlowInput, args: { secret: CognigySecret
     if (!args.sysId) return Promise.reject("No sysId defined");
 
     return new Promise((resolve, reject) => {
-        let result = {};
 
         axios.delete(`${args.secret.instance}/api/now/attachment/${args.sysId}`, {
             headers: {
@@ -337,8 +336,7 @@ async function DeleteAttachment(input: IFlowInput, args: { secret: CognigySecret
             },
         })
             .then(() => {
-                result = "succefully deleted attachment with id " + args.sysId;
-                input.context.getFullContext()[args.store] = result;
+                input.context.getFullContext()[args.store] = `succefully deleted attachment with id ${args.sysId}`;
                 resolve(input);
             })
             .catch((error) => {
