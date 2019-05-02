@@ -544,7 +544,7 @@ async function sentimentAnalysis(input: IFlowInput, args: { secret: CognigySecre
             });
         };
 
-        let getSentiments = function (documents) {
+        let getSentiments = (documents) => {
             let body = JSON.stringify(documents);
 
             let requestParams = {
