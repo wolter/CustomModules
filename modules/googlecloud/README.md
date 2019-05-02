@@ -1,6 +1,6 @@
 # Google Cloud
 
-With this module you can use the [Google Cloud API](https://console.cloud.google.com/) to translate or recognize text inside your Cognigy bot — for this, it uses the [Google Translate NPM Package](https://www.npmjs.com/package/google-translate)
+With this module you can use the [Google Cloud API](https://console.cloud.google.com/) to translate or recognize text inside your Cognigy bot
 
 **Secrets**
 
