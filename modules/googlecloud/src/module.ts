@@ -17,7 +17,7 @@ async function translateText(input: IFlowInput, args: { secret: CognigySecret, l
   return new Promise((resolve, reject) => {
     let result = {};
 
-    googleTranslate.translate(args.text, args.language, function (err, translation) {
+    googleTranslate.translate(args.text, args.language, (err, translation) => {
       if (err) {
         if (args.stopOnError) { reject(err.message); return; }
         result = { "error": err.message };
@@ -55,7 +55,7 @@ async function detectLanguageInText(input: IFlowInput, args: { secret: CognigySe
   return new Promise((resolve, reject) => {
     let result = {};
 
-    googleTranslate.detectLanguage(args.text, function (err, detection) {
+    googleTranslate.detectLanguage(args.text, (err, detection) => {
       if (err) {
         if (args.stopOnError) { reject(err.message); return; }
         result = { "error": err.message };
