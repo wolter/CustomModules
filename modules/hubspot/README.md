@@ -96,7 +96,7 @@ Creating a **Contact** or a **Company** is nearly the same. You need the followi
 
 If the creation was successful, the API  returns the new Contact in a JSON format. 
 
-# Node: searchContact
+# Node: findContact
 
 You can include a **query** to search in your **Contacts**, such as the full name. Then it returns the **Contact ID (Vid)** of the found contact:
 

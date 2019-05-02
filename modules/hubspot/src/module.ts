@@ -151,7 +151,7 @@ async function createContact(input: IFlowInput, args: { secret: CognigySecret, d
  * @arg {CognigyScript} `store` Where to store the result
  * @arg {Boolean} `stopOnError` Whether to stop on error or continue
  */
-async function searchContact(input: IFlowInput, args: { secret: CognigySecret, query: string, properties: string, writeToContext: boolean, store: string, stopOnError: boolean }): Promise<any> {
+async function findContact(input: IFlowInput, args: { secret: CognigySecret, query: string, properties: string, writeToContext: boolean, store: string, stopOnError: boolean }): Promise<any> {
 	if (!args.secret || !args.secret.apiKey) return Promise.reject("Secret not defined or invalid.");
 	if (!args.query) return Promise.reject("No query defined.");
 
@@ -424,7 +424,7 @@ async function getOwners(input: IFlowInput, args: { secret: CognigySecret, write
 module.exports.findContactByEmail = findContactByEmail;
 module.exports.createContact = createContact;
 module.exports.updateContact = updateContact;
-module.exports.searchContact = searchContact;
+module.exports.findContact = findContact;
 module.exports.findCompanyByDomain = findCompanyByDomain;
 module.exports.createCompany = createCompany;
 module.exports.updateCompany = updateCompany;
