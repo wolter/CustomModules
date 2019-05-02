@@ -4,7 +4,10 @@
 	"description": "This module integrates Cognigy.AI with the Google Cloud Plattform",
 	"main": "build/module.js",
 	"scripts": {
-		"build": "tsc -p ."
+		"transpile": "tsc -p .",
+		"zip": "zip google.zip build/* package.json package-lock.json README.md icon.png icon-large.png",
+		"build": "npm run transpile && npm run lint && npm run zip",
+		"lint": "tslint -c tslint.json src/**/*.ts"
 	},
 	"repository": {
 		"type": "git",
@@ -14,6 +17,7 @@
 	"license": "MIT",
 	"devDependencies": {
 		"@types/node": "^10.14.6",
+		"tslint": "^5.16.0",
 		"typescript": "^3.1.6"
 	},
 	"dependencies": {
