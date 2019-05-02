@@ -26,11 +26,11 @@ async function findContactByEmail(input: IFlowInput, args: { secret: CognigySecr
 			} else {
 				const properties = (args.properties) ? args.properties.split(",") : [];
 				if (properties.indexOf("vid") === -1) properties.push("vid");
-				Object.keys(res["properties"]).forEach((key) => {
+				Object.keys(res.properties).forEach((key) => {
 
 					// if key isn't in the defined properties, delete it
 					if (properties.indexOf(key) === -1) {
-						delete res["properties"][key]
+						delete res.properties[key]
 					}
 					else if (key === "properties") {
 						// if the key is properties, remove versions
@@ -169,9 +169,9 @@ async function findContact(input: IFlowInput, args: { secret: CognigySecret, que
 				if (properties.indexOf("vid") === -1) properties.push("vid");
 				if (contacts) {
 					contacts.forEach((res) => {
-						Object.keys(res["properties"]).forEach((key) => {
+						Object.keys(res.properties).forEach((key) => {
 							// if key isn't in the defined properties, delete it
-							if (properties.indexOf(key) === -1) delete res["properties"][key];
+							if (properties.indexOf(key) === -1) delete res.properties[key];
 							else if (key === "properties") {
 								// if the key is properties, remove versions
 								Object.keys(res[key]).forEach((propkey) => {
@@ -228,9 +228,9 @@ async function findCompanyByDomain(input: IFlowInput, args: { secret: CognigySec
 
 				if (res && Array.isArray(res) && res.length > 0) {
 					res.forEach((company) => {
-						Object.keys(company["properties"]).forEach((key) => {
+						Object.keys(company.properties).forEach((key) => {
 							// if key isn't in the defined properties, delete it
-							if (properties.indexOf(key) === -1) delete company["properties"][key];
+							if (properties.indexOf(key) === -1) delete company.properties[key];
 							else if (key === "properties") {
 								// if the key is properties, remove versions
 								Object.keys(company[key]).forEach((propkey) => {
