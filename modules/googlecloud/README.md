@@ -4,11 +4,13 @@ With this module you can use the [Google Cloud API](https://console.cloud.google
 
 **Secrets**
 
-To use the Google Cloud you need to enable a specific API KEY in your Google Cloud Console.
+To use the Google Cloud you need to enable a specific `API_KEY` in your Google Cloud Console.
 
 **Translation, LanguageDetection**
 
-- [Cloud Translation API](https://console.cloud.google.com/apis/library/translate.googleapis.com?q=translation&id=c22f20ba-6a29-40ae-9084-8bc264a97fc2&project=boreal-physics-231713) -  API KEY
+| [Cloud Translation API](https://console.cloud.google.com/apis/library/translate.googleapis.com?q=translation&id=c22f20ba-6a29-40ae-9084-8bc264a97fc2&project=boreal-physics-231713) | API_KEY |
+| ------------------------------------------------------------ | ------- |
+|                                                              |         |
 
 ## Node: Translation
 
