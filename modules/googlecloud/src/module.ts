@@ -7,7 +7,7 @@
  * @arg {CognigyScript} `store` Where to store the result
  * @arg {Boolean} `stopOnError` Whether to stop on error or continue
  */
-async function translation(input: IFlowInput, args: { secret: CognigySecret, language: string, text: string, writeToContext: boolean, store: string, stopOnError: boolean }): Promise<IFlowInput | {}> {
+async function translateText(input: IFlowInput, args: { secret: CognigySecret, language: string, text: string, writeToContext: boolean, store: string, stopOnError: boolean }): Promise<IFlowInput | {}> {
   // Check if secret exists and contains correct parameters
   if (!args.secret || !args.secret.key) return Promise.reject("Secret not defined or invalid.");
   if (!args.text) return Promise.reject("No text defined.");
@@ -34,7 +34,7 @@ async function translation(input: IFlowInput, args: { secret: CognigySecret, lan
   });
 }
 
-module.exports.translation = translation;
+module.exports.translateText = translateText;
 
 
 /**
@@ -45,7 +45,7 @@ module.exports.translation = translation;
  * @arg {CognigyScript} `store` Where to store the result
  * @arg {Boolean} `stopOnError` Whether to stop on error or continue
  */
-async function languageDetection(input: IFlowInput, args: { secret: CognigySecret, text: string, writeToContext: boolean, store: string, stopOnError: boolean }): Promise<IFlowInput | {}> {
+async function detectLanguageInText(input: IFlowInput, args: { secret: CognigySecret, text: string, writeToContext: boolean, store: string, stopOnError: boolean }): Promise<IFlowInput | {}> {
   // Check if secret exists and contains correct parameters
   if (!args.secret || !args.secret.key) return Promise.reject("Secret not defined or invalid.");
   if (!args.text) return Promise.reject("No text defined.");
@@ -70,4 +70,4 @@ async function languageDetection(input: IFlowInput, args: { secret: CognigySecre
   });
 }
 
-module.exports.languageDetection = languageDetection;
+module.exports.detectLanguageInText = detectLanguageInText;
