@@ -14,7 +14,7 @@ async function findContactByEmail(input: IFlowInput, args: { secret: CognigySecr
 	if (!args.email) return Promise.reject("No email defined.");
 
 	const hubspot = new Hubspot({ apiKey: args.secret.apiKey });
-	if (hubspot.qs && typeof hubspot.qs === 'object') hubspot.qs["propertyMode"] = 'value_only';
+	if (hubspot.qs && typeof hubspot.qs === 'object') hubspot.qs.propertyMode = 'value_only';
 	let result = {};
 
 	return new Promise((resolve, reject) => {
@@ -73,7 +73,7 @@ async function updateContact(input: IFlowInput, args: { secret: CognigySecret, v
 	if (!args.data) return Promise.reject("No data defined.");
 
 	const hubspot = new Hubspot({ apiKey: args.secret.apiKey });
-	if (hubspot.qs && typeof hubspot.qs === 'object') hubspot.qs["propertyMode"] = 'value_only';
+	if (hubspot.qs && typeof hubspot.qs === 'object') hubspot.qs.propertyMode = 'value_only';
 	let result = {};
 
 	return new Promise((resolve, reject) => {
@@ -113,7 +113,7 @@ async function createContact(input: IFlowInput, args: { secret: CognigySecret, d
 	if (!args.data) return Promise.reject("No data defined.");
 
 	const hubspot = new Hubspot({ apiKey: args.secret.apiKey });
-	if (hubspot.qs && typeof hubspot.qs === 'object') hubspot.qs["propertyMode"] = 'value_only';
+	if (hubspot.qs && typeof hubspot.qs === 'object') hubspot.qs.propertyMode = 'value_only';
 	let result = {};
 
 	return new Promise((resolve, reject) => {
@@ -154,7 +154,7 @@ async function findContact(input: IFlowInput, args: { secret: CognigySecret, que
 	if (!args.query) return Promise.reject("No query defined.");
 
 	const hubspot = new Hubspot({ apiKey: args.secret.apiKey });
-	if (hubspot.qs && typeof hubspot.qs === 'object') hubspot.qs["propertyMode"] = 'value_only';
+	if (hubspot.qs && typeof hubspot.qs === 'object') hubspot.qs.propertyMode = 'value_only';
 	let result = {};
 
 	return new Promise((resolve, reject) => {
@@ -213,7 +213,7 @@ async function findCompanyByDomain(input: IFlowInput, args: { secret: CognigySec
 	if (!args.domain) return Promise.reject("No domain defined.");
 
 	const hubspot = new Hubspot({ apiKey: args.secret.apiKey });
-	if (hubspot.qs && typeof hubspot.qs === 'object') hubspot.qs["propertyMode"] = 'value_only';
+	if (hubspot.qs && typeof hubspot.qs === 'object') hubspot.qs.propertyMode = 'value_only';
 	let result = {};
 
 	return new Promise((resolve, reject) => {
@@ -272,7 +272,7 @@ async function createCompany(input: IFlowInput, args: { secret: CognigySecret, d
 	if (!args.data) return Promise.reject("No data defined.");
 
 	const hubspot = new Hubspot({ apiKey: args.secret.apiKey });
-	if (hubspot.qs && typeof hubspot.qs === 'object') hubspot.qs["propertyMode"] = 'value_only';
+	if (hubspot.qs && typeof hubspot.qs === 'object') hubspot.qs.propertyMode = 'value_only';
 	let result = {};
 
 	return new Promise((resolve, reject) => {
@@ -314,7 +314,7 @@ async function updateCompany(input: IFlowInput, args: { secret: CognigySecret, c
 	if (!args.data) return Promise.reject("No data defined.");
 
 	const hubspot = new Hubspot({ apiKey: args.secret.apiKey });
-	if (hubspot.qs && typeof hubspot.qs === 'object') hubspot.qs["propertyMode"] = 'value_only';
+	if (hubspot.qs && typeof hubspot.qs === 'object') hubspot.qs.propertyMode = 'value_only';
 	let result = {};
 
 	return new Promise((resolve, reject) => {
@@ -354,7 +354,7 @@ async function createEngagement(input: IFlowInput, args: { secret: CognigySecret
 	if (!args.data) return Promise.reject("No data defined.");
 	
 	const hubspot = new Hubspot({ apiKey: args.secret.apiKey });
-	if (hubspot.qs && typeof hubspot.qs === 'object') hubspot.qs["propertyMode"] = 'value_only';
+	if (hubspot.qs && typeof hubspot.qs === 'object') hubspot.qs.propertyMode = 'value_only';
 	let result = {};
 
 	return new Promise((resolve, reject) => {
@@ -392,7 +392,7 @@ async function getOwners(input: IFlowInput, args: { secret: CognigySecret, write
 	if (!args.secret || !args.secret.apiKey) return Promise.reject("Secret not defined or invalid.");
 
 	const hubspot = new Hubspot({ apiKey: args.secret.apiKey });
-	if (hubspot.qs && typeof hubspot.qs === 'object') hubspot.qs["propertyMode"] = 'value_only';
+	if (hubspot.qs && typeof hubspot.qs === 'object') hubspot.qs.propertyMode = 'value_only';
 	let result = {};
 
 	return new Promise((resolve, reject) => {
