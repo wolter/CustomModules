@@ -26,7 +26,6 @@ async function findContactByEmail(input: IFlowInput, args: { secret: CognigySecr
 			} else {
 				const properties = (args.properties) ? args.properties.split(",") : [];
 				if (properties.indexOf("vid") === -1) properties.push("vid");
-
 				Object.keys(res["properties"]).forEach((key) => {
 
 					// if key isn't in the defined properties, delete it
