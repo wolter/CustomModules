@@ -20,7 +20,7 @@ async function spellCheck(input: IFlowInput, args: { secret: CognigySecret, text
 
         const host = 'api.cognitive.microsoft.com';
         const path = '/bing/v7.0/spellcheck';
-        const query_string = "?mkt=" + args.language + "&mode=proof";
+        const query_string = `?mkt=${args.language}&mode=proof`;
 
         const request_params = {
             method: 'POST',
@@ -83,7 +83,7 @@ async function recognizeLanguage(input: IFlowInput, args: { secret: CognigySecre
         let result = {};
         let accessKey = args.secret.key;
 
-        const uri = args.secret.region + '.api.cognitive.microsoft.com';
+        const uri = `${args.secret.region}.api.cognitive.microsoft.com`;
         const path = '/text/analytics/v2.0/languages';
 
         const response_handler = (response) => {
@@ -159,7 +159,7 @@ async function extractKeyphrases(input: IFlowInput, args: { secret: CognigySecre
         let result = {};
         let accessKey = args.secret.key;
 
-        const uri = args.secret.region + '.api.cognitive.microsoft.com';
+        const uri = `${args.secret.region}.api.cognitive.microsoft.com`;
         const path = '/text/analytics/v2.0/keyPhrases';
 
         const response_handler = (response) => {
@@ -235,7 +235,7 @@ async function namedEntityRecognition(input: IFlowInput, args: { secret: Cognigy
         let result = {};
         let accessKey = args.secret.key;
 
-        const uri = args.secret.region + '.api.cognitive.microsoft.com';
+        const uri = `${args.secret.region}.api.cognitive.microsoft.com`;
         const path = '/text/analytics/v2.1-preview/entities';
 
         const response_handler = (response) => {
@@ -312,7 +312,7 @@ async function bingWebSearch(input: IFlowInput, args: { secret: CognigySecret, q
 
         https.get({
             hostname: 'api.cognitive.microsoft.com',
-            path: '/bing/v7.0/search?q=' + encodeURIComponent(args.query),
+            path: `/bing/v7.0/search?q=${encodeURIComponent(args.query)}`,
             headers: { 'Ocp-Apim-Subscription-Key': accessKey },
         }, res => {
             let body = '';
@@ -362,7 +362,7 @@ async function bingNewsSearch(input: IFlowInput, args: { secret: CognigySecret, 
 
         https.get({
             hostname: 'api.cognitive.microsoft.com',
-            path: '/bing/v7.0/news/search?q=' + encodeURIComponent(args.term),
+            path: `/bing/v7.0/news/search?q=${encodeURIComponent(args.term)}`,
             headers: { 'Ocp-Apim-Subscription-Key': accessKey },
         }, res => {
             let body = '';
@@ -408,7 +408,7 @@ async function bingImageSearch(input: IFlowInput, args: { secret: CognigySecret,
         const request_params = {
             method: 'GET',
             hostname: 'api.cognitive.microsoft.com',
-            path: '/bing/v7.0/images/search' + '?q=' + encodeURIComponent(args.term),
+            path: `/bing/v7.0/images/search?q=${encodeURIComponent(args.term)}`,
             headers: {
                 'Ocp-Apim-Subscription-Key': accessKey,
             }
@@ -516,7 +516,7 @@ async function sentimentAnalysis(input: IFlowInput, args: { secret: CognigySecre
         let result = {};
         let accessKey = args.secret.key;
 
-        const uri = args.secret.region + '.api.cognitive.microsoft.com';
+        const uri = `${args.secret.region}.api.cognitive.microsoft.com`;
         const path = '/text/analytics/v2.0/sentiment';
 
         const response_handler = (response) => {
