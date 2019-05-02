@@ -506,7 +506,7 @@ module.exports.textTranslator = textTranslator;
  * @arg {CognigyScript} `store` Where to store the result
  * @arg {Boolean} `stopOnError` Whether to stop on error or continue
  */
-async function sentimentAnalysis(input: IFlowInput, args: { secret: CognigySecret, text: string, language: string, store: string, stopOnError: boolean }): Promise<IFlowInput | {}> {
+async function analyseSentiments(input: IFlowInput, args: { secret: CognigySecret, text: string, language: string, store: string, stopOnError: boolean }): Promise<IFlowInput | {}> {
     // Check if secret exists and contains correct parameters
     if (!args.secret || !args.secret.key || !args.secret.region) return Promise.reject("Secret not defined or invalid.");
     if (!args.text) return Promise.reject("No text defined.");
@@ -571,4 +571,4 @@ async function sentimentAnalysis(input: IFlowInput, args: { secret: CognigySecre
     });
 }
 
-module.exports.sentimentAnalysis = sentimentAnalysis;
+module.exports.analyseSentiments = analyseSentiments;
