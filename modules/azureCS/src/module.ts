@@ -81,7 +81,7 @@ async function recognizeLanguage(input: IFlowInput, args: { secret: CognigySecre
 
     return new Promise((resolve, reject) => {
         let result = {};
-        let accessKey = args.secret.key;
+        const accessKey = args.secret.key;
 
         const uri = `${args.secret.region}.api.cognitive.microsoft.com`;
         const path = '/text/analytics/v2.0/languages';
@@ -112,9 +112,9 @@ async function recognizeLanguage(input: IFlowInput, args: { secret: CognigySecre
         };
 
         const getLanguage = (documents) => {
-            let body = JSON.stringify(documents);
+            const body = JSON.stringify(documents);
 
-            let requestParams = {
+            const requestParams = {
                 method: 'POST',
                 hostname: uri,
                 path: path,
@@ -128,7 +128,7 @@ async function recognizeLanguage(input: IFlowInput, args: { secret: CognigySecre
             req.end();
         };
 
-        let documents = {
+        const documents = {
             'documents': [
                 { 'id': '1', 'text': args.text }
             ]
@@ -157,7 +157,7 @@ async function extractKeyphrases(input: IFlowInput, args: { secret: CognigySecre
 
     return new Promise((resolve, reject) => {
         let result = {};
-        let accessKey = args.secret.key;
+        const accessKey = args.secret.key;
 
         const uri = `${args.secret.region}.api.cognitive.microsoft.com`;
         const path = '/text/analytics/v2.0/keyPhrases';
@@ -188,9 +188,9 @@ async function extractKeyphrases(input: IFlowInput, args: { secret: CognigySecre
         };
 
         const getKeyPhrases = (documents) => {
-            let body = JSON.stringify(documents);
+            const body = JSON.stringify(documents);
 
-            let requestParams = {
+            const requestParams = {
                 method: 'POST',
                 hostname: uri,
                 path: path,
@@ -204,7 +204,7 @@ async function extractKeyphrases(input: IFlowInput, args: { secret: CognigySecre
             req.end();
         };
 
-        let documents = {
+        const documents = {
             'documents': [
                 { 'id': '1', 'language': args.language, 'text': args.text }
             ]
@@ -233,7 +233,7 @@ async function namedEntityRecognition(input: IFlowInput, args: { secret: Cognigy
 
     return new Promise((resolve, reject) => {
         let result = {};
-        let accessKey = args.secret.key;
+        const accessKey = args.secret.key;
 
         const uri = `${args.secret.region}.api.cognitive.microsoft.com`;
         const path = '/text/analytics/v2.1-preview/entities';
@@ -264,9 +264,9 @@ async function namedEntityRecognition(input: IFlowInput, args: { secret: Cognigy
         };
 
         const getEntities = (documents) => {
-            let body = JSON.stringify(documents);
+            const body = JSON.stringify(documents);
 
-            let requestParams = {
+            const requestParams = {
                 method: 'POST',
                 hostname: uri,
                 path: path,
@@ -280,7 +280,7 @@ async function namedEntityRecognition(input: IFlowInput, args: { secret: Cognigy
             req.end();
         };
 
-        let documents = {
+        const documents = {
             'documents': [
                 { 'id': '1', 'language': args.language, 'text': args.text }
             ]
@@ -308,7 +308,7 @@ async function bingWebSearch(input: IFlowInput, args: { secret: CognigySecret, q
 
     return new Promise((resolve, reject) => {
         let result = {};
-        let accessKey = args.secret.key;
+        const accessKey = args.secret.key;
 
         https.get({
             hostname: 'api.cognitive.microsoft.com',
@@ -335,8 +335,8 @@ async function bingWebSearch(input: IFlowInput, args: { secret: CognigySecret, q
                 result = { "error": err.message };
                 input.input[args.store] = result;
                 resolve(input);
-            })
-        })
+            });
+        });
     });
 }
 
@@ -358,7 +358,7 @@ async function bingNewsSearch(input: IFlowInput, args: { secret: CognigySecret, 
     return new Promise((resolve, reject) => {
         let result = {};
 
-        let accessKey = args.secret.key;
+        const accessKey = args.secret.key;
 
         https.get({
             hostname: 'api.cognitive.microsoft.com',
@@ -382,7 +382,7 @@ async function bingNewsSearch(input: IFlowInput, args: { secret: CognigySecret, 
                 }
 
             });
-        })
+        });
     });
 }
 
@@ -403,7 +403,7 @@ async function bingImageSearch(input: IFlowInput, args: { secret: CognigySecret,
 
     return new Promise((resolve, reject) => {
         let result = {};
-        let accessKey = args.secret.key;
+        const accessKey = args.secret.key;
 
         const requestParams = {
             method: 'GET',
@@ -458,7 +458,7 @@ async function textTranslator(input: IFlowInput, args: { secret: CognigySecret, 
 
     return new Promise((resolve, reject) => {
         let result = {};
-        let accessKey = args.secret.key;
+        const accessKey = args.secret.key;
 
         const options = {
             method: 'POST',
@@ -514,7 +514,7 @@ async function analyseSentiments(input: IFlowInput, args: { secret: CognigySecre
 
     return new Promise((resolve, reject) => {
         let result = {};
-        let accessKey = args.secret.key;
+        const accessKey = args.secret.key;
 
         const uri = `${args.secret.region}.api.cognitive.microsoft.com`;
         const path = '/text/analytics/v2.0/sentiment';
@@ -544,10 +544,10 @@ async function analyseSentiments(input: IFlowInput, args: { secret: CognigySecre
             });
         };
 
-        let getSentiments = (documents) => {
-            let body = JSON.stringify(documents);
+        const getSentiments = (documents) => {
+            const body = JSON.stringify(documents);
 
-            let requestParams = {
+            const requestParams = {
                 method: 'POST',
                 hostname: uri,
                 path: path,
@@ -556,12 +556,12 @@ async function analyseSentiments(input: IFlowInput, args: { secret: CognigySecre
                 }
             };
 
-            let req = https.request(requestParams, responseHandler);
+            const req = https.request(requestParams, responseHandler);
             req.write(body);
             req.end();
-        }
+        };
 
-        let documents = {
+        const documents = {
             'documents': [
                 { 'id': '1', 'language': args.language, 'text': args.text },
             ]
