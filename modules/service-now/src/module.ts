@@ -33,10 +33,11 @@ async function GETFromTable(input: IFlowInput, args: { secret: CognigySecret, ta
                 resolve(input);
             })
             .catch((error) => {
-                if (args.stopOnError) { reject(error.message); return; }
-                else input.context.getFullContext()[args.store] = { "error": error.message };
+                if (args.stopOnError) {
+                    reject(error.message); return;
+                } else input.context.getFullContext()[args.store] = { "error": error.message };
                 resolve(input);
-            })
+            });
     });
 }
 
@@ -76,10 +77,11 @@ async function POSTToTable(input: IFlowInput, args: { secret: CognigySecret, tab
                 resolve(input);
             })
             .catch((error) => {
-                if (args.stopOnError) { reject(error.message); return; }
-                else input.context.getFullContext()[args.store] = { "error": error.message };
+                if (args.stopOnError) {
+                    reject(error.message); return;
+                } else input.context.getFullContext()[args.store] = { "error": error.message };
                 resolve(input);
-            })
+            });
     });
 }
 
@@ -123,10 +125,11 @@ async function PatchRecordInTable(input: IFlowInput, args: { secret: CognigySecr
                 resolve(input);
             })
             .catch((error) => {
-                if (args.stopOnError) { reject(error.message); return; }
-                else input.context.getFullContext()[args.store] = { "error": error.message };
+                if (args.stopOnError) {
+                    reject(error.message); return;
+                } else input.context.getFullContext()[args.store] = { "error": error.message };
                 resolve(input);
-            })
+            });
     });
 }
 
@@ -167,10 +170,11 @@ async function DeleteFromTable(input: IFlowInput, args: { secret: CognigySecret,
                 resolve(input);
             })
             .catch((error) => {
-                if (args.stopOnError) { reject(error.message); return; }
-                else input.context.getFullContext()[args.store] = { "error": error.message };
+                if (args.stopOnError) {
+                    reject(error.message); return;
+                } else input.context.getFullContext()[args.store] = { "error": error.message };
                 resolve(input);
-            })
+            });
     });
 }
 
@@ -207,10 +211,11 @@ async function GETAttachments(input: IFlowInput, args: { secret: CognigySecret, 
                 resolve(input);
             })
             .catch((error) => {
-                if (args.stopOnError) { reject(error.message); return; }
-                else input.context.getFullContext()[args.store] = { "error": error.message };
+                if (args.stopOnError) {
+                    reject(error.message); return;
+                } else input.context.getFullContext()[args.store] = { "error": error.message };
                 resolve(input);
-            })
+            });
     });
 }
 
@@ -247,10 +252,11 @@ async function GETAttachmentById(input: IFlowInput, args: { secret: CognigySecre
                 resolve(input);
             })
             .catch((error) => {
-                if (args.stopOnError) { reject(error.message); return; }
-                else input.context.getFullContext()[args.store] = { "error": error.message };
+                if (args.stopOnError) {
+                    reject(error.message); return;
+                } else input.context.getFullContext()[args.store] = { "error": error.message };
                 resolve(input);
-            })
+            });
     });
 }
 
@@ -299,10 +305,11 @@ async function POSTAttachment(input: IFlowInput, args: { secret: CognigySecret, 
                     resolve(input);
                 })
                 .catch((error) => {
-                    if (args.stopOnError) { reject(error.message); return; }
-                    else input.context.getFullContext()[args.store] = { "error": error.message };
+                    if (args.stopOnError) {
+                        reject(error.message); return;
+                    } else input.context.getFullContext()[args.store] = { "error": error.message };
                     resolve(input);
-                })
+                });
         });
     });
 }
@@ -340,10 +347,11 @@ async function DeleteAttachment(input: IFlowInput, args: { secret: CognigySecret
                 resolve(input);
             })
             .catch((error) => {
-                if (args.stopOnError) { reject(error.message); return; }
-                else input.context.getFullContext()[args.store] = { "error": error.message };
+                if (args.stopOnError) {
+                    reject(error.message); return;
+                } else input.context.getFullContext()[args.store] = { "error": error.message };
                 resolve(input);
-            })
+            });
     });
 }
 
