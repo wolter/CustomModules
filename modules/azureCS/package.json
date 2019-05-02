@@ -4,7 +4,10 @@
   "description": "Microsoft Azure Cognitive Services Custom Module (Language, Search API)",
   "main": "build/module.js",
   "scripts": {
-    "build": "tsc -p ."
+    "transpile": "tsc -p .",
+    "zip": "zip azure.zip build/* package.json package-lock.json README.md icon.png icon-large.png",
+    "build": "npm run transpile && npm run lint && npm run zip",
+    "lint": "tslint -c tslint.json src/**/*.ts"
   },
   "repository": {
     "type": "git",
