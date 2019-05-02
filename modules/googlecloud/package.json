@@ -4,7 +4,6 @@
 	"description": "This module integrates Cognigy.AI with the Google Cloud Plattform",
 	"main": "build/module.js",
 	"scripts": {
-		
 		"build": "tsc -p ."
 	},
 	"repository": {
@@ -14,7 +13,7 @@
 	"author": "Cognigy GmbH",
 	"license": "MIT",
 	"devDependencies": {
-		"@types/node": "^10.12.26",
+		"@types/node": "^10.14.6",
 		"typescript": "^3.1.6"
 	},
 	"dependencies": {
