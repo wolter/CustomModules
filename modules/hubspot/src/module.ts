@@ -19,7 +19,6 @@ async function findContactByEmail(input: IFlowInput, args: { secret: CognigySecr
 
 	return new Promise((resolve, reject) => {
 		hubspot.contacts.getByEmail(args.email, (err, res) => {
-
 			if (err) {
 				// if an error was triggered, either reject or write error to store
 				if (args.stopOnError) { reject(err); return; }
