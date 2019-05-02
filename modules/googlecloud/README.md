@@ -8,11 +8,11 @@ To use the Google Cloud you need to enable a specific `API_KEY` in your Google C
 
 **Translation, LanguageDetection**
 
-| [Cloud Translation API](https://console.cloud.google.com/apis/library/translate.googleapis.com?q=translation&id=c22f20ba-6a29-40ae-9084-8bc264a97fc2&project=boreal-physics-231713) | API_KEY |
+| [Cloud Translation API](https://console.cloud.google.com/apis/library/translate.googleapis.com?q=translation&id==boreal-physics-231713) | API_KEY |
 | ------------------------------------------------------------ | ------- |
 |                                                              |         |
 
-## Node: Translation
+## Node: Translate
 
 This node translates a given text into a specific given language. Just choose a **language** in which the **text** should be translated. If you want to use this translation in your later bot conversation, just store it to the CognigyContext.
 
@@ -24,7 +24,7 @@ Example sentence: *Soy Alex y trabajo a Cognigy en Düsseldorf.*
 
 
 
-## Node: LanguageDetection
+## Node: DetectLanguage
 
 This node detects the language of your given **text** and stores it to the CognigyContext if you want:
 
