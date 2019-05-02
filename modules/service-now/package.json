@@ -6,7 +6,8 @@
 	"scripts": {
 		"transpile": "tsc -p .",
 		"zip": "zip serviceNow.zip build/* package.json package-lock.json README.md icon.png icon-large.png",
-		"build": "npm run transpile && npm run zip"
+		"build": "npm run transpile && npm run lint && npm run zip",
+		"lint": "tslint -c tslint.json src/**/*.ts"
 	},
 	"repository": {
 		"type": "git",
