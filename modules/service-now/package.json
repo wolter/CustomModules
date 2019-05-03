@@ -1,5 +1,5 @@
 {
-	"name": "service-now",
+	"name": "Service-Now",
 	"version": "1.0.0",
 	"description": "Integrates Service-Now with Cognigy.AI",
 	"main": "build/module.js",
