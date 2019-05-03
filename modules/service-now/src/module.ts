@@ -64,7 +64,7 @@ async function POSTToTable(input: IFlowInput, args: { secret: CognigySecret, tab
         axios.post(`${args.secret.instance}/api/now/table/${args.tableName}`,
             args.data, {
                 headers: {
-                    'Allow': 'application/json',
+                    'Accept': 'application/json',
                     'Content-Type': 'application/json'
                 },
                 auth: {
@@ -112,7 +112,7 @@ async function PatchRecordInTable(input: IFlowInput, args: { secret: CognigySecr
             args.data
             , {
                 headers: {
-                    'Allow': 'application/json',
+                    'Accept': 'application/json',
                     'Content-Type': 'application/json'
                 },
                 auth: {
@@ -156,7 +156,7 @@ async function DeleteFromTable(input: IFlowInput, args: { secret: CognigySecret,
 
         axios.delete(`${args.secret.instance}/api/now/table/${args.tableName}/${args.sysId}`, {
             headers: {
-                'Allow': 'application/json',
+                'Accept': 'application/json',
                 'Content-Type': 'application/json'
             },
             auth: {
