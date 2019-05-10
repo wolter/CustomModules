@@ -20,9 +20,13 @@ async function GetEntity(input: IFlowInput, args: { secret: CognigySecret, entit
     return new Promise((resolve, reject) => {
         let result = {};
         
-        axios.get(`https://api.yext.com/v2/accounts/me/${args.entity.toLowerCase()}?api_key=${args.secret.api_key}&v=${version}`, {
+        axios.get(`https://api.yext.com/v2/accounts/me/${args.entity.toLowerCase()}`, {
             headers: {
                 'Allow': 'application/json'
+            },
+            params: {
+                api_key: args.secret.api_key,
+                v: version
             }
         })
             .then((response) => {
@@ -61,9 +65,13 @@ async function GetEntityById(input: IFlowInput, args: { secret: CognigySecret, e
     return new Promise((resolve, reject) => {
         let result = {};
         
-        axios.get(`https://api.yext.com/v2/accounts/me/${args.entity.toLowerCase()}/${args.entity_id}?api_key=${args.secret.api_key}&v=${version}`, {
+        axios.get(`https://api.yext.com/v2/accounts/me/${args.entity.toLowerCase()}/${args.entity_id}`, {
             headers: {
                 'Allow': 'application/json'
+            },
+            params: {
+                api_key: args.secret.api_key,
+                v: version
             }
         })
             .then((response) => {
@@ -100,12 +108,14 @@ async function GetLocationsByFilter(input: IFlowInput, args: { secret: CognigySe
     return new Promise((resolve, reject) => {
         let result = {};
         
-        axios.get(`https://api.yext.com/v2/accounts/me/locationsearch?api_key=${args.secret.api_key}&v=${version}`, {
+        axios.get(`https://api.yext.com/v2/accounts/me/locationsearch`, {
             headers: {
                 'Allow': 'application/json'
             },
             params: {
-                filters: JSON.stringify(args.filters)
+                filters: JSON.stringify(args.filters),
+                api_key: args.secret.api_key,
+                v: version
             }  
         })
             .then((response) => {
@@ -163,9 +173,13 @@ async function CreateLocation(input: IFlowInput, args: { secret: CognigySecret, 
             featuredMessage: args.featuredMessage
         }
 
-        axios.post(`https://api.yext.com/v2/accounts/me/locations?api_key=${args.secret.api_key}&v=${version}`, data, {
+        axios.post(`https://api.yext.com/v2/accounts/me/locations`, data, {
             headers: {
                 'Allow': 'application/json'
+            },
+            params: {
+                api_key: args.secret.api_key,
+                v: version
             }
         })
             .then((response) => {
