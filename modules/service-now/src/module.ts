@@ -169,7 +169,7 @@ async function DeleteFromTable(input: IFlowInput, args: { secret: CognigySecret,
             },
         })
             .then(() => {
-                result = "succefully deleted entry with id " + args.sysId;
+                result = `succefully deleted entry with id ${args.sysId}`;
                 input.context.getFullContext()[args.store] = result;
                 resolve(input);
             })
