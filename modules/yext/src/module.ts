@@ -153,6 +153,16 @@ async function CreateLocation(input: IFlowInput, args: { secret: CognigySecret, 
 
     // Check if secret exists and contains correct parameters
     if (!args.secret || !args.secret.api_key) return Promise.reject("Secret not defined or invalid.");
+    if (!args.locationName) return Promise.reject("No location name is defined");
+    if (!args.address) return Promise.reject("No address is defined.");
+    if (!args.city) return Promise.reject("No city is defined.");
+    if (!args.state) return Promise.reject("No state is defined.");
+    if (!args.zip) return Promise.reject("No zip is defined.");
+    if (!args.countryCode) return Promise.reject("No country code is defined. E.g 'de'");
+    if (!args.phone) return Promise.reject("No phone number is defined.");
+    if (!args.categoryIds) return Promise.reject("No categories are defined. Please check the Ids with 'https://api.yext.com/v2/categories?api_key=<API-KEY>&v=20190424'");
+    if (!args.featuredMessage) return Promise.reject("No featured message is defined.");
+
 
     let version = args.api_version || "20190424"
     let randomId = uuidv4()
