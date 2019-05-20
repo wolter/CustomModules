@@ -11,7 +11,7 @@ import * as http from 'https';
  * @arg {Boolean} `stopOnError` Whether to stop on error or continue
  * @arg {CognigyScript} `store` Where to store the result
  */
-async function GETFromTable(input: IFlowInput, args: { secret: CognigySecret, tableName: string, columns: string[], limit: number, stopOnError: boolean, store: string }): Promise<IFlowInput | {}> {
+function GETFromTable(input: IFlowInput, args: { secret: CognigySecret, tableName: string, columns: string[], limit: number, stopOnError: boolean, store: string }): Promise<IFlowInput | {}> {
 
     // Check if secret exists and contains correct parameters
     if (!args.secret || !args.secret.username || !args.secret.password || !args.secret.instance) return Promise.reject("Secret not defined or invalid.");
@@ -56,7 +56,7 @@ module.exports.GETFromTable = GETFromTable;
  * @arg {Boolean} `stopOnError` Whether to stop on error or continue
  * @arg {CognigyScript} `store` Where to store the result
  */
-async function POSTToTable(input: IFlowInput, args: { secret: CognigySecret, tableName: string, data: any, stopOnError: boolean, store: string }): Promise<IFlowInput | {}> {
+function POSTToTable(input: IFlowInput, args: { secret: CognigySecret, tableName: string, data: any, stopOnError: boolean, store: string }): Promise<IFlowInput | {}> {
 
     // Check if secret exists and contains correct parameters
     if (!args.secret || !args.secret.username || !args.secret.password || !args.secret.instance) return Promise.reject("Secret not defined or invalid.");
@@ -102,7 +102,7 @@ module.exports.POSTToTable = POSTToTable;
  * @arg {Boolean} `stopOnError` Whether to stop on error or continue
  * @arg {CognigyScript} `store` Where to store the result
  */
-async function PatchRecordInTable(input: IFlowInput, args: { secret: CognigySecret, tableName: string, data: any, sysId: string, stopOnError: boolean, store: string }): Promise<IFlowInput | {}> {
+function PatchRecordInTable(input: IFlowInput, args: { secret: CognigySecret, tableName: string, data: any, sysId: string, stopOnError: boolean, store: string }): Promise<IFlowInput | {}> {
 
     // Check if secret exists and contains correct parameters
     if (!args.secret || !args.secret.username || !args.secret.password || !args.secret.instance) return Promise.reject("Secret not defined or invalid.");
@@ -148,7 +148,7 @@ module.exports.PatchRecordInTable = PatchRecordInTable;
  * @arg {Boolean} `stopOnError` Whether to stop on error or continue
  * @arg {CognigyScript} `store` Where to store the result
  */
-async function DeleteFromTable(input: IFlowInput, args: { secret: CognigySecret, tableName: string, sysId: string, stopOnError: boolean, store: string }): Promise<IFlowInput | {}> {
+function DeleteFromTable(input: IFlowInput, args: { secret: CognigySecret, tableName: string, sysId: string, stopOnError: boolean, store: string }): Promise<IFlowInput | {}> {
 
     // Check if secret exists and contains correct parameters
     if (!args.secret || !args.secret.username || !args.secret.password || !args.secret.instance) return Promise.reject("Secret not defined or invalid.");
@@ -191,7 +191,7 @@ module.exports.DeleteFromTable = DeleteFromTable;
  * @arg {Boolean} `stopOnError` Whether to stop on error or continue
  * @arg {CognigyScript} `store` Where to store the result
  */
-async function GETAttachments(input: IFlowInput, args: { secret: CognigySecret, limit: string, query: string, stopOnError: boolean, store: string }): Promise<IFlowInput | {}> {
+function GETAttachments(input: IFlowInput, args: { secret: CognigySecret, limit: string, query: string, stopOnError: boolean, store: string }): Promise<IFlowInput | {}> {
 
     // Check if secret exists and contains correct parameters
     if (!args.secret || !args.secret.username || !args.secret.password || !args.secret.instance) return Promise.reject("Secret not defined or invalid.");
@@ -235,7 +235,7 @@ module.exports.GETAttachments = GETAttachments;
  * @arg {Boolean} `stopOnError` Whether to stop on error or continue
  * @arg {CognigyScript} `store` Where to store the result
  */
-async function GETAttachmentById(input: IFlowInput, args: { secret: CognigySecret, sysId: string, stopOnError: boolean, store: string }): Promise<IFlowInput | {}> {
+function GETAttachmentById(input: IFlowInput, args: { secret: CognigySecret, sysId: string, stopOnError: boolean, store: string }): Promise<IFlowInput | {}> {
 
     // Check if secret exists and contains correct parameters
     if (!args.secret || !args.secret.username || !args.secret.password || !args.secret.instance) return Promise.reject("Secret not defined or invalid.");
@@ -280,7 +280,7 @@ module.exports.GETAttachmentById = GETAttachmentById;
  * @arg {Boolean} `stopOnError` Whether to stop on error or continue
  * @arg {CognigyScript} `store` Where to store the result
  */
-async function POSTAttachment(input: IFlowInput, args: { secret: CognigySecret, tableName: string, tableSysId: string, fileName: string, fileLocation: string, stopOnError: boolean, store: string }): Promise<IFlowInput | {}> {
+function POSTAttachment(input: IFlowInput, args: { secret: CognigySecret, tableName: string, tableSysId: string, fileName: string, fileLocation: string, stopOnError: boolean, store: string }): Promise<IFlowInput | {}> {
 
     // Check if secret exists and contains correct parameters
     if (!args.secret || !args.secret.username || !args.secret.password || !args.secret.instance) return Promise.reject("Secret not defined or invalid.");
@@ -335,7 +335,7 @@ module.exports.POSTAttachment = POSTAttachment;
  * @arg {Boolean} `stopOnError` Whether to stop on error or continue
  * @arg {CognigyScript} `store` Where to store the result
  */
-async function DeleteAttachment(input: IFlowInput, args: { secret: CognigySecret, sysId: string, stopOnError: boolean, store: string }): Promise<IFlowInput | {}> {
+function DeleteAttachment(input: IFlowInput, args: { secret: CognigySecret, sysId: string, stopOnError: boolean, store: string }): Promise<IFlowInput | {}> {
 
     // Check if secret exists and contains correct parameters
     if (!args.secret || !args.secret.username || !args.secret.password || !args.secret.instance) return Promise.reject("Secret not defined or invalid.");
