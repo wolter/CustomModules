@@ -156,7 +156,6 @@ async function DeleteFromTable(input: IFlowInput, args: { secret: CognigySecret,
     if (!args.sysId) return Promise.reject("No sys id defined.");
 
     return new Promise((resolve, reject) => {
-        let result = {};
 
         axios.delete(`${args.secret.instance}/api/now/table/${args.tableName}/${args.sysId}`, {
             headers: {
@@ -169,8 +168,7 @@ async function DeleteFromTable(input: IFlowInput, args: { secret: CognigySecret,
             },
         })
             .then(() => {
-                result = `succefully deleted entry with id ${args.sysId}`;
-                input.context.getFullContext()[args.store] = result;
+                input.context.getFullContext()[args.store] = `succefully deleted entry with id ${args.sysId}`;
                 resolve(input);
             })
             .catch((error) => {
