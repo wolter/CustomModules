@@ -19,13 +19,17 @@ async function GETFromTable(input: IFlowInput, args: { secret: CognigySecret, ta
 
     return new Promise((resolve, reject) => {
 
-        axios.get(`${args.secret.instance}/api/now/table/${args.tableName}?sysparm_fields=${args.columns}&sysparm_limit=${args.limit}`, {
+        axios.get(`${args.secret.instance}/api/now/table/${args.tableName}`, {
             headers: {
                 'Accept': 'application/json'
             },
             auth: {
                 username: args.secret.username,
                 password: args.secret.password
+            },
+            params: {
+                sysparm_fields: args.columns,
+                sysparm_limit: args.limit
             }
         })
             .then((response) => {
@@ -196,7 +200,7 @@ async function GETAttachments(input: IFlowInput, args: { secret: CognigySecret, 
 
     return new Promise((resolve, reject) => {
 
-        axios.get(`${args.secret.instance}/api/now/attachment?sysparm_limit=${args.limit}&sysparm_query=${args.query}`, {
+        axios.get(`${args.secret.instance}/api/now/attachment`, {
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json'
@@ -205,6 +209,10 @@ async function GETAttachments(input: IFlowInput, args: { secret: CognigySecret, 
                 username: args.secret.username,
                 password: args.secret.password
             },
+            params: {
+                sysparm_limit: args.limit,
+                sysparm_query: args.query
+            }
         })
             .then((response) => {
                 input.context.getFullContext()[args.store] = response.data.result;
@@ -288,7 +296,7 @@ async function POSTAttachment(input: IFlowInput, args: { secret: CognigySecret, 
 
         // get file from location
         const request = http.get(args.fileLocation, (response) => {
-            axios.post(`${args.secret.instance}/api/now/attachment/file?table_name=${args.tableName}&table_sys_id=${args.tableSysId}&file_name=${args.fileName}`,
+            axios.post(`${args.secret.instance}/api/now/attachment/file`,
                 response
                 , {
                     headers: {
@@ -299,6 +307,11 @@ async function POSTAttachment(input: IFlowInput, args: { secret: CognigySecret, 
                         username: args.secret.username,
                         password: args.secret.password
                     },
+                    params: {
+                        table_name: args.tableName,
+                        table_sys_id: args.tableSysId,
+                        file_name: args.fileName
+                    }
                 })
                 .then((response) => {
                     input.context.getFullContext()[args.store] = response.data.result;
