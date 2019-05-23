@@ -1,5 +1,5 @@
 {
-	"name": "Google-Cloud",
+	"name": "google-cloud",
 	"version": "1.0.0",
 	"description": "This module integrates Cognigy.AI with the Google Cloud Plattform",
 	"main": "build/module.js",
