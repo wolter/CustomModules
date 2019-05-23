@@ -30,6 +30,36 @@ If you don't want to handle all results of a chosen entity, you can filter them 
 
 Return your locations, given a chosen filter, such as the `name` or `address`. Find out more about the filter [here](https://developer.yext.com/docs/api-reference/#operation/searchLocations). 
 
+Example Filters: 
+
+```json
+[
+  {
+    "city": {
+      "contains": [
+        {
+          "$cs": {
+            "script": "cc.userLocation.user_city.value",
+            "type": "string"
+          }
+        }
+      ]
+    }
+  }
+]
+```
+You always need an array of filters with the syntax `[{filter}, {filter}]`, where each filter has the following syntax: 
+
+```json
+{
+  "<field_name>": {
+    "contains": [
+      "value"
+    ]
+  }
+}
+```
+
 The result will be a list of all found locations: 
 
 ```json
