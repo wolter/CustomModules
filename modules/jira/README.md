@@ -105,7 +105,6 @@ Use this node to create a new ticket.
 
 - **secret** --> Select the secret that contains username, password and domain.
 - **summary** --> Expects a summary for the ticket
-- **issueTypeId** --> This is filled by default. Only fill out if you know what you are doing.
 - **projectId** --> The ID of the project. This is typically the first part of the ticket format. 
 
 If ticket format is **CIT-2341**, the projectId is  **CIT** 
