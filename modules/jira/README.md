@@ -7,9 +7,9 @@ This module is based on the Jira Connector (https://github.com/floralvikings/jir
 ### Secret
 This modules needs a CognigySecret to be defined and passed to the Nodes. The secret must have the following keys:
 
-- Jira domain (e.g. my-domain.atlassian.net)
-- Username (Your Jira account email address bob@sample.com)
-- API token (Can be generated within your Jira Project. Click [here](https://confluence.atlassian.com/cloud/api-tokens-938839638.html) for instructions.)
+- domain (e.g. my-domain.atlassian.net)
+- username (Your Jira account email address bob@sample.com)
+- password (Can be generated within your Jira Project. Click [here](https://confluence.atlassian.com/cloud/api-tokens-938839638.html) for instructions.)
 
 **PLEASE NOTE:** 
 *This package uses the term **"ticket"** as a generic term for any Jira issue. This can be  a UserStory, Issue, etc.*
@@ -36,14 +36,20 @@ the extractTicket node will automatically extract **ITI-1542** and write it to t
 
 This package provides several nodes to retrieve ticket information from Jira, using the **ticket** name like "SB-4": 
 
-- status
-- assignee
-- priority
-- resolution
-- reporter
-- comments
-- watchers
-- summary
+An example output would be the following: 
+
+```json
+"summary": {
+    "ticket": "CI-10",
+    "type": "Epic",
+    "project": "Customer Issues",
+    "status": "To Do",
+    "assignedTo": "a.teusz@cognigy.com",
+    "reportedBy": "t.waanders@cognigy.com",
+    "resolution": null,
+    "comments": []
+  }
+```
 
 
 Retrieves information on the ticket number and returns it in the following format: 
