@@ -7,13 +7,22 @@ const JiraClient = require('jira-connector');
  * @arg {CognigyScript} `summary` The summary of the new ticket
  * @arg {CognigyScript} `projectId` The summary of the new ticket
  * @arg {CognigyScript} `epicname` The epicname of the new ticket
+ * @arg {CognigyScript} `description` The description of the new ticket
+ * @arg {CognigyScript} `assignee` The assignee of the new ticket
  * @arg {CognigyScript} `store` Where to store the result
  * @arg {Boolean} `stopOnError` Whether to stop on error or continue
  */
 
-async function createTicket2(input: IFlowInput, args: { secret: CognigySecret, summary: string, projectId: string, epicname: string, store: string, stopOnError: boolean }): Promise<IFlowInput | {}> {
+async function CreateIssueTicket(input: IFlowInput, args: { secret: CognigySecret, summary: string, projectId: string, epicname: string, description: string, assignee: string, store: string, stopOnError: boolean }): Promise<IFlowInput | {}> {
+
+  if (!args.secret || !args.secret.username || !args.secret.password || !args.secret.domain) return Promise.reject("Secret not defined or invalid.");
+  if (!args.summary) return Promise.reject("No ticket sumnmary defined");
+  if (!args.projectId) return Promise.reject("No ticket projectId defined");
+  if (!args.epicname) return Promise.reject("No ticket epicname defined");
+  if (!args.description) return Promise.reject("No ticket description defined");
+  if (!args.assignee) return Promise.reject("No ticket assignee defined");
+
   return new Promise((resolve, reject) => {
-    let reslut: any = {};
 
     const jira = new JiraClient({
       host: args.secret.domain,
@@ -32,37 +41,32 @@ async function createTicket2(input: IFlowInput, args: { secret: CognigySecret, s
         project: {
           id: args.projectId
         },
-        customfield_10011: args.epicname
-        // description: {
-        //   type: "doc",
-        //   version: 1,
-        //   content: [
-        //     {
-        //       type: "paragraph",
-        //       content: [
-        //         {
-        //           text: args.description,
-        //           type: "text"
-        //         }
-        //       ]
-        //     }
-        //   ]
-        // }
+        customfield_10011: args.epicname,
+        description: args.description,
+        assignee: {
+          name: args.assignee
+        }
       }
     }, (error, issue) => {
       if (error) {
-        reject(error);
+        const errorMessage = Array.isArray(error.errorMessages) ?
+          error.errorMessages[0] : error.errorMessage;
+
+        if (args.stopOnError) {
+          reject(errorMessage);
+          return;
+        }
+
+        input.context.getFullContext()[args.store] = { "error": errorMessage };
+        resolve(input);
       }
-      input.actions.output("", issue);
       input.context.getFullContext()[args.store] = issue;
+      resolve(input);
     });
-
-
   });
-
 }
 
-module.exports.createTicket2 = createTicket2;
+module.exports.CreateIssueTicket = CreateIssueTicket;
 
 
 /**
