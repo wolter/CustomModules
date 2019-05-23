@@ -7,6 +7,10 @@ This Custom Module integrates [Yext.com](https://www.yext.de/) with Cognigy.
 - api_key
   - You need the **Knowledge API Key** from your [Yext Developer](https://developer.yext.com/) Account. There you have to create a new application and add this API to get the key.
 
+**IMPORTANT**
+
+You don't have to specify the **Api_version** if it doesn't matter which version you use. For default the version is `20190424`, so you can leave this field empty.
+
 
 **Categories**
 
