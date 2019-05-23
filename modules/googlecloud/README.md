@@ -8,7 +8,7 @@ To use the Google Cloud you need to enable a specific `API_KEY` in your Google C
 
 **Translation, LanguageDetection**
 
-| [Cloud Translation API](https://console.cloud.google.com/apis/library/translate.googleapis.com?q=translation&id==boreal-physics-231713) | API_KEY |
+| [Cloud Translation API](https://console.cloud.google.com/apis/library/translate.googleapis.com) | API_KEY |
 | ------------------------------------------------------------ | ------- |
 |                                                              |         |
 
