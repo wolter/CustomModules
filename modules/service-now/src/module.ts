@@ -1,52 +1,59 @@
 import axios from 'axios';
 import * as http from 'https';
+import { networkInterfaces } from 'os';
 
 
 /**
  * Gets the information of a chosen table
- * @arg {SecretSelect} `secret` The configured secret to use
- * @arg {CognigyScript} `tableName` The name of the table you want to query
+ * @arg {SecretSelect} `secret` 1 The configured secret to use
+ * @arg {CognigyScript} `tableName` 1 The name of the table you want to query
  * @arg {CognigyScriptArray} `columns` The columns you want to show
  * @arg {Number} `limit` The limit of the shown results
- * @arg {Boolean} `stopOnError` Whether to stop on error or continue
- * @arg {CognigyScript} `store` Where to store the result
+ * @arg {Boolean} `stopOnError` 1 Whether to stop on error or continue
+ * @arg {CognigyScript} `store` 1 Where to store the result
  */
-function GETFromTable(input: IFlowInput, args: { secret: CognigySecret, tableName: string, columns: string[], limit: number, stopOnError: boolean, store: string }): Promise<IFlowInput | {}> {
+async function GETFromTable(input: IFlowInput, args: { secret: CognigySecret, tableName: string, columns?: string[], limit?: number, stopOnError: boolean, store: string }): Promise<IFlowInput | {}> {
 
-    // Check if secret exists and contains correct parameters
-    if (!args.secret || !args.secret.username || !args.secret.password || !args.secret.instance) return Promise.reject("Secret not defined or invalid.");
-    if (!args.tableName) return Promise.reject("No table name defined.");
+    /* validate node arguments */
+    const { secret, tableName, store, stopOnError, columns, limit } = args;
+    if (!secret) throw new Error("Secret not defined.");
+    if (!tableName) throw new Error("Table name not defined.");
+    if (!store) throw new Error("Context store not defined.");
+    if (stopOnError === undefined) throw new Error("Stop on error flag not defined.");
 
-    return new Promise((resolve, reject) => {
+    const { username, password, instance } = secret;
+    if (!username) throw new Error("Secret is missing the 'username' field.");
+    if (!password) throw new Error("Secret is missing the 'password' field.");
+    if (!instance) throw new Error("Secret is missing the 'instance' field.");
 
-        axios.get(`${args.secret.instance}/api/now/table/${args.tableName}`, {
+    try {
+         const response = await axios.get(`${instance}/api/now/table/${tableName}`, {
             headers: {
                 'Accept': 'application/json'
             },
             auth: {
-                username: args.secret.username,
-                password: args.secret.password
+                username,
+                password
             },
             params: {
-                sysparm_fields: args.columns,
-                sysparm_limit: args.limit
+                sysparm_fields: columns,
+                sysparm_limit: limit
             }
-        })
-            .then((response) => {
-                input.context.getFullContext()[args.store] = response.data.result;
-                resolve(input);
-            })
-            .catch((error) => {
-                if (args.stopOnError) {
-                    reject(error.message); return;
-                } else input.context.getFullContext()[args.store] = { "error": error.message };
-                resolve(input);
-            });
-    });
+        });
+
+        input.actions.addToContext(store, response.data.result, 'simple');
+    } catch (error) {
+        if (stopOnError) {
+            throw new Error(error.message);
+        } else {
+            input.actions.addToContext(store, { error: error.message }, 'simple');
+        }
+    }
+
+    return input;
 }
 
 module.exports.GETFromTable = GETFromTable;
-
 
 /**
  * Inserts a new row into the chosen Service Now table
