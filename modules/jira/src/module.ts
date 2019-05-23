@@ -5,7 +5,6 @@ const JiraClient = require('jira-connector');
  * Creates a Ticket in Jira
  * @arg {SecretSelect} `secret` The configured secret to use
  * @arg {CognigyScript} `summary` The summary of the new ticket
- * @arg {CognigyScript} `issueTypeId` The issue type id of the new ticket
  * @arg {CognigyScript} `projectId` The projectId of the new ticket
  * @arg {CognigyScript} `epicname` The epicname of the new ticket
  * @arg {CognigyScript} `description` The description of the new ticket
@@ -14,11 +13,10 @@ const JiraClient = require('jira-connector');
  * @arg {Boolean} `stopOnError` Whether to stop on error or continue
  */
 
-async function CreateIssueTicket(input: IFlowInput, args: { secret: CognigySecret, summary: string, issueTypeId: string, projectId: string, epicname: string, description: string, assignee: string, store: string, stopOnError: boolean }): Promise<IFlowInput | {}> {
+async function createJiraTicket(input: IFlowInput, args: { secret: CognigySecret, summary: string, projectId: string, epicname: string, description: string, assignee: string, store: string, stopOnError: boolean }): Promise<IFlowInput | {}> {
 
   if (!args.secret || !args.secret.username || !args.secret.password || !args.secret.domain) return Promise.reject("Secret not defined or invalid.");
   if (!args.summary) return Promise.reject("No ticket sumnmary defined");
-  if (!args.issueTypeId) return Promise.reject("No ticket issue type id defined");
   if (!args.projectId) return Promise.reject("No ticket projectId defined");
   if (!args.epicname) return Promise.reject("No ticket epicname defined");
   if (!args.description) return Promise.reject("No ticket description defined");
@@ -37,7 +35,7 @@ async function CreateIssueTicket(input: IFlowInput, args: { secret: CognigySecre
       fields: {
         summary: args.summary,
         issuetype: {
-          id: args.issueTypeId
+          id: "10000"
         },
         project: {
           key: args.projectId
@@ -70,7 +68,7 @@ async function CreateIssueTicket(input: IFlowInput, args: { secret: CognigySecre
   });
 }
 
-module.exports.CreateIssueTicket = CreateIssueTicket;
+module.exports.createJiraTicket = createJiraTicket;
 
 
 /**
