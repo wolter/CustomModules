@@ -13,7 +13,7 @@ const JiraClient = require('jira-connector');
 
 async function createTicket2(input: IFlowInput, args: { secret: CognigySecret, summary: string, projectId: string, epicname: string, store: string, stopOnError: boolean }): Promise<IFlowInput | {}> {
   return new Promise((resolve, reject) => {
-    let reslut: any = {}
+    let reslut: any = {};
 
     const jira = new JiraClient({
       host: args.secret.domain,
@@ -50,8 +50,8 @@ async function createTicket2(input: IFlowInput, args: { secret: CognigySecret, s
         // }
       }
     }, (error, issue) => {
-      if (error){
-        reject(error)
+      if (error) {
+        reject(error);
       }
       input.actions.output("", issue);
       input.context.getFullContext()[args.store] = issue;
@@ -66,7 +66,7 @@ module.exports.createTicket2 = createTicket2;
 
 
 /**
- * This function takes the input text and automatically extracts a ticket number (e.g. SB-2 or TIF-1234). You select where to store it. 
+ * This function takes the input text and automatically extracts a ticket number (e.g. SB-2 or TIF-1234). You select where to store it.
  * @arg {CognigyScript} `storeTicket` Where to store the result
  * @arg {Boolean} `stopOnError` Whether to stop on error or continue
  */
@@ -104,14 +104,14 @@ async function getTicketStatus(input: IFlowInput, args: { secret: CognigySecret,
   if (!args.secret || !args.secret.username || !args.secret.password || !args.secret.domain) return Promise.reject("Secret not defined or invalid.");
   if (!args.ticket) return Promise.reject("No ticket defined. Please define a ticket like AB-1234");
 
-  return await processJiraIssue(input, args, "status")
+  return await processJiraIssue(input, args, "status");
 }
 
 module.exports.getTicketStatus = getTicketStatus;
 
 
 /**
- * Returns the assignee of a given ticket (e.g. bob@bob.com). 
+ * Returns the assignee of a given ticket (e.g. bob@bob.com).
  * @arg {SecretSelect} `secret` The configured secret to use
  * @arg {CognigyScript} `ticket` The ticket number e.g. ABC-1234
  * @arg {CognigyScript} `store` Where to store the result
@@ -124,7 +124,7 @@ async function getTicketAssignee(input: IFlowInput, args: { secret: CognigySecre
   if (!args.secret || !args.secret.username || !args.secret.password || !args.secret.domain) return Promise.reject("Secret not defined or invalid.");
   if (!args.ticket) return Promise.reject("No ticket defined. Please define a ticket like AB-1234");
 
-  return await processJiraIssue(input, args, "assignee")
+  return await processJiraIssue(input, args, "assignee");
 }
 
 module.exports.getTicketAssignee = getTicketAssignee;
@@ -144,7 +144,7 @@ async function getTicketPriority(input: IFlowInput, args: { secret: CognigySecre
   if (!args.secret || !args.secret.username || !args.secret.password || !args.secret.domain) return Promise.reject("Secret not defined or invalid.");
   if (!args.ticket) return Promise.reject("No ticket defined. Please define a ticket like AB-1234");
 
-  return await processJiraIssue(input, args, "priority")
+  return await processJiraIssue(input, args, "priority");
 }
 
 module.exports.getTicketPriority = getTicketPriority;
@@ -164,7 +164,7 @@ async function getTicketResolution(input: IFlowInput, args: { secret: CognigySec
   if (!args.secret || !args.secret.username || !args.secret.password || !args.secret.domain) return Promise.reject("Secret not defined or invalid.");
   if (!args.ticket) return Promise.reject("No ticket defined. Please define a ticket like AB-1234");
 
-  return await processJiraIssue(input, args, "resolution")
+  return await processJiraIssue(input, args, "resolution");
 }
 
 module.exports.getTicketResolution = getTicketResolution;
@@ -184,14 +184,14 @@ async function getTicketReporter(input: IFlowInput, args: { secret: CognigySecre
   if (!args.secret || !args.secret.username || !args.secret.password || !args.secret.domain) return Promise.reject("Secret not defined or invalid.");
   if (!args.ticket) return Promise.reject("No ticket defined. Please define a ticket like AB-1234");
 
-  return await processJiraIssue(input, args, "reporter")
+  return await processJiraIssue(input, args, "reporter");
 }
 
 module.exports.getTicketReporter = getTicketReporter;
 
 
 /**
- * Returns comments on this ticket, if it has any. 
+ * Returns comments on this ticket, if it has any.
  * @arg {SecretSelect} `secret` The configured secret to use
  * @arg {CognigyScript} `ticket` The ticket number e.g. ABC-1234
  * @arg {CognigyScript} `store` Where to store the result
@@ -211,7 +211,7 @@ module.exports.getTicketComments = getTicketComments;
 
 
 /**
- * Returns a list (array) of people watching the ticket. 
+ * Returns a list (array) of people watching the ticket.
  * @arg {SecretSelect} `secret` The configured secret to use
  * @arg {CognigyScript} `ticket` The ticket number e.g. ABC-1234
  * @arg {CognigyScript} `store` Where to store the result
@@ -224,13 +224,13 @@ async function getTicketWatchers(input: IFlowInput, args: { secret: CognigySecre
   if (!args.secret || !args.secret.username || !args.secret.password || !args.secret.domain) return Promise.reject("Secret not defined or invalid.");
   if (!args.ticket) return Promise.reject("No ticket defined. Please define a ticket like AB-1234");
 
-  return await processJiraIssue(input, args, "watches")
+  return await processJiraIssue(input, args, "watches");
 }
 
 module.exports.getTicketWatchers = getTicketWatchers;
 
 /**
- * Returns basic summary of the ticket, including: type, project, status, assignedTo, reportedBy, resolution and comments. 
+ * Returns basic summary of the ticket, including: type, project, status, assignedTo, reportedBy, resolution and comments.
  * @arg {SecretSelect} `secret` The configured secret to use
  * @arg {CognigyScript} `ticket` The ticket number e.g. ABC-1234
  * @arg {CognigyScript} `store` Where to store the result
@@ -256,7 +256,7 @@ async function getTicketSummary(input: IFlowInput, args: { secret: CognigySecret
 
     jira.issue.getIssue({
       issueKey: args.ticket
-    }, function (error, issue) {
+    }, (error: any, issue: any) => {
       if (error && error.errorMessages) {
         const errorMessage = Array.isArray(error.errorMessages) ?
           error.errorMessages[0] : error.errorMessage;
@@ -318,7 +318,7 @@ module.exports.getTicketSummary = getTicketSummary;
 
 
 /**
- * Returns the full JIRA response, including ALL meta data. Use this if you need more info. 
+ * Returns the full JIRA response, including ALL meta data. Use this if you need more info.
  * @arg {SecretSelect} `secret` The configured secret to use
  * @arg {CognigyScript} `ticket` The ticket number e.g. ABC-1234
  * @arg {CognigyScript} `store` Where to store the result
@@ -344,7 +344,7 @@ async function getAllTicketInfo(input: IFlowInput, args: { secret: CognigySecret
 
     jira.issue.getIssue({
       issueKey: args.ticket
-    }, function (error, issue) {
+    }, (error: any, issue: any) => {
       if (error && error.errorMessages) {
         const errorMessage = Array.isArray(error.errorMessages) ?
           error.errorMessages[0] : error.errorMessage;
@@ -375,7 +375,7 @@ async function getAllTicketInfo(input: IFlowInput, args: { secret: CognigySecret
 module.exports.getAllTicketInfo = getAllTicketInfo;
 
 
-async function processJiraIssue(input: IFlowInput, args: { [key: string]: any; }, fieldName: string) {
+async function processJiraIssue(input: IFlowInput, args: { [key: string]: any; }, fieldName: string): Promise<IFlowInput | {}> {
 
   const jira = new JiraClient({
     host: args.secret.domain,
@@ -388,7 +388,7 @@ async function processJiraIssue(input: IFlowInput, args: { [key: string]: any; }
 
     jira.issue.getIssue({
       issueKey: args.ticket
-    }, function (error, issue) {
+    }, (error: any, issue: any) => {
       try {
         if (error && error.errorMessages) {
           const errorMessage = Array.isArray(error.errorMessages) ?
@@ -414,7 +414,7 @@ async function processJiraIssue(input: IFlowInput, args: { [key: string]: any; }
           const result = {
             ticket: issue.key || null,
             status: issue.fields && issue.fields[fieldName] || null
-          }
+          };
 
           input.context.getFullContext()[args.store] = result;
           resolve(input);
