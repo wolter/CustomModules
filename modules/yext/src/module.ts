@@ -11,35 +11,40 @@ const uuidv4 = require('uuid/v4')
  */
 async function GetEntity(input: IFlowInput, args: { secret: CognigySecret, entity: string, api_version: string, stopOnError: boolean, store: string }): Promise<IFlowInput | {}> {
 
-    // Check if secret exists and contains correct parameters
-    if (!args.secret || !args.secret.api_key) return Promise.reject("Secret not defined or invalid.");
-    if (!args.entity) return Promise.reject("No entity defined.");
+    /* validate node arguments */
+    const { secret, entity, api_version, store, stopOnError } = args;
+    if (!secret) throw new Error("Secret not defined.");
+    if (!entity) throw new Error("Entity not defined.");
+    if (!store) throw new Error("Context store not defined.");
+    if (stopOnError === undefined) throw new Error("Stop on error flag not defined.");
 
-    let version = args.api_version || "20190424"
+    /* validate secrets */
+    const { api_key } = secret;
+    if (!api_key) throw new Error("Secret is missing the 'api_key' field.");
 
-    return new Promise((resolve, reject) => {
-        let result = {};
+    const version = api_version || "20190424"
 
-        axios.get(`https://api.yext.com/v2/accounts/me/${args.entity.toLowerCase()}`, {
+    try {
+        const response = await axios.get(`https://api.yext.com/v2/accounts/me/${entity.toLowerCase()}`, {
             headers: {
                 'Allow': 'application/json'
             },
             params: {
-                api_key: args.secret.api_key,
+                api_key,
                 v: version
             }
-        })
-            .then((response) => {
-                result = response.data
-                input.context.getFullContext()[args.store] = result
-                resolve(input)
-            })
-            .catch((error) => {
-                if (args.stopOnError) { reject(error.message); return; }
-                else input.context.getFullContext()[args.store] = { "error": error.message }
-                resolve(input)
-            })
-    });
+        });
+
+        input.actions.addToContext(store, response.data.result, 'simple');
+    } catch (error) {
+        if (stopOnError) {
+            throw new Error(error.message);
+        } else {
+            input.actions.addToContext(store, { error: error.message }, 'simple');
+        }
+    }
+
+    return input;
 }
 
 module.exports.GetEntity = GetEntity;
