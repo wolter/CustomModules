@@ -19,7 +19,7 @@ async function GetEntity(input: IFlowInput, args: { secret: CognigySecret, entit
 
     return new Promise((resolve, reject) => {
         let result = {};
-        
+
         axios.get(`https://api.yext.com/v2/accounts/me/${args.entity.toLowerCase()}`, {
             headers: {
                 'Allow': 'application/json'
@@ -64,7 +64,7 @@ async function GetEntityById(input: IFlowInput, args: { secret: CognigySecret, e
 
     return new Promise((resolve, reject) => {
         let result = {};
-        
+
         axios.get(`https://api.yext.com/v2/accounts/me/${args.entity.toLowerCase()}/${args.entity_id}`, {
             headers: {
                 'Allow': 'application/json'
@@ -98,37 +98,42 @@ module.exports.GetEntityById = GetEntityById;
  * @arg {Boolean} `stopOnError` Whether to stop on error or continue
  * @arg {CognigyScript} `store` Where to store the result
  */
-async function GetLocationsByFilter(input: IFlowInput, args: { secret: CognigySecret, filters: string, api_version: string, stopOnError: boolean, store: string }): Promise<IFlowInput | {}> {
+async function GetLocationsByFilter(input: IFlowInput, args: { secret: CognigySecret, filters?: string, api_version?: string, stopOnError: boolean, store: string }): Promise<IFlowInput | {}> {
 
-    // Check if secret exists and contains correct parameters
-    if (!args.secret || !args.secret.api_key) return Promise.reject("Secret not defined or invalid.");
+    /* validate node arguments */
+    const { secret, filters, api_version, store, stopOnError } = args;
+    if (!secret) throw new Error("Secret not defined.");
+    if (!store) throw new Error("Context store not defined.");
+    if (stopOnError === undefined) throw new Error("Stop on error flag not defined.");
 
-    let version = args.api_version || "20190424"
+    /* validate secrets */
+    const { api_key } = secret;
+    if (!api_key) throw new Error("Secret is missing the 'api_key' field.");
 
-    return new Promise((resolve, reject) => {
-        let result = {};
-        
-        axios.get(`https://api.yext.com/v2/accounts/me/locationsearch`, {
+    const version = api_version || "20190424"
+
+    try {
+        const response = await axios.get(`https://api.yext.com/v2/accounts/me/locationsearch`, {
             headers: {
                 'Allow': 'application/json'
             },
             params: {
-                filters: JSON.stringify(args.filters),
-                api_key: args.secret.api_key,
+                filters: JSON.stringify(filters),
+                api_key,
                 v: version
-            }  
-        })
-            .then((response) => {
-                result = response.data
-                input.context.getFullContext()[args.store] = result
-                resolve(input)
-            })
-            .catch((error) => {
-                if (args.stopOnError) { reject(error.message); return; }
-                else input.context.getFullContext()[args.store] = { "error": error.message }
-                resolve(input)
-            })
-    });
+            }
+        });
+
+        input.actions.addToContext(store, response.data.result, 'simple');
+    } catch (error) {
+        if (stopOnError) {
+            throw new Error(error.message)
+        } else {
+            input.actions.addToContext(store, { error: error.message }, 'simple');
+        }
+    }
+
+    return input;
 }
 
 module.exports.GetLocationsByFilter = GetLocationsByFilter;
@@ -169,7 +174,7 @@ async function CreateLocation(input: IFlowInput, args: { secret: CognigySecret, 
 
     return new Promise((resolve, reject) => {
         let result = {};
-        
+
         const data = {
             id: randomId,
             locationName: args.locationName,
