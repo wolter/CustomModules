@@ -221,38 +221,46 @@ module.exports.DeleteFromTable = DeleteFromTable;
  * @arg {Boolean} `stopOnError` Whether to stop on error or continue
  * @arg {CognigyScript} `store` Where to store the result
  */
-function GETAttachments(input: IFlowInput, args: { secret: CognigySecret, limit: string, query: string, stopOnError: boolean, store: string }): Promise<IFlowInput | {}> {
+async function GETAttachments(input: IFlowInput, args: { secret: CognigySecret, limit?: string, query?: string, stopOnError: boolean, store: string }): Promise<IFlowInput | {}> {
 
-    // Check if secret exists and contains correct parameters
-    if (!args.secret || !args.secret.username || !args.secret.password || !args.secret.instance) return Promise.reject("Secret not defined or invalid.");
+    /* validate node arguments */
+    const { secret, store, stopOnError } = args;
+    if (!secret) throw new Error("Secret not defined.");
+    if (!store) throw new Error("Context store not defined.");
+    if (stopOnError === undefined) throw new Error("Stop on error flag not defined.");
 
-    return new Promise((resolve, reject) => {
+    /* validate secrets */
+    const { username, password, instance } = secret;
+    if (!username) throw new Error("Secret is missing the 'username' field.");
+    if (!password) throw new Error("Secret is missing the 'password' field.");
+    if (!instance) throw new Error("Secret is missing the 'instance' field.");
 
-        axios.get(`${args.secret.instance}/api/now/attachment`, {
+    try {
+        const response = await axios.get(`${instance}/api/now/attachment`, {
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json'
             },
             auth: {
-                username: args.secret.username,
-                password: args.secret.password
+                username,
+                password
             },
             params: {
                 sysparm_limit: args.limit,
                 sysparm_query: args.query
             }
-        })
-            .then((response) => {
-                input.context.getFullContext()[args.store] = response.data.result;
-                resolve(input);
-            })
-            .catch((error) => {
-                if (args.stopOnError) {
-                    reject(error.message); return;
-                } else input.context.getFullContext()[args.store] = { "error": error.message };
-                resolve(input);
-            });
-    });
+        });
+
+        input.actions.addToContext(store, response.data.result, 'simple');
+    } catch (error) {
+        if (stopOnError) {
+            throw new Error(error.message);
+        } else {
+            input.actions.addToContext(store, { error: error.message }, 'simple');
+        }
+    }
+
+    return input;
 }
 
 module.exports.GETAttachments = GETAttachments;
