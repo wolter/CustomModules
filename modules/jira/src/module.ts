@@ -155,9 +155,18 @@ module.exports.getTicketStatus = getTicketStatus;
 
 async function getTicketAssignee(input: IFlowInput, args: { secret: CognigySecret, ticket: string, store: string, stopOnError: boolean }): Promise<IFlowInput | {}> {
 
-  // Check if secret exists and contains correct parameters
-  if (!args.secret || !args.secret.username || !args.secret.password || !args.secret.domain) return Promise.reject("Secret not defined or invalid.");
-  if (!args.ticket) return Promise.reject("No ticket defined. Please define a ticket like AB-1234");
+  /* validate node arguments */
+  const { secret, ticket, store, stopOnError } = args;
+  if (!secret) throw new Error("Secret not defined.");
+  if (!ticket) throw new Error("No ticket defined. Please define a ticket like AB-1234.");
+  if (!store) throw new Error("Context store not defined.");
+  if (stopOnError === undefined) throw new Error("Stop on error flag not defined.");
+
+  /* validate secrets */
+  const { username, password, domain } = secret;
+  if (!username) throw new Error("Secret is missing the 'username' field.");
+  if (!password) throw new Error("Secret is missing the 'password' field.");
+  if (!domain) throw new Error("Secret is missing the 'domain' field.");
 
   return await processJiraIssue(input, args, "assignee");
 }
