@@ -82,16 +82,16 @@ async function POSTToTable(input: IFlowInput, args: { secret: CognigySecret, tab
 
     try {
         const response = await axios.post(`${instance}/api/now/table/${tableName}`,
-        data, {
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
-            },
-            auth: {
-                username,
-                password
-            },
-        });
+            data, {
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                auth: {
+                    username,
+                    password
+                },
+            });
 
         input.actions.addToContext(store, response.data.result, 'simple');
     } catch (error) {
@@ -117,39 +117,46 @@ module.exports.POSTToTable = POSTToTable;
  * @arg {Boolean} `stopOnError` Whether to stop on error or continue
  * @arg {CognigyScript} `store` Where to store the result
  */
-function PatchRecordInTable(input: IFlowInput, args: { secret: CognigySecret, tableName: string, data: any, sysId: string, stopOnError: boolean, store: string }): Promise<IFlowInput | {}> {
+async function PatchRecordInTable(input: IFlowInput, args: { secret: CognigySecret, tableName: string, data: any, sysId: string, stopOnError: boolean, store: string }): Promise<IFlowInput | {}> {
 
-    // Check if secret exists and contains correct parameters
-    if (!args.secret || !args.secret.username || !args.secret.password || !args.secret.instance) return Promise.reject("Secret not defined or invalid.");
-    if (!args.tableName) return Promise.reject("No table name defined.");
-    if (!args.data) return Promise.reject("No data to update defined.");
-    if (!args.sysId) return Promise.reject("No sys id defined.");
+    /* validate node arguments */
+    const { secret, tableName, data, sysId, store, stopOnError } = args;
+    if (!secret) throw new Error("Secret not defined.");
+    if (!tableName) throw new Error("Table name not defined.");
+    if (!data) throw new Error("Data to post not defined.");
+    if (!sysId) throw new Error("Sys Id not defined.");
+    if (!store) throw new Error("Context store not defined.");
+    if (stopOnError === undefined) throw new Error("Stop on error flag not defined.");
 
-    return new Promise((resolve, reject) => {
+    /* validate secrets */
+    const { username, password, instance } = secret;
+    if (!username) throw new Error("Secret is missing the 'username' field.");
+    if (!password) throw new Error("Secret is missing the 'password' field.");
+    if (!instance) throw new Error("Secret is missing the 'instance' field.");
 
-        axios.patch(`${args.secret.instance}/api/now/table/${args.tableName}/${args.sysId}`,
-            args.data
-            , {
-                headers: {
-                    'Accept': 'application/json',
-                    'Content-Type': 'application/json'
-                },
-                auth: {
-                    username: args.secret.username,
-                    password: args.secret.password
-                },
-            })
-            .then((response) => {
-                input.context.getFullContext()[args.store] = response.data.result;
-                resolve(input);
-            })
-            .catch((error) => {
-                if (args.stopOnError) {
-                    reject(error.message); return;
-                } else input.context.getFullContext()[args.store] = { "error": error.message };
-                resolve(input);
-            });
-    });
+    try {
+        const response = await axios.patch(`${instance}/api/now/table/${tableName}/${sysId}`,
+        data, {
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            auth: {
+                username,
+                password
+            },
+        });
+
+        input.actions.addToContext(store, response.data.result, 'simple');
+    } catch (error) {
+        if (stopOnError) {
+            throw new Error(error.message);
+        } else {
+            input.actions.addToContext(store, { error: error.message }, 'simple');
+        }
+    }
+
+    return input;
 }
 
 module.exports.PatchRecordInTable = PatchRecordInTable;
