@@ -176,6 +176,7 @@ async function CreateLocation(input: IFlowInput, args: { secret: CognigySecret, 
     if (!state) throw new Error("State not defined.");
     if (!zip) throw new Error("Zip not defined.");
     if (!countryCode) throw new Error("Country code not defined.");
+    if (countryCode.length !== 2) throw new Error("Country code has to look like 'de', 'en', 'es', and so on.");
     if (!phone) throw new Error("Phone number not defined.");
     if (!categoryIds) throw new Error("CategoryIds not defined.");
     if (!featuredMessage) throw new Error("Featured message not defined.");
@@ -195,7 +196,7 @@ async function CreateLocation(input: IFlowInput, args: { secret: CognigySecret, 
         city,
         state,
         zip,
-        countryCode,
+        countryCode: countryCode.toLocaleLowerCase(),
         phone,
         categoryIds,
         featuredMessage
