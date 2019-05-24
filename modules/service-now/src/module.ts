@@ -27,7 +27,7 @@ async function GETFromTable(input: IFlowInput, args: { secret: CognigySecret, ta
     if (!instance) throw new Error("Secret is missing the 'instance' field.");
 
     try {
-         const response = await axios.get(`${instance}/api/now/table/${tableName}`, {
+        const response = await axios.get(`${instance}/api/now/table/${tableName}`, {
             headers: {
                 'Accept': 'application/json'
             },
@@ -63,37 +63,44 @@ module.exports.GETFromTable = GETFromTable;
  * @arg {Boolean} `stopOnError` Whether to stop on error or continue
  * @arg {CognigyScript} `store` Where to store the result
  */
-function POSTToTable(input: IFlowInput, args: { secret: CognigySecret, tableName: string, data: any, stopOnError: boolean, store: string }): Promise<IFlowInput | {}> {
+async function POSTToTable(input: IFlowInput, args: { secret: CognigySecret, tableName: string, data: any, stopOnError: boolean, store: string }): Promise<IFlowInput | {}> {
 
-    // Check if secret exists and contains correct parameters
-    if (!args.secret || !args.secret.username || !args.secret.password || !args.secret.instance) return Promise.reject("Secret not defined or invalid.");
-    if (!args.tableName) return Promise.reject("No table name defined.");
-    if (!args.data) return Promise.reject("No data to post defined.");
+    /* validate node arguments */
+    const { secret, tableName, data, store, stopOnError } = args;
+    if (!secret) throw new Error("Secret not defined.");
+    if (!tableName) throw new Error("Table name not defined.");
+    if (!data) throw new Error("Data to post not defined.");
+    if (!store) throw new Error("Context store not defined.");
+    if (stopOnError === undefined) throw new Error("Stop on error flag not defined.");
 
-    return new Promise((resolve, reject) => {
+    const { username, password, instance } = secret;
+    if (!username) throw new Error("Secret is missing the 'username' field.");
+    if (!password) throw new Error("Secret is missing the 'password' field.");
+    if (!instance) throw new Error("Secret is missing the 'instance' field.");
 
-        axios.post(`${args.secret.instance}/api/now/table/${args.tableName}`,
-            args.data, {
-                headers: {
-                    'Accept': 'application/json',
-                    'Content-Type': 'application/json'
-                },
-                auth: {
-                    username: args.secret.username,
-                    password: args.secret.password
-                },
-            })
-            .then((response) => {
-                input.context.getFullContext()[args.store] = response.data.result;
-                resolve(input);
-            })
-            .catch((error) => {
-                if (args.stopOnError) {
-                    reject(error.message); return;
-                } else input.context.getFullContext()[args.store] = { "error": error.message };
-                resolve(input);
-            });
-    });
+    try {
+        const response = await axios.post(`${instance}/api/now/table/${tableName}`,
+        data, {
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            auth: {
+                username,
+                password
+            },
+        });
+
+        input.actions.addToContext(store, response.data.result, 'simple');
+    } catch (error) {
+        if (stopOnError) {
+            throw new Error(error.message);
+        } else {
+            input.actions.addToContext(store, { error: error.message }, 'simple');
+        }
+    }
+
+    return input;
 }
 
 
