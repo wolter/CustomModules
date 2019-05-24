@@ -83,7 +83,7 @@ module.exports.createJiraTicket = createJiraTicket;
 
 /**
  * This function takes the input text and automatically extracts a ticket number (e.g. SB-2 or TIF-1234). You select where to store it.
- * @arg {CognigyScript} `storeTicket` Where to store the result
+ * @arg {CognigyScript} `store` Where to store the result
  * @arg {Boolean} `stopOnError` Whether to stop on error or continue
  */
 async function extractTicket(input: IFlowInput, args: { store: string, stopOnError: boolean }): Promise<IFlowInput | {}> {
@@ -93,19 +93,24 @@ async function extractTicket(input: IFlowInput, args: { store: string, stopOnErr
   if (!store) throw new Error("Context store not defined.");
   if (stopOnError === undefined) throw new Error("Stop on error flag not defined.");
 
-  return new Promise((resolve, reject) => {
-
+  try {
     const pattern = /[a-zA-Z]+-\d+/g;
-    let match = input.input.text.match(pattern);
+    let match = await input.input.text.match(pattern);
 
     if (match) {
       input.actions.addToContext(store, match[0], 'simple');
-      resolve(input);
     } else {
       input.actions.addToContext(store, 'No ticket found', 'simple');
-      resolve(input);
     }
-  });
+  } catch (error) {
+    if (stopOnError) {
+      throw new Error(error.message);
+    } else {
+      input.actions.addToContext(store, { error: error.message }, 'simple');
+    }
+  }
+
+  return input;
 }
 
 module.exports.extractTicket = extractTicket;
