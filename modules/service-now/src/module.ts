@@ -368,7 +368,7 @@ async function POSTAttachment(input: IFlowInput, args: { secret: CognigySecret, 
                 }
             });
 
-            input.actions.addToContext(store, post.data.result, 'simple');
+        input.actions.addToContext(store, post.data.result, 'simple');
     } catch (error) {
         if (stopOnError) {
             throw new Error(error.message);
@@ -390,35 +390,43 @@ module.exports.POSTAttachment = POSTAttachment;
  * @arg {Boolean} `stopOnError` Whether to stop on error or continue
  * @arg {CognigyScript} `store` Where to store the result
  */
-function DeleteAttachment(input: IFlowInput, args: { secret: CognigySecret, sysId: string, stopOnError: boolean, store: string }): Promise<IFlowInput | {}> {
+async function DeleteAttachment(input: IFlowInput, args: { secret: CognigySecret, sysId: string, stopOnError: boolean, store: string }): Promise<IFlowInput | {}> {
 
-    // Check if secret exists and contains correct parameters
-    if (!args.secret || !args.secret.username || !args.secret.password || !args.secret.instance) return Promise.reject("Secret not defined or invalid.");
-    if (!args.sysId) return Promise.reject("No sysId defined");
+    /* validate node arguments */
+    const { secret, sysId, store, stopOnError } = args;
+    if (!secret) throw new Error("Secret not defined.");
+    if (!sysId) throw new Error("Sys Id not defined.");
+    if (!store) throw new Error("Context store not defined.");
+    if (stopOnError === undefined) throw new Error("Stop on error flag not defined.");
 
-    return new Promise((resolve, reject) => {
+    /* validate secrets */
+    const { username, password, instance } = secret;
+    if (!username) throw new Error("Secret is missing the 'username' field.");
+    if (!password) throw new Error("Secret is missing the 'password' field.");
+    if (!instance) throw new Error("Secret is missing the 'instance' field.");
 
-        axios.delete(`${args.secret.instance}/api/now/attachment/${args.sysId}`, {
+    try {
+        const response = await axios.delete(`${instance}/api/now/attachment/${sysId}`, {
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json'
             },
             auth: {
-                username: args.secret.username,
-                password: args.secret.password
+                username,
+                password
             },
-        })
-            .then(() => {
-                input.context.getFullContext()[args.store] = `succefully deleted attachment with id ${args.sysId}`;
-                resolve(input);
-            })
-            .catch((error) => {
-                if (args.stopOnError) {
-                    reject(error.message); return;
-                } else input.context.getFullContext()[args.store] = { "error": error.message };
-                resolve(input);
-            });
-    });
+        });
+
+        input.actions.addToContext(store, `succefully deleted attachment with id: ${sysId}`, 'simple');
+    } catch (error) {
+        if (stopOnError) {
+            throw new Error(error.message);
+        } else {
+            input.actions.addToContext(store, { error: error.message }, 'simple');
+        }
+    }
+
+    return input;
 }
 
 module.exports.DeleteAttachment = DeleteAttachment;
