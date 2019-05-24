@@ -170,36 +170,44 @@ module.exports.PatchRecordInTable = PatchRecordInTable;
  * @arg {Boolean} `stopOnError` Whether to stop on error or continue
  * @arg {CognigyScript} `store` Where to store the result
  */
-function DeleteFromTable(input: IFlowInput, args: { secret: CognigySecret, tableName: string, sysId: string, stopOnError: boolean, store: string }): Promise<IFlowInput | {}> {
+async function DeleteFromTable(input: IFlowInput, args: { secret: CognigySecret, tableName: string, sysId: string, stopOnError: boolean, store: string }): Promise<IFlowInput | {}> {
 
-    // Check if secret exists and contains correct parameters
-    if (!args.secret || !args.secret.username || !args.secret.password || !args.secret.instance) return Promise.reject("Secret not defined or invalid.");
-    if (!args.tableName) return Promise.reject("No table name defined.");
-    if (!args.sysId) return Promise.reject("No sys id defined.");
+    /* validate node arguments */
+    const { secret, tableName, sysId, store, stopOnError } = args;
+    if (!secret) throw new Error("Secret not defined.");
+    if (!tableName) throw new Error("Table name not defined.");
+    if (!sysId) throw new Error("Sys Id not defined.");
+    if (!store) throw new Error("Context store not defined.");
+    if (stopOnError === undefined) throw new Error("Stop on error flag not defined.");
 
-    return new Promise((resolve, reject) => {
+    /* validate secrets */
+    const { username, password, instance } = secret;
+    if (!username) throw new Error("Secret is missing the 'username' field.");
+    if (!password) throw new Error("Secret is missing the 'password' field.");
+    if (!instance) throw new Error("Secret is missing the 'instance' field.");
 
-        axios.delete(`${args.secret.instance}/api/now/table/${args.tableName}/${args.sysId}`, {
+    try {
+        const response = await axios.delete(`${instance}/api/now/table/${tableName}/${sysId}`, {
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json'
             },
             auth: {
-                username: args.secret.username,
-                password: args.secret.password
+                username,
+                password
             },
-        })
-            .then(() => {
-                input.context.getFullContext()[args.store] = `succefully deleted entry with id ${args.sysId}`;
-                resolve(input);
-            })
-            .catch((error) => {
-                if (args.stopOnError) {
-                    reject(error.message); return;
-                } else input.context.getFullContext()[args.store] = { "error": error.message };
-                resolve(input);
-            });
-    });
+        });
+
+        input.actions.addToContext(store, `succefully deleted entry with id: ${sysId}`, 'simple');
+    } catch (error) {
+        if (stopOnError) {
+            throw new Error(error.message);
+        } else {
+            input.actions.addToContext(store, { error: error.message }, 'simple');
+        }
+    }
+
+    return input;
 }
 
 module.exports.DeleteFromTable = DeleteFromTable;
