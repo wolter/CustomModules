@@ -105,7 +105,7 @@ async function extractTicket(input: IFlowInput, args: { store: string, stopOnErr
   } catch (error) {
     if (stopOnError) {
       throw new Error(error.message);
-    } else {
+    } else {
       input.actions.addToContext(store, { error: error.message }, 'simple');
     }
   }
@@ -126,9 +126,9 @@ module.exports.extractTicket = extractTicket;
 
 async function getTicketStatus(input: IFlowInput, args: { secret: CognigySecret, ticket: string, store: string, stopOnError: boolean }): Promise<IFlowInput | {}> {
 
-  await validateArgs(args);
+  const { ticket, store, stopOnError, username, password, domain } = await validateArgs(args);
 
-  return await processJiraIssue(input, args, "status");
+  return await processJiraIssue(input, ticket, store, stopOnError, username, password, domain, "status");
 }
 
 module.exports.getTicketStatus = getTicketStatus;
@@ -144,9 +144,9 @@ module.exports.getTicketStatus = getTicketStatus;
 
 async function getTicketAssignee(input: IFlowInput, args: { secret: CognigySecret, ticket: string, store: string, stopOnError: boolean }): Promise<IFlowInput | {}> {
 
-  await validateArgs(args);
+  const { ticket, store, stopOnError, username, password, domain } = await validateArgs(args);
 
-  return await processJiraIssue(input, args, "assignee");
+  return await processJiraIssue(input, ticket, store, stopOnError, username, password, domain, "assignee");
 }
 
 module.exports.getTicketAssignee = getTicketAssignee;
@@ -162,9 +162,9 @@ module.exports.getTicketAssignee = getTicketAssignee;
 
 async function getTicketPriority(input: IFlowInput, args: { secret: CognigySecret, ticket: string, store: string, stopOnError: boolean }): Promise<IFlowInput | {}> {
 
-  await validateArgs(args);
+  const { ticket, store, stopOnError, username, password, domain } = await validateArgs(args);
 
-  return await processJiraIssue(input, args, "priority");
+  return await processJiraIssue(input, ticket, store, stopOnError, username, password, domain, "priority");
 }
 
 module.exports.getTicketPriority = getTicketPriority;
@@ -180,9 +180,9 @@ module.exports.getTicketPriority = getTicketPriority;
 
 async function getTicketResolution(input: IFlowInput, args: { secret: CognigySecret, ticket: string, store: string, stopOnError: boolean }): Promise<IFlowInput | {}> {
 
-  await validateArgs(args);
+  const { ticket, store, stopOnError, username, password, domain } = await validateArgs(args);
 
-  return await processJiraIssue(input, args, "resolution");
+  return await processJiraIssue(input, ticket, store, stopOnError, username, password, domain, "resolution");
 }
 
 module.exports.getTicketResolution = getTicketResolution;
@@ -198,9 +198,9 @@ module.exports.getTicketResolution = getTicketResolution;
 
 async function getTicketReporter(input: IFlowInput, args: { secret: CognigySecret, ticket: string, store: string, stopOnError: boolean }): Promise<IFlowInput | {}> {
 
-  await validateArgs(args);
+  const { ticket, store, stopOnError, username, password, domain } = await validateArgs(args);
 
-  return await processJiraIssue(input, args, "reporter");
+  return await processJiraIssue(input, ticket, store, stopOnError, username, password, domain, "reporter");
 }
 
 module.exports.getTicketReporter = getTicketReporter;
@@ -216,9 +216,9 @@ module.exports.getTicketReporter = getTicketReporter;
 
 async function getTicketComments(input: IFlowInput, args: { secret: CognigySecret, ticket: string, store: string, stopOnError: boolean }): Promise<IFlowInput | {}> {
 
-  await validateArgs(args);
+  const { ticket, store, stopOnError, username, password, domain } = await validateArgs(args);
 
-  return await processJiraIssue(input, args, "comment");
+  return await processJiraIssue(input, ticket, store, stopOnError, username, password, domain, "comment");
 }
 
 module.exports.getTicketComments = getTicketComments;
@@ -234,9 +234,9 @@ module.exports.getTicketComments = getTicketComments;
 
 async function getTicketWatchers(input: IFlowInput, args: { secret: CognigySecret, ticket: string, store: string, stopOnError: boolean }): Promise<IFlowInput | {}> {
 
-  await validateArgs(args);
+  const { ticket, store, stopOnError, username, password, domain } = await validateArgs(args);
 
-  return await processJiraIssue(input, args, "watches");
+  return await processJiraIssue(input, ticket, store, stopOnError, username, password, domain, "watches");
 }
 
 module.exports.getTicketWatchers = getTicketWatchers;
@@ -251,21 +251,21 @@ module.exports.getTicketWatchers = getTicketWatchers;
 
 async function getTicketSummary(input: IFlowInput, args: { secret: CognigySecret, ticket: string, store: string, stopOnError: boolean }): Promise<IFlowInput | {}> {
 
-  await validateArgs(args);
+  const { ticket, store, stopOnError, username, password, domain } = await validateArgs(args);
 
   return new Promise((resolve, reject) => {
     let result: any = {};
 
     const jira = new JiraClient({
-      host: args.secret.domain,
+      host: domain,
       basic_auth: {
-        username: args.secret.username,
-        password: args.secret.password
+        username,
+        password
       }
     });
 
     jira.issue.getIssue({
-      issueKey: args.ticket
+      issueKey: ticket
     }, (error: any, issue: any) => {
       if (error && error.errorMessages) {
         const errorMessage = Array.isArray(error.errorMessages) ?
@@ -277,7 +277,7 @@ async function getTicketSummary(input: IFlowInput, args: { secret: CognigySecret
         }
 
         const result = { "error": errorMessage };
-        input.context.getFullContext()[args.store] = result;
+        input.context.getFullContext()[store] = result;
         resolve(input);
 
       } else if (error) {
@@ -317,7 +317,7 @@ async function getTicketSummary(input: IFlowInput, args: { secret: CognigySecret
           Promise.reject("Error while getting ticket summary");
         }
 
-        input.context.getFullContext()[args.store] = result;
+        input.context.getFullContext()[store] = result;
         resolve(input);
       }
     });
@@ -337,21 +337,21 @@ module.exports.getTicketSummary = getTicketSummary;
 
 async function getAllTicketInfo(input: IFlowInput, args: { secret: CognigySecret, ticket: string, store: string, stopOnError: boolean }): Promise<IFlowInput | {}> {
 
-  await validateArgs(args);
+  const { ticket, store, stopOnError, username, password, domain } = await validateArgs(args);
 
   return new Promise((resolve, reject) => {
     let result = {};
 
     const jira = new JiraClient({
-      host: args.secret.domain,
+      host: domain,
       basic_auth: {
-        username: args.secret.username,
-        password: args.secret.password
+        username,
+        password
       }
     });
 
     jira.issue.getIssue({
-      issueKey: args.ticket
+      issueKey: ticket
     }, (error: any, issue: any) => {
       if (error && error.errorMessages) {
         const errorMessage = Array.isArray(error.errorMessages) ?
@@ -363,7 +363,7 @@ async function getAllTicketInfo(input: IFlowInput, args: { secret: CognigySecret
         }
 
         const result = { "error": errorMessage };
-        input.context.getFullContext()[args.store] = result;
+        input.context.getFullContext()[store] = result;
         resolve(input);
 
       } else if (error) {
@@ -373,7 +373,7 @@ async function getAllTicketInfo(input: IFlowInput, args: { secret: CognigySecret
         if (!issue) {
           reject("Error while getting Jira issue. No issue was found");
         }
-        input.context.getFullContext()[args.store] = issue;
+        input.context.getFullContext()[store] = issue;
         resolve(input);
       }
     });
@@ -383,32 +383,32 @@ async function getAllTicketInfo(input: IFlowInput, args: { secret: CognigySecret
 module.exports.getAllTicketInfo = getAllTicketInfo;
 
 
-async function processJiraIssue(input: IFlowInput, args: { [key: string]: any; }, fieldName: string): Promise<IFlowInput | {}> {
+async function processJiraIssue(input: IFlowInput, ticket: string, store: string, stopOnError: boolean, username: string, password: string, domain: string, fieldName: string): Promise<IFlowInput | {}> {
 
   const jira = new JiraClient({
-    host: args.secret.domain,
+    host: domain,
     basic_auth: {
-      username: args.secret.username,
-      password: args.secret.password
+      username,
+      password
     }
   });
   return new Promise((resolve, reject) => {
 
     jira.issue.getIssue({
-      issueKey: args.ticket
+      issueKey: ticket
     }, (error: any, issue: any) => {
       try {
         if (error && error.errorMessages) {
           const errorMessage = Array.isArray(error.errorMessages) ?
             error.errorMessages[0] : error.errorMessage;
 
-          if (args.stopOnError) {
+          if (stopOnError) {
             reject(errorMessage);
             return;
           }
 
           const result = { "error": errorMessage };
-          input.context.getFullContext()[args.store] = result;
+          input.context.getFullContext()[store] = result;
           resolve(input);
 
         } else if (error) {
@@ -424,7 +424,7 @@ async function processJiraIssue(input: IFlowInput, args: { [key: string]: any; }
             status: issue.fields && issue.fields[fieldName] || null
           };
 
-          input.context.getFullContext()[args.store] = result;
+          input.context.getFullContext()[store] = result;
           resolve(input);
         }
       } catch (err) {
@@ -434,7 +434,17 @@ async function processJiraIssue(input: IFlowInput, args: { [key: string]: any; }
   });
 }
 
-function validateArgs(args: {secret: CognigySecret, ticket: string, store: string, stopOnError: boolean}): void {
+
+interface IValidateArgsResponse {
+  ticket: string;
+  store: string;
+  stopOnError: boolean;
+  username: string;
+  password: string;
+  domain: string;
+}
+
+function validateArgs(args: { secret: CognigySecret, ticket: string, store: string, stopOnError: boolean }): IValidateArgsResponse {
 
   /* validate node arguments */
   const { secret, ticket, store, stopOnError } = args;
@@ -448,4 +458,13 @@ function validateArgs(args: {secret: CognigySecret, ticket: string, store: strin
   if (!username) throw new Error("Secret is missing the 'username' field.");
   if (!password) throw new Error("Secret is missing the 'password' field.");
   if (!domain) throw new Error("Secret is missing the 'domain' field.");
+
+  return {
+    ticket,
+    store,
+    stopOnError,
+    username,
+    password,
+    domain
+  };
 }
