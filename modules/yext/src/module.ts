@@ -167,58 +167,61 @@ module.exports.GetLocationsByFilter = GetLocationsByFilter;
  */
 async function CreateLocation(input: IFlowInput, args: { secret: CognigySecret, locationName: string, address: string, city: string, state: string, zip: string, countryCode: string, phone: string, categoryIds: string[], featuredMessage: string, api_version: string, stopOnError: boolean, store: string }): Promise<IFlowInput | {}> {
 
-    // Check if secret exists and contains correct parameters
-    if (!args.secret || !args.secret.api_key) return Promise.reject("Secret not defined or invalid.");
-    if (!args.locationName) return Promise.reject("No location name is defined");
-    if (!args.address) return Promise.reject("No address is defined.");
-    if (!args.city) return Promise.reject("No city is defined.");
-    if (!args.state) return Promise.reject("No state is defined.");
-    if (!args.zip) return Promise.reject("No zip is defined.");
-    if (!args.countryCode) return Promise.reject("No country code is defined. E.g 'de'");
-    if (!args.phone) return Promise.reject("No phone number is defined.");
-    if (!args.categoryIds) return Promise.reject("No categories are defined. Please check the Ids with 'https://api.yext.com/v2/categories?api_key=<API-KEY>&v=20190424'");
-    if (!args.featuredMessage) return Promise.reject("No featured message is defined.");
+    /* validate node arguments */
+    const { secret, locationName, address, city, state, zip, countryCode, phone, categoryIds, featuredMessage, api_version, stopOnError, store } = args;
+    if (!secret) throw new Error("Secret not defined.");
+    if (!locationName) throw new Error("Location name not defined.");
+    if (!address) throw new Error("Address not defined.");
+    if (!city) throw new Error("City not defined.");
+    if (!state) throw new Error("State not defined.");
+    if (!zip) throw new Error("Zip not defined.");
+    if (!countryCode) throw new Error("Country code not defined.");
+    if (!phone) throw new Error("Phone number not defined.");
+    if (!categoryIds) throw new Error("CategoryIds not defined.");
+    if (!featuredMessage) throw new Error("Featured message not defined.");
+    if (!store) throw new Error("Context store not defined.");
+    if (stopOnError === undefined) throw new Error("Stop on error flag not defined.");
 
+    /* validate secrets */
+    const { api_key } = secret;
+    if (!api_key) throw new Error("Secret is missing the 'api_key' field.");
 
-    let version = args.api_version || "20190424"
-    let randomId = uuidv4()
+    const version = api_version || "20190424"
+    const id = uuidv4()
+    const data = {
+        id,
+        locationName,
+        address,
+        city,
+        state,
+        zip,
+        countryCode,
+        phone,
+        categoryIds,
+        featuredMessage
+    }
 
-    return new Promise((resolve, reject) => {
-        let result = {};
-
-        const data = {
-            id: randomId,
-            locationName: args.locationName,
-            address: args.address,
-            city: args.city,
-            state: args.state,
-            zip: args.zip,
-            countryCode: args.countryCode,
-            phone: args.phone,
-            categoryIds: args.categoryIds,
-            featuredMessage: args.featuredMessage
-        }
-
-        axios.post(`https://api.yext.com/v2/accounts/me/locations`, data, {
+    try {
+        const response = await axios.post(`https://api.yext.com/v2/accounts/me/locations`, data, {
             headers: {
                 'Allow': 'application/json'
             },
             params: {
-                api_key: args.secret.api_key,
+                api_key,
                 v: version
             }
-        })
-            .then((response) => {
-                result = response.data
-                input.context.getFullContext()[args.store] = result
-                resolve(input)
-            })
-            .catch((error) => {
-                if (args.stopOnError) { reject(error.message); return; }
-                else input.context.getFullContext()[args.store] = { "error": error.message }
-                resolve(input)
-            })
-    });
+        });
+
+        input.actions.addToContext(store, response.data.result, 'simple');
+    } catch (error) {
+        if (stopOnError) {
+            throw new Error(error.message)
+        } else {
+            input.actions.addToContext(store, { error: error.message }, 'simple');
+        }
+    }
+
+    return input;
 }
 
 module.exports.CreateLocation = CreateLocation;
