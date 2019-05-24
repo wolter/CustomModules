@@ -66,11 +66,11 @@ async function detectLanguageInText(input: IFlowInput, args: { secret: CognigySe
   if (!key) throw new Error("Secret is missing the 'key' field.");
 
   /* google translation package */
-  let googleTranslate = require('google-translate')(key);
+  const googleTranslate = require('google-translate')(key);
 
   return new Promise((resolve, reject) => {
 
-    googleTranslate.detectLanguage(text, (err, detection) => {
+    googleTranslate.detectLanguage(text, (err: any, detection: any) => {
       if (err) {
         if (args.stopOnError) { reject(err.message); return; }
         input.input[store] = { error: err.message };
