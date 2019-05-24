@@ -4,7 +4,10 @@ With this module you can use the [Google Cloud API](https://console.cloud.google
 
 **Secrets**
 
-To use the Google Cloud you need to enable a specific `API_KEY` in your Google Cloud Console.
+To use the Google Cloud you need to enable a specific `API_KEY` in your Google Cloud Console. After getting your `API_KEY` you have to define your Cognigy Secret as the following: 
+
+- Secret Key: **key**
+- Secret Value: **API_KEY**
 
 **Translation, LanguageDetection**
 
