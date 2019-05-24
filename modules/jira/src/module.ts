@@ -13,7 +13,7 @@ const JiraClient = require('jira-connector');
  * @arg {Boolean} `stopOnError` Whether to stop on error or continue
  */
 
-async function createJiraTicket(input: IFlowInput, args: { secret: CognigySecret, summary: string, projectId: string, epicname: string, description: string, assignee: string, store: string, stopOnError: boolean }): Promise<IFlowInput | {}> {
+async function createJiraTicket(input: IFlowInput, args: { secret: CognigySecret, summary: string, projectId: string, epicname: string, description: string, assignee?: string, store: string, stopOnError: boolean }): Promise<IFlowInput | {}> {
 
   /* validate node arguments */
   const { secret, summary, projectId, epicname, description, assignee, store, stopOnError } = args;
@@ -22,7 +22,6 @@ async function createJiraTicket(input: IFlowInput, args: { secret: CognigySecret
   if (!projectId) throw new Error("Project Id not defined.");
   if (!epicname) throw new Error("Epicname not defined.");
   if (!description) throw new Error("Description not defined.");
-  if (!assignee) throw new Error("Assignee not defined.");
   if (!store) throw new Error("Context store not defined.");
   if (stopOnError === undefined) throw new Error("Stop on error flag not defined.");
 
