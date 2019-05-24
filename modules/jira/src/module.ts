@@ -126,18 +126,7 @@ module.exports.extractTicket = extractTicket;
 
 async function getTicketStatus(input: IFlowInput, args: { secret: CognigySecret, ticket: string, store: string, stopOnError: boolean }): Promise<IFlowInput | {}> {
 
-  /* validate node arguments */
-  const { secret, ticket, store, stopOnError } = args;
-  if (!secret) throw new Error("Secret not defined.");
-  if (!ticket) throw new Error("No ticket defined. Please define a ticket like AB-1234.");
-  if (!store) throw new Error("Context store not defined.");
-  if (stopOnError === undefined) throw new Error("Stop on error flag not defined.");
-
-  /* validate secrets */
-  const { username, password, domain } = secret;
-  if (!username) throw new Error("Secret is missing the 'username' field.");
-  if (!password) throw new Error("Secret is missing the 'password' field.");
-  if (!domain) throw new Error("Secret is missing the 'domain' field.");
+  await validateArgs(args);
 
   return await processJiraIssue(input, args, "status");
 }
@@ -155,18 +144,7 @@ module.exports.getTicketStatus = getTicketStatus;
 
 async function getTicketAssignee(input: IFlowInput, args: { secret: CognigySecret, ticket: string, store: string, stopOnError: boolean }): Promise<IFlowInput | {}> {
 
-  /* validate node arguments */
-  const { secret, ticket, store, stopOnError } = args;
-  if (!secret) throw new Error("Secret not defined.");
-  if (!ticket) throw new Error("No ticket defined. Please define a ticket like AB-1234.");
-  if (!store) throw new Error("Context store not defined.");
-  if (stopOnError === undefined) throw new Error("Stop on error flag not defined.");
-
-  /* validate secrets */
-  const { username, password, domain } = secret;
-  if (!username) throw new Error("Secret is missing the 'username' field.");
-  if (!password) throw new Error("Secret is missing the 'password' field.");
-  if (!domain) throw new Error("Secret is missing the 'domain' field.");
+  await validateArgs(args);
 
   return await processJiraIssue(input, args, "assignee");
 }
@@ -184,18 +162,7 @@ module.exports.getTicketAssignee = getTicketAssignee;
 
 async function getTicketPriority(input: IFlowInput, args: { secret: CognigySecret, ticket: string, store: string, stopOnError: boolean }): Promise<IFlowInput | {}> {
 
-  /* validate node arguments */
-  const { secret, ticket, store, stopOnError } = args;
-  if (!secret) throw new Error("Secret not defined.");
-  if (!ticket) throw new Error("No ticket defined. Please define a ticket like AB-1234.");
-  if (!store) throw new Error("Context store not defined.");
-  if (stopOnError === undefined) throw new Error("Stop on error flag not defined.");
-
-  /* validate secrets */
-  const { username, password, domain } = secret;
-  if (!username) throw new Error("Secret is missing the 'username' field.");
-  if (!password) throw new Error("Secret is missing the 'password' field.");
-  if (!domain) throw new Error("Secret is missing the 'domain' field.");
+  await validateArgs(args);
 
   return await processJiraIssue(input, args, "priority");
 }
@@ -213,18 +180,7 @@ module.exports.getTicketPriority = getTicketPriority;
 
 async function getTicketResolution(input: IFlowInput, args: { secret: CognigySecret, ticket: string, store: string, stopOnError: boolean }): Promise<IFlowInput | {}> {
 
-  /* validate node arguments */
-  const { secret, ticket, store, stopOnError } = args;
-  if (!secret) throw new Error("Secret not defined.");
-  if (!ticket) throw new Error("No ticket defined. Please define a ticket like AB-1234.");
-  if (!store) throw new Error("Context store not defined.");
-  if (stopOnError === undefined) throw new Error("Stop on error flag not defined.");
-
-  /* validate secrets */
-  const { username, password, domain } = secret;
-  if (!username) throw new Error("Secret is missing the 'username' field.");
-  if (!password) throw new Error("Secret is missing the 'password' field.");
-  if (!domain) throw new Error("Secret is missing the 'domain' field.");
+  await validateArgs(args);
 
   return await processJiraIssue(input, args, "resolution");
 }
@@ -242,9 +198,7 @@ module.exports.getTicketResolution = getTicketResolution;
 
 async function getTicketReporter(input: IFlowInput, args: { secret: CognigySecret, ticket: string, store: string, stopOnError: boolean }): Promise<IFlowInput | {}> {
 
-  // Check if secret exists and contains correct parameters
-  if (!args.secret || !args.secret.username || !args.secret.password || !args.secret.domain) return Promise.reject("Secret not defined or invalid.");
-  if (!args.ticket) return Promise.reject("No ticket defined. Please define a ticket like AB-1234");
+  await validateArgs(args);
 
   return await processJiraIssue(input, args, "reporter");
 }
@@ -262,9 +216,7 @@ module.exports.getTicketReporter = getTicketReporter;
 
 async function getTicketComments(input: IFlowInput, args: { secret: CognigySecret, ticket: string, store: string, stopOnError: boolean }): Promise<IFlowInput | {}> {
 
-  // Check if secret exists and contains correct parameters
-  if (!args.secret || !args.secret.username || !args.secret.password || !args.secret.domain) return Promise.reject("Secret not defined or invalid.");
-  if (!args.ticket) return Promise.reject("No ticket defined. Please define a ticket like AB-1234");
+  await validateArgs(args);
 
   return await processJiraIssue(input, args, "comment");
 }
@@ -282,9 +234,7 @@ module.exports.getTicketComments = getTicketComments;
 
 async function getTicketWatchers(input: IFlowInput, args: { secret: CognigySecret, ticket: string, store: string, stopOnError: boolean }): Promise<IFlowInput | {}> {
 
-  // Check if secret exists and contains correct parameters
-  if (!args.secret || !args.secret.username || !args.secret.password || !args.secret.domain) return Promise.reject("Secret not defined or invalid.");
-  if (!args.ticket) return Promise.reject("No ticket defined. Please define a ticket like AB-1234");
+  await validateArgs(args);
 
   return await processJiraIssue(input, args, "watches");
 }
@@ -301,9 +251,7 @@ module.exports.getTicketWatchers = getTicketWatchers;
 
 async function getTicketSummary(input: IFlowInput, args: { secret: CognigySecret, ticket: string, store: string, stopOnError: boolean }): Promise<IFlowInput | {}> {
 
-  // Check if secret exists and contains correct parameters
-  if (!args.secret || !args.secret.username || !args.secret.password || !args.secret.domain) return Promise.reject("Secret not defined or invalid.");
-  if (!args.ticket) return Promise.reject("No ticket defined. Please define a ticket like AB-1234");
+  await validateArgs(args);
 
   return new Promise((resolve, reject) => {
     let result: any = {};
@@ -389,9 +337,7 @@ module.exports.getTicketSummary = getTicketSummary;
 
 async function getAllTicketInfo(input: IFlowInput, args: { secret: CognigySecret, ticket: string, store: string, stopOnError: boolean }): Promise<IFlowInput | {}> {
 
-  // Check if secret exists and contains correct parameters
-  if (!args.secret || !args.secret.username || !args.secret.password || !args.secret.domain) return Promise.reject("Secret not defined or invalid.");
-  if (!args.ticket) return Promise.reject("No ticket defined. Please define a ticket like AB-1234");
+  await validateArgs(args);
 
   return new Promise((resolve, reject) => {
     let result = {};
@@ -486,4 +432,20 @@ async function processJiraIssue(input: IFlowInput, args: { [key: string]: any; }
       }
     });
   });
+}
+
+function validateArgs(args: {secret: CognigySecret, ticket: string, store: string, stopOnError: boolean}): void {
+
+  /* validate node arguments */
+  const { secret, ticket, store, stopOnError } = args;
+  if (!secret) throw new Error("Secret not defined.");
+  if (!ticket) throw new Error("No ticket defined. Please define a ticket like AB-1234.");
+  if (!store) throw new Error("Context store not defined.");
+  if (stopOnError === undefined) throw new Error("Stop on error flag not defined.");
+
+  /* validate secrets */
+  const { username, password, domain } = secret;
+  if (!username) throw new Error("Secret is missing the 'username' field.");
+  if (!password) throw new Error("Secret is missing the 'password' field.");
+  if (!domain) throw new Error("Secret is missing the 'domain' field.");
 }
