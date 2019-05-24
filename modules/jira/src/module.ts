@@ -53,7 +53,7 @@ async function createJiraTicket(input: IFlowInput, args: { secret: CognigySecret
         customfield_10011: epicname,
         description,
         assignee: {
-          name: assignee || "admin"
+          name: assignee || "admin"
         }
       }
     }, (error: any, issue: any) => {
@@ -65,12 +65,12 @@ async function createJiraTicket(input: IFlowInput, args: { secret: CognigySecret
             reject(errorMessage);
             return;
           }
-            input.actions.addToContext(store, { error: errorMessage }, 'simple');
+          input.actions.addToContext(store, { error: errorMessage }, 'simple');
           resolve(input);
         }
         input.actions.addToContext(store, issue, 'simple');
         resolve(input);
-      } catch (err) {
+      } catch (err) {
         reject(err);
         return;
       }
@@ -86,7 +86,12 @@ module.exports.createJiraTicket = createJiraTicket;
  * @arg {CognigyScript} `storeTicket` Where to store the result
  * @arg {Boolean} `stopOnError` Whether to stop on error or continue
  */
-async function extractTicket(input: IFlowInput, args: { secret: CognigySecret, storeTicket: string, stopOnError: boolean }): Promise<IFlowInput | {}> {
+async function extractTicket(input: IFlowInput, args: { store: string, stopOnError: boolean }): Promise<IFlowInput | {}> {
+
+  /* validate node arguments */
+  const { store, stopOnError } = args;
+  if (!store) throw new Error("Context store not defined.");
+  if (stopOnError === undefined) throw new Error("Stop on error flag not defined.");
 
   return new Promise((resolve, reject) => {
 
@@ -94,10 +99,10 @@ async function extractTicket(input: IFlowInput, args: { secret: CognigySecret, s
     let match = input.input.text.match(pattern);
 
     if (match) {
-      input.context.getFullContext()[args.storeTicket] = match[0];
+      input.actions.addToContext(store, match[0], 'simple');
       resolve(input);
     } else {
-      input.context.getFullContext()[args.storeTicket] = "No Ticket Found";
+      input.actions.addToContext(store, 'No ticket found', 'simple');
       resolve(input);
     }
   });
