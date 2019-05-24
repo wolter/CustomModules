@@ -8,29 +8,35 @@
  * @arg {Boolean} `stopOnError` Whether to stop on error or continue
  */
 async function translateText(input: IFlowInput, args: { secret: CognigySecret, language: string, text: string, writeToContext: boolean, store: string, stopOnError: boolean }): Promise<IFlowInput | {}> {
-  // Check if secret exists and contains correct parameters
-  if (!args.secret || !args.secret.key) return Promise.reject("Secret not defined or invalid.");
-  if (!args.text) return Promise.reject("No text defined.");
 
-  let googleTranslate = require('google-translate')(args.secret.key);
+  /* validate node arguments */
+  const { secret, language, text, writeToContext, store, stopOnError } = args;
+  if (!secret) throw new Error("Secret not defined.");
+  if (!language) throw new Error("Language ist not defined.");
+  if (!text) throw new Error("Text ist not defined.");
+  if (writeToContext === undefined) throw new Error("Write to context flag not defined.");
+  if (!store) throw new Error("Context store not defined.");
+  if (stopOnError === undefined) throw new Error("Stop on error flag not defined.");
+
+  /* validate secrets */
+  const { key } = secret;
+  if (!key) throw new Error("Secret is missing the 'key' field.");
+
+  /* google translation package */
+  const googleTranslate = require('google-translate')(key);
 
   return new Promise((resolve, reject) => {
-    let result = {};
 
-    googleTranslate.translate(args.text, args.language, (err, translation) => {
+    googleTranslate.translate(text, language, (err: any, translation: any) => {
       if (err) {
-        if (args.stopOnError) { reject(err.message); return; }
-        result = { "error": err.message };
-        input.input[args.store] = result;
+        if (stopOnError) { reject(err.message); return; }
+        input.input[store] = { error: err.message };
         resolve(input);
       }
-      result = translation.translatedText;
-      if (args.writeToContext) input.context.getFullContext()[args.store] = result;
-      else input.input[args.store] = result;
+      if (writeToContext) input.actions.addToContext(store, translation.translatedText, 'simple');
+      else input.input[store] = translation.translatedText;
       resolve(input);
     });
-
-
   });
 }
 
