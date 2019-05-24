@@ -326,49 +326,58 @@ module.exports.GETAttachmentById = GETAttachmentById;
  * @arg {Boolean} `stopOnError` Whether to stop on error or continue
  * @arg {CognigyScript} `store` Where to store the result
  */
-function POSTAttachment(input: IFlowInput, args: { secret: CognigySecret, tableName: string, tableSysId: string, fileName: string, fileLocation: string, stopOnError: boolean, store: string }): Promise<IFlowInput | {}> {
+async function POSTAttachment(input: IFlowInput, args: { secret: CognigySecret, tableName: string, tableSysId: string, fileName: string, fileLocation: string, stopOnError: boolean, store: string }): Promise<IFlowInput | {}> {
 
-    // Check if secret exists and contains correct parameters
-    if (!args.secret || !args.secret.username || !args.secret.password || !args.secret.instance) return Promise.reject("Secret not defined or invalid.");
-    if (!args.tableSysId) return Promise.reject("No sysId defined");
-    if (!args.fileName) return Promise.reject("No fileName defined");
-    if (!args.tableName) return Promise.reject("No table defined");
-    if (!args.fileLocation) return Promise.reject("No file location defined");
+    /* validate node arguments */
+    const { secret, tableName, tableSysId, fileName, fileLocation, store, stopOnError } = args;
+    if (!secret) throw new Error("Secret not defined.");
+    if (!tableName) throw new Error("Table name not defined.");
+    if (!tableSysId) throw new Error("Table sys Id not defined.");
+    if (!fileName) throw new Error("File name not defined.");
+    if (!fileLocation) throw new Error("File location not defined.");
+    if (!store) throw new Error("Context store not defined.");
+    if (stopOnError === undefined) throw new Error("Stop on error flag not defined.");
 
+    /* validate secrets */
+    const { username, password, instance } = secret;
+    if (!username) throw new Error("Secret is missing the 'username' field.");
+    if (!password) throw new Error("Secret is missing the 'password' field.");
+    if (!instance) throw new Error("Secret is missing the 'instance' field.");
 
-    return new Promise((resolve, reject) => {
-
-        // get file from location
-        const request = http.get(args.fileLocation, (response) => {
-            axios.post(`${args.secret.instance}/api/now/attachment/file`,
-                response
-                , {
-                    headers: {
-                        'Accept': 'application/json',
-                        'Content-Type': 'multipart/form-data'
-                    },
-                    auth: {
-                        username: args.secret.username,
-                        password: args.secret.password
-                    },
-                    params: {
-                        table_name: args.tableName,
-                        table_sys_id: args.tableSysId,
-                        file_name: args.fileName
-                    }
-                })
-                .then((response) => {
-                    input.context.getFullContext()[args.store] = response.data.result;
-                    resolve(input);
-                })
-                .catch((error) => {
-                    if (args.stopOnError) {
-                        reject(error.message); return;
-                    } else input.context.getFullContext()[args.store] = { "error": error.message };
-                    resolve(input);
-                });
+    try {
+        const file = await new Promise((resolve) => {
+            http.get(fileLocation, (response) => {
+                resolve(response);
+            });
         });
-    });
+
+        const post = await axios.post(`${instance}/api/now/attachment/file`,
+            file, {
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'multipart/form-data'
+                },
+                auth: {
+                    username,
+                    password
+                },
+                params: {
+                    table_name: tableName,
+                    table_sys_id: tableSysId,
+                    file_name: fileName
+                }
+            });
+
+            input.actions.addToContext(store, post.data.result, 'simple');
+    } catch (error) {
+        if (stopOnError) {
+            throw new Error(error.message);
+        } else {
+            input.actions.addToContext(store, { error: error.message }, 'simple');
+        }
+    }
+
+    return input;
 }
 
 module.exports.POSTAttachment = POSTAttachment;
