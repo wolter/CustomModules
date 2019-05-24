@@ -15,35 +15,46 @@ const JiraClient = require('jira-connector');
 
 async function createJiraTicket(input: IFlowInput, args: { secret: CognigySecret, summary: string, projectId: string, epicname: string, description: string, assignee: string, store: string, stopOnError: boolean }): Promise<IFlowInput | {}> {
 
-  if (!args.secret || !args.secret.username || !args.secret.password || !args.secret.domain) return Promise.reject("Secret not defined or invalid.");
-  if (!args.summary) return Promise.reject("No ticket sumnmary defined");
-  if (!args.projectId) return Promise.reject("No ticket projectId defined");
-  if (!args.epicname) return Promise.reject("No ticket epicname defined");
-  if (!args.description) return Promise.reject("No ticket description defined");
+  /* validate node arguments */
+  const { secret, summary, projectId, epicname, description, assignee, store, stopOnError } = args;
+  if (!secret) throw new Error("Secret not defined.");
+  if (!summary) throw new Error("Summary not defined.");
+  if (!projectId) throw new Error("Project Id not defined.");
+  if (!epicname) throw new Error("Epicname not defined.");
+  if (!description) throw new Error("Description not defined.");
+  if (!assignee) throw new Error("Assignee not defined.");
+  if (!store) throw new Error("Context store not defined.");
+  if (stopOnError === undefined) throw new Error("Stop on error flag not defined.");
+
+  /* validate secrets */
+  const { username, password, domain } = secret;
+  if (!username) throw new Error("Secret is missing the 'username' field.");
+  if (!password) throw new Error("Secret is missing the 'password' field.");
+  if (!domain) throw new Error("Secret is missing the 'domain' field.");
 
   return new Promise((resolve, reject) => {
 
     const jira = new JiraClient({
-      host: args.secret.domain,
+      host: domain,
       basic_auth: {
-        username: args.secret.username,
-        password: args.secret.password
+        username,
+        password
       }
     });
 
     jira.issue.createIssue({
       fields: {
-        summary: args.summary,
+        summary,
         issuetype: {
           id: "10000"
         },
         project: {
-          key: args.projectId
+          key: projectId
         },
-        customfield_10011: args.epicname,
-        description: args.description,
+        customfield_10011: epicname,
+        description,
         assignee: {
-          name: args.assignee || "admin"
+          name: assignee || "admin"
         }
       }
     }, (error: any, issue: any) => {
@@ -55,10 +66,10 @@ async function createJiraTicket(input: IFlowInput, args: { secret: CognigySecret
             reject(errorMessage);
             return;
           }
-            input.context.getFullContext()[args.store] = { "error": errorMessage };
+            input.actions.addToContext(store, { error: errorMessage }, 'simple');
           resolve(input);
         }
-        input.context.getFullContext()[args.store] = issue;
+        input.actions.addToContext(store, issue, 'simple');
         resolve(input);
       } catch (err) {
         reject(err);
