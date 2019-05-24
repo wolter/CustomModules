@@ -7,15 +7,14 @@ import { networkInterfaces } from 'os';
  * Gets the information of a chosen table
  * @arg {SecretSelect} `secret` 1 The configured secret to use
  * @arg {CognigyScript} `tableName` 1 The name of the table you want to query
- * @arg {CognigyScriptArray} `columns` The columns you want to show
  * @arg {Number} `limit` The limit of the shown results
  * @arg {Boolean} `stopOnError` 1 Whether to stop on error or continue
  * @arg {CognigyScript} `store` 1 Where to store the result
  */
-async function GETFromTable(input: IFlowInput, args: { secret: CognigySecret, tableName: string, columns?: string[], limit?: number, stopOnError: boolean, store: string }): Promise<IFlowInput | {}> {
+async function GETFromTable(input: IFlowInput, args: { secret: CognigySecret, tableName: string, limit?: number, stopOnError: boolean, store: string }): Promise<IFlowInput | {}> {
 
     /* validate node arguments */
-    const { secret, tableName, store, stopOnError, columns, limit } = args;
+    const { secret, tableName, store, stopOnError, limit } = args;
     if (!secret) throw new Error("Secret not defined.");
     if (!tableName) throw new Error("Table name not defined.");
     if (!store) throw new Error("Context store not defined.");
@@ -37,7 +36,6 @@ async function GETFromTable(input: IFlowInput, args: { secret: CognigySecret, ta
                 password
             },
             params: {
-                sysparm_fields: columns,
                 sysparm_limit: limit
             }
         });
