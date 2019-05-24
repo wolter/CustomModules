@@ -136,16 +136,16 @@ async function PatchRecordInTable(input: IFlowInput, args: { secret: CognigySecr
 
     try {
         const response = await axios.patch(`${instance}/api/now/table/${tableName}/${sysId}`,
-        data, {
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
-            },
-            auth: {
-                username,
-                password
-            },
-        });
+            data, {
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                auth: {
+                    username,
+                    password
+                },
+            });
 
         input.actions.addToContext(store, response.data.result, 'simple');
     } catch (error) {
@@ -273,35 +273,43 @@ module.exports.GETAttachments = GETAttachments;
  * @arg {Boolean} `stopOnError` Whether to stop on error or continue
  * @arg {CognigyScript} `store` Where to store the result
  */
-function GETAttachmentById(input: IFlowInput, args: { secret: CognigySecret, sysId: string, stopOnError: boolean, store: string }): Promise<IFlowInput | {}> {
+async function GETAttachmentById(input: IFlowInput, args: { secret: CognigySecret, sysId: string, stopOnError: boolean, store: string }): Promise<IFlowInput | {}> {
 
-    // Check if secret exists and contains correct parameters
-    if (!args.secret || !args.secret.username || !args.secret.password || !args.secret.instance) return Promise.reject("Secret not defined or invalid.");
-    if (!args.sysId) return Promise.reject("No sysId defined");
+    /* validate node arguments */
+    const { secret, sysId, store, stopOnError } = args;
+    if (!secret) throw new Error("Secret not defined.");
+    if (!sysId) throw new Error("Sys Id not defined.");
+    if (!store) throw new Error("Context store not defined.");
+    if (stopOnError === undefined) throw new Error("Stop on error flag not defined.");
 
-    return new Promise((resolve, reject) => {
+    /* validate secrets */
+    const { username, password, instance } = secret;
+    if (!username) throw new Error("Secret is missing the 'username' field.");
+    if (!password) throw new Error("Secret is missing the 'password' field.");
+    if (!instance) throw new Error("Secret is missing the 'instance' field.");
 
-        axios.get(`${args.secret.instance}/api/now/attachment/${args.sysId}`, {
+    try {
+        const response = await axios.get(`${instance}/api/now/attachment/${sysId}`, {
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json'
             },
             auth: {
-                username: args.secret.username,
-                password: args.secret.password
+                username,
+                password
             },
-        })
-            .then((response) => {
-                input.context.getFullContext()[args.store] = response.data.result;
-                resolve(input);
-            })
-            .catch((error) => {
-                if (args.stopOnError) {
-                    reject(error.message); return;
-                } else input.context.getFullContext()[args.store] = { "error": error.message };
-                resolve(input);
-            });
-    });
+        });
+
+        input.actions.addToContext(store, response.data.result, 'simple');
+    } catch (error) {
+        if (stopOnError) {
+            throw new Error(error.message);
+        } else {
+            input.actions.addToContext(store, { error: error.message }, 'simple');
+        }
+    }
+
+    return input;
 }
 
 module.exports.GETAttachmentById = GETAttachmentById;
