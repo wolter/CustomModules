@@ -338,7 +338,6 @@ async function getAllTicketInfo(input: IFlowInput, args: { secret: CognigySecret
   const { ticket, store, stopOnError, username, password, domain } = await validateArgs(args);
 
   return new Promise((resolve, reject) => {
-    let result = {};
 
     const jira = new JiraClient({
       host: domain,
@@ -355,7 +354,7 @@ async function getAllTicketInfo(input: IFlowInput, args: { secret: CognigySecret
         const errorMessage = Array.isArray(error.errorMessages) ?
           error.errorMessages[0] : error.errorMessage;
 
-        if (args.stopOnError) {
+        if (stopOnError) {
           reject(errorMessage);
           return;
         }
