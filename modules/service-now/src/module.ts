@@ -21,6 +21,7 @@ async function GETFromTable(input: IFlowInput, args: { secret: CognigySecret, ta
     if (!store) throw new Error("Context store not defined.");
     if (stopOnError === undefined) throw new Error("Stop on error flag not defined.");
 
+    /* validate secrets */
     const { username, password, instance } = secret;
     if (!username) throw new Error("Secret is missing the 'username' field.");
     if (!password) throw new Error("Secret is missing the 'password' field.");
@@ -73,6 +74,7 @@ async function POSTToTable(input: IFlowInput, args: { secret: CognigySecret, tab
     if (!store) throw new Error("Context store not defined.");
     if (stopOnError === undefined) throw new Error("Stop on error flag not defined.");
 
+    /* validate secrets */
     const { username, password, instance } = secret;
     if (!username) throw new Error("Secret is missing the 'username' field.");
     if (!password) throw new Error("Secret is missing the 'password' field.");
