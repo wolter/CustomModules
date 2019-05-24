@@ -105,7 +105,6 @@ async function POSTToTable(input: IFlowInput, args: { secret: CognigySecret, tab
     return input;
 }
 
-
 module.exports.POSTToTable = POSTToTable;
 
 
