@@ -275,9 +275,7 @@ async function getTicketSummary(input: IFlowInput, args: { secret: CognigySecret
           reject(errorMessage);
           return;
         }
-
-        const result = { "error": errorMessage };
-        input.context.getFullContext()[store] = result;
+        input.actions.addToContext(store, { error: errorMessage }, 'simple');
         resolve(input);
 
       } else if (error) {
@@ -317,7 +315,7 @@ async function getTicketSummary(input: IFlowInput, args: { secret: CognigySecret
           Promise.reject("Error while getting ticket summary");
         }
 
-        input.context.getFullContext()[store] = result;
+        input.actions.addToContext(store, result, 'simple');
         resolve(input);
       }
     });
@@ -362,8 +360,7 @@ async function getAllTicketInfo(input: IFlowInput, args: { secret: CognigySecret
           return;
         }
 
-        const result = { "error": errorMessage };
-        input.context.getFullContext()[store] = result;
+        input.actions.addToContext(store, { error: errorMessage }, 'simple');
         resolve(input);
 
       } else if (error) {
@@ -373,7 +370,7 @@ async function getAllTicketInfo(input: IFlowInput, args: { secret: CognigySecret
         if (!issue) {
           reject("Error while getting Jira issue. No issue was found");
         }
-        input.context.getFullContext()[store] = issue;
+        input.actions.addToContext(store, issue, 'simple');
         resolve(input);
       }
     });
@@ -407,8 +404,7 @@ async function processJiraIssue(input: IFlowInput, ticket: string, store: string
             return;
           }
 
-          const result = { "error": errorMessage };
-          input.context.getFullContext()[store] = result;
+          input.actions.addToContext(store, { error: errorMessage }, 'simple');
           resolve(input);
 
         } else if (error) {
@@ -424,7 +420,7 @@ async function processJiraIssue(input: IFlowInput, ticket: string, store: string
             status: issue.fields && issue.fields[fieldName] || null
           };
 
-          input.context.getFullContext()[store] = result;
+          input.actions.addToContext(store, result, 'simple');
           resolve(input);
         }
       } catch (err) {
