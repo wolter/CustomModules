@@ -35,7 +35,7 @@ async function GetEntity(input: IFlowInput, args: { secret: CognigySecret, entit
             }
         });
 
-        input.actions.addToContext(store, response.data.result, 'simple');
+        input.actions.addToContext(store, response.data, 'simple');
     } catch (error) {
         if (stopOnError) {
             throw new Error(error.message);
@@ -86,7 +86,7 @@ async function GetEntityById(input: IFlowInput, args: { secret: CognigySecret, e
             }
         });
 
-        input.actions.addToContext(store, response.data.result, 'simple');
+        input.actions.addToContext(store, response.data, 'simple');
     } catch (error) {
         if (stopOnError) {
             throw new Error(error.message);
@@ -135,7 +135,7 @@ async function GetLocationsByFilter(input: IFlowInput, args: { secret: CognigySe
             }
         });
 
-        input.actions.addToContext(store, response.data.result, 'simple');
+        input.actions.addToContext(store, response.data, 'simple');
     } catch (error) {
         if (stopOnError) {
             throw new Error(error.message)
@@ -212,7 +212,7 @@ async function CreateLocation(input: IFlowInput, args: { secret: CognigySecret, 
             }
         });
 
-        input.actions.addToContext(store, response.data.result, 'simple');
+        input.actions.addToContext(store, response.data, 'simple');
     } catch (error) {
         if (stopOnError) {
             throw new Error(error.message)
