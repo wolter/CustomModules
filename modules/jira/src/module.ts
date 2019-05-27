@@ -61,8 +61,9 @@ async function createJiraTicket(input: IFlowInput, args: { secret: CognigySecret
         if (error) {
           const errorMessage = Array.isArray(error.errorMessages) ?
             error.errorMessages[0] : error.errorMessage;
+          const fullMessage = `Error: ${errorMessage}. Please check your Cognigy Secret, too.`;
           if (args.stopOnError) {
-            reject(errorMessage);
+            reject(fullMessage);
             return;
           }
           input.actions.addToContext(contextStore, { error: errorMessage }, 'simple');
