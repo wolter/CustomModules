@@ -20,12 +20,12 @@ async function spellCheck(input: IFlowInput, args: { secret: CognigySecret, text
 
         const host = 'api.cognitive.microsoft.com';
         const path = '/bing/v7.0/spellcheck';
-        const query_string = "?mkt=" + args.language + "&mode=proof";
+        const queryString = `?mkt=${args.language}&mode=proof`;
 
-        const request_params = {
+        const requestParams = {
             method: 'POST',
             hostname: host,
-            path: path + query_string,
+            path: path + queryString,
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded',
                 'Content-Length': args.text.length + 5,
@@ -33,7 +33,7 @@ async function spellCheck(input: IFlowInput, args: { secret: CognigySecret, text
             }
         };
 
-        const response_handler = (response) => {
+        const responseHandler = (response) => {
             let body = '';
             response.on('data', (d) => {
                 body += d;
@@ -58,7 +58,7 @@ async function spellCheck(input: IFlowInput, args: { secret: CognigySecret, text
             });
         };
 
-        const req = https.request(request_params, response_handler);
+        const req = https.request(requestParams, responseHandler);
         req.write("text=" + args.text);
         req.end();
     });
@@ -81,12 +81,12 @@ async function recognizeLanguage(input: IFlowInput, args: { secret: CognigySecre
 
     return new Promise((resolve, reject) => {
         let result = {};
-        let accessKey = args.secret.key;
+        const accessKey = args.secret.key;
 
-        const uri = args.secret.region + '.api.cognitive.microsoft.com';
+        const uri = `${args.secret.region}.api.cognitive.microsoft.com`;
         const path = '/text/analytics/v2.0/languages';
 
-        const response_handler = (response) => {
+        const responseHandler = (response) => {
             let body = '';
             response.on('data', (d) => {
                 body += d;
@@ -111,10 +111,10 @@ async function recognizeLanguage(input: IFlowInput, args: { secret: CognigySecre
             });
         };
 
-        const get_language = (documents) => {
-            let body = JSON.stringify(documents);
+        const getLanguage = (documents) => {
+            const body = JSON.stringify(documents);
 
-            let request_params = {
+            const requestParams = {
                 method: 'POST',
                 hostname: uri,
                 path: path,
@@ -123,18 +123,18 @@ async function recognizeLanguage(input: IFlowInput, args: { secret: CognigySecre
                 }
             };
 
-            const req = https.request(request_params, response_handler);
+            const req = https.request(requestParams, responseHandler);
             req.write(body);
             req.end();
         };
 
-        let documents = {
+        const documents = {
             'documents': [
                 { 'id': '1', 'text': args.text }
             ]
         };
 
-        get_language(documents);
+        getLanguage(documents);
 
     });
 }
@@ -157,12 +157,12 @@ async function extractKeyphrases(input: IFlowInput, args: { secret: CognigySecre
 
     return new Promise((resolve, reject) => {
         let result = {};
-        let accessKey = args.secret.key;
+        const accessKey = args.secret.key;
 
-        const uri = args.secret.region + '.api.cognitive.microsoft.com';
+        const uri = `${args.secret.region}.api.cognitive.microsoft.com`;
         const path = '/text/analytics/v2.0/keyPhrases';
 
-        const response_handler = (response) => {
+        const responseHandler = (response) => {
             let body = '';
             response.on('data', (d) => {
                 body += d;
@@ -187,10 +187,10 @@ async function extractKeyphrases(input: IFlowInput, args: { secret: CognigySecre
             });
         };
 
-        const get_key_phrases = (documents) => {
-            let body = JSON.stringify(documents);
+        const getKeyPhrases = (documents) => {
+            const body = JSON.stringify(documents);
 
-            let request_params = {
+            const requestParams = {
                 method: 'POST',
                 hostname: uri,
                 path: path,
@@ -199,18 +199,18 @@ async function extractKeyphrases(input: IFlowInput, args: { secret: CognigySecre
                 }
             };
 
-            const req = https.request(request_params, response_handler);
+            const req = https.request(requestParams, responseHandler);
             req.write(body);
             req.end();
         };
 
-        let documents = {
+        const documents = {
             'documents': [
                 { 'id': '1', 'language': args.language, 'text': args.text }
             ]
         };
 
-        get_key_phrases(documents);
+        getKeyPhrases(documents);
 
     });
 }
@@ -233,12 +233,12 @@ async function namedEntityRecognition(input: IFlowInput, args: { secret: Cognigy
 
     return new Promise((resolve, reject) => {
         let result = {};
-        let accessKey = args.secret.key;
+        const accessKey = args.secret.key;
 
-        const uri = args.secret.region + '.api.cognitive.microsoft.com';
+        const uri = `${args.secret.region}.api.cognitive.microsoft.com`;
         const path = '/text/analytics/v2.1-preview/entities';
 
-        const response_handler = (response) => {
+        const responseHandler = (response) => {
             let body = '';
             response.on('data', (d) => {
                 body += d;
@@ -263,10 +263,10 @@ async function namedEntityRecognition(input: IFlowInput, args: { secret: Cognigy
             });
         };
 
-        const get_entities = (documents) => {
-            let body = JSON.stringify(documents);
+        const getEntities = (documents) => {
+            const body = JSON.stringify(documents);
 
-            let request_params = {
+            const requestParams = {
                 method: 'POST',
                 hostname: uri,
                 path: path,
@@ -275,18 +275,18 @@ async function namedEntityRecognition(input: IFlowInput, args: { secret: Cognigy
                 }
             };
 
-            const req = https.request(request_params, response_handler);
+            const req = https.request(requestParams, responseHandler);
             req.write(body);
             req.end();
         };
 
-        let documents = {
+        const documents = {
             'documents': [
                 { 'id': '1', 'language': args.language, 'text': args.text }
             ]
         };
 
-        get_entities(documents);
+        getEntities(documents);
 
     });
 }
@@ -308,11 +308,11 @@ async function bingWebSearch(input: IFlowInput, args: { secret: CognigySecret, q
 
     return new Promise((resolve, reject) => {
         let result = {};
-        let accessKey = args.secret.key;
+        const accessKey = args.secret.key;
 
         https.get({
             hostname: 'api.cognitive.microsoft.com',
-            path: '/bing/v7.0/search?q=' + encodeURIComponent(args.query),
+            path: `/bing/v7.0/search?q=${encodeURIComponent(args.query)}`,
             headers: { 'Ocp-Apim-Subscription-Key': accessKey },
         }, res => {
             let body = '';
@@ -335,8 +335,8 @@ async function bingWebSearch(input: IFlowInput, args: { secret: CognigySecret, q
                 result = { "error": err.message };
                 input.input[args.store] = result;
                 resolve(input);
-            })
-        })
+            });
+        });
     });
 }
 
@@ -358,11 +358,11 @@ async function bingNewsSearch(input: IFlowInput, args: { secret: CognigySecret, 
     return new Promise((resolve, reject) => {
         let result = {};
 
-        let accessKey = args.secret.key;
+        const accessKey = args.secret.key;
 
         https.get({
             hostname: 'api.cognitive.microsoft.com',
-            path: '/bing/v7.0/news/search?q=' + encodeURIComponent(args.term),
+            path: `/bing/v7.0/news/search?q=${encodeURIComponent(args.term)}`,
             headers: { 'Ocp-Apim-Subscription-Key': accessKey },
         }, res => {
             let body = '';
@@ -382,7 +382,7 @@ async function bingNewsSearch(input: IFlowInput, args: { secret: CognigySecret, 
                 }
 
             });
-        })
+        });
     });
 }
 
@@ -403,18 +403,18 @@ async function bingImageSearch(input: IFlowInput, args: { secret: CognigySecret,
 
     return new Promise((resolve, reject) => {
         let result = {};
-        let accessKey = args.secret.key;
+        const accessKey = args.secret.key;
 
-        const request_params = {
+        const requestParams = {
             method: 'GET',
             hostname: 'api.cognitive.microsoft.com',
-            path: '/bing/v7.0/images/search' + '?q=' + encodeURIComponent(args.term),
+            path: `/bing/v7.0/images/search?q=${encodeURIComponent(args.term)}`,
             headers: {
                 'Ocp-Apim-Subscription-Key': accessKey,
             }
         };
 
-        const response_handler = (response) => {
+        const responseHandler = (response) => {
             let body = '';
 
             response.on('data', (d) => {
@@ -435,7 +435,7 @@ async function bingImageSearch(input: IFlowInput, args: { secret: CognigySecret,
             });
         };
 
-        const req = https.request(request_params, response_handler);
+        const req = https.request(requestParams, responseHandler);
         req.end();
     });
 }
@@ -458,7 +458,7 @@ async function textTranslator(input: IFlowInput, args: { secret: CognigySecret, 
 
     return new Promise((resolve, reject) => {
         let result = {};
-        let accessKey = args.secret.key;
+        const accessKey = args.secret.key;
 
         const options = {
             method: 'POST',
@@ -496,3 +496,79 @@ async function textTranslator(input: IFlowInput, args: { secret: CognigySecret, 
 }
 
 module.exports.textTranslator = textTranslator;
+
+
+/**
+ * Returns the sentiment of a given sentence.
+ * @arg {SecretSelect} `secret` The configured secret to use
+ * @arg {CognigyScript} `text` The text to analyse
+ * @arg {Select[af,ar,bn,bs,bg,yue,ca,zh-Hans,zh-Hant,hr,cs,da,nl,en,et,fj,fil,fi,fr,de,el,ht,he,hi,mww,hu,is,id,it,ja,sw,tlh,tlh-Qaak,ko,lv,lt,mg,ms,mt,nb,fa,pl,pt,otq,ro,ru,sm,sr-Cyrl,sr-Latn,sk,sl,es,sv,ty,ta,te,th,to,tr,uk,ur,vi,cy,yau]} `language` the language of the given text
+ * @arg {CognigyScript} `store` Where to store the result
+ * @arg {Boolean} `stopOnError` Whether to stop on error or continue
+ */
+async function analyseSentiments(input: IFlowInput, args: { secret: CognigySecret, text: string, language: string, store: string, stopOnError: boolean }): Promise<IFlowInput | {}> {
+    // Check if secret exists and contains correct parameters
+    if (!args.secret || !args.secret.key || !args.secret.region) return Promise.reject("Secret not defined or invalid.");
+    if (!args.text) return Promise.reject("No text defined.");
+    if (!args.language) return Promise.reject("No language defined.");
+
+    return new Promise((resolve, reject) => {
+        let result = {};
+        const accessKey = args.secret.key;
+
+        const uri = `${args.secret.region}.api.cognitive.microsoft.com`;
+        const path = '/text/analytics/v2.0/sentiment';
+
+        const responseHandler = (response) => {
+            let body = '';
+            response.on('data', (d) => {
+                body += d;
+            });
+            response.on('end', () => {
+                try {
+                    result = JSON.parse(body);
+                    input.context.getFullContext()[args.store] = result;
+                    resolve(input);
+                } catch (e) {
+                    if (args.stopOnError) { reject(e.message); return; }
+                    result = { "error": e.message };
+                    input.context.getFullContext()[args.store] = result;
+                    resolve(input);
+                }
+            });
+            response.on('error', (err) => {
+                if (args.stopOnError) { reject(err.message); return; }
+                result = { "error": err.message };
+                input.context.getFullContext()[args.store] = result;
+                resolve(input);
+            });
+        };
+
+        const getSentiments = (documents) => {
+            const body = JSON.stringify(documents);
+
+            const requestParams = {
+                method: 'POST',
+                hostname: uri,
+                path: path,
+                headers: {
+                    'Ocp-Apim-Subscription-Key': accessKey,
+                }
+            };
+
+            const req = https.request(requestParams, responseHandler);
+            req.write(body);
+            req.end();
+        };
+
+        const documents = {
+            'documents': [
+                { 'id': '1', 'language': args.language, 'text': args.text },
+            ]
+        };
+
+        getSentiments(documents);
+    });
+}
+
+module.exports.analyseSentiments = analyseSentiments;
