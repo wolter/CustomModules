@@ -7,14 +7,19 @@ This model needs several **CognigySecrets** to be defined and passed to the Node
 You will require the following Secrets for the respective Nodes:
 
 - **Spellcheck**
-  - key (API Key)
-- **Named Entity Recognition**, **Extract Keyphrases**, **Recognize Language**
-  - key (API Key)
-  - region (Azure Region)
+
+  - Set the **key** to the value "key" and insert the **Cognitive Services API Key** as value
+- **Named Entity Recognition**, **Extract Keyphrases**, **Recognize Language**, **Sentiment Analysis**
+
+  - Set the **key** to the value "key" and insert the **Text Analytics API Key** as value
+
+  - Set the **key** to the value "region" and insert the  **Azure Region** as value
 - **Bing Web Search**, **Bing News Search**
-  - key (API Key)
+
+  - Set the **key** to the value "key" and insert the **Bing Search API Key** as value
 - **Text Translator**
-  - key (API Key)
+
+  - Set the **key** to the value "key" and insert the  **Translator Text API Key** as value
 
 ## Node: Spell Check
  [Resource](https://docs.microsoft.com/de-de/azure/cognitive-services/bing-spell-check/quickstarts/nodejs) 
@@ -237,3 +242,23 @@ Example sentence: *Cognigy is a company from Düsseldorf in Germany.*
     }
   ]
 ```
+
+## Node: Sentiment Analysis
+
+This node returns the sentiment score of a given **text** in a specific **language**. The result is stored in the CognigyContext.
+
+Example sentence: *I love you my son.*
+language: "de"
+
+```json
+"sentiment": {
+    "documents": [
+      {
+        "id": "1",
+        "score": 0.6946889162063599
+      }
+    ],
+    "errors": []
+  }
+```
+
