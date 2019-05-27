@@ -1,10 +1,13 @@
 {
-  "name": "AzureCS",
-  "version": "1.0.0",
+  "name": "azure-cs",
+  "version": "1.1.0",
   "description": "Microsoft Azure Cognitive Services Custom Module (Language, Search API)",
   "main": "build/module.js",
   "scripts": {
-    "build": "tsc -p ."
+    "transpile": "tsc -p .",
+    "zip": "zip azure.zip build/* package.json package-lock.json README.md icon.png icon-large.png",
+    "build": "npm run transpile && npm run lint && npm run zip",
+    "lint": "tslint -c tslint.json src/**/*.ts"
   },
   "repository": {
     "type": "git",
@@ -19,7 +22,7 @@
   "author": "Cognigy GmbH",
   "license": "MIT",
   "devDependencies": {
-    "@types/node": "^10.12.20",
+    "@types/node": "^10.14.6",
     "tslint": "^5.12.1",
     "typescript": "^3.3.3"
   },
