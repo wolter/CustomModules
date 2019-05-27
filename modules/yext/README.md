@@ -97,3 +97,33 @@ With this node you can create a new location entity in your Yext instance, where
     }
   }
 ```
+
+There are a few rules to follow, so that the node will look like this:
+
+![Create Location Node](./docs/createLocation.png)
+
+**Fields:**
+
+- LocationName: 
+  - The Name of your new Location
+- Address: 
+  - The street with house number
+- City: 
+  - The city of your location
+- State: 
+  - The state, not the country, of your location
+- Zip: 
+  - The exact ZIP Code of your location
+- CountryCode: 
+  - The code of your location's country, such as
+  - en, es, de, us, ...
+- Phone: 
+  - The exact phone number of your location
+- CategoryIds: 
+  - A list of IDs for your location
+  - Look above for more information
+- FeaturedMessage: 
+  - A description of the new location
+- API_version: 
+  - **NOT REQUIRED**
+  - The default version is `20190424`
