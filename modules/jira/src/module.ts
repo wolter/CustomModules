@@ -9,20 +9,20 @@ const JiraClient = require('jira-connector');
  * @arg {CognigyScript} `epicname` The epicname of the new ticket
  * @arg {CognigyScript} `description` The description of the new ticket
  * @arg {CognigyScript} `assignee` The assignee of the new ticket
- * @arg {CognigyScript} `store` Where to store the result
+ * @arg {CognigyScript} `contextStore` Where to store the result
  * @arg {Boolean} `stopOnError` Whether to stop on error or continue
  */
 
-async function createJiraTicket(input: IFlowInput, args: { secret: CognigySecret, summary: string, projectId: string, epicname: string, description: string, assignee?: string, store: string, stopOnError: boolean }): Promise<IFlowInput | {}> {
+async function createJiraTicket(input: IFlowInput, args: { secret: CognigySecret, summary: string, projectId: string, epicname: string, description: string, assignee?: string, contextStore: string, stopOnError: boolean }): Promise<IFlowInput | {}> {
 
   /* validate node arguments */
-  const { secret, summary, projectId, epicname, description, assignee, store, stopOnError } = args;
+  const { secret, summary, projectId, epicname, description, assignee, contextStore, stopOnError } = args;
   if (!secret) throw new Error("Secret not defined.");
   if (!summary) throw new Error("Summary not defined.");
   if (!projectId) throw new Error("Project Id not defined.");
   if (!epicname) throw new Error("Epicname not defined.");
   if (!description) throw new Error("Description not defined.");
-  if (!store) throw new Error("Context store not defined.");
+  if (!contextStore) throw new Error("Context store not defined.");
   if (stopOnError === undefined) throw new Error("Stop on error flag not defined.");
 
   /* validate secrets */
@@ -65,10 +65,10 @@ async function createJiraTicket(input: IFlowInput, args: { secret: CognigySecret
             reject(errorMessage);
             return;
           }
-          input.actions.addToContext(store, { error: errorMessage }, 'simple');
+          input.actions.addToContext(contextStore, { error: errorMessage }, 'simple');
           resolve(input);
         }
-        input.actions.addToContext(store, issue, 'simple');
+        input.actions.addToContext(contextStore, issue, 'simple');
         resolve(input);
       } catch (err) {
         reject(err);
@@ -83,14 +83,14 @@ module.exports.createJiraTicket = createJiraTicket;
 
 /**
  * This function takes the input text and automatically extracts a ticket number (e.g. SB-2 or TIF-1234). You select where to store it.
- * @arg {CognigyScript} `store` Where to store the result
+ * @arg {CognigyScript} `contextStore` Where to store the result
  * @arg {Boolean} `stopOnError` Whether to stop on error or continue
  */
-async function extractTicket(input: IFlowInput, args: { store: string, stopOnError: boolean }): Promise<IFlowInput | {}> {
+async function extractTicket(input: IFlowInput, args: { contextStore: string, stopOnError: boolean }): Promise<IFlowInput | {}> {
 
   /* validate node arguments */
-  const { store, stopOnError } = args;
-  if (!store) throw new Error("Context store not defined.");
+  const { contextStore, stopOnError } = args;
+  if (!contextStore) throw new Error("Context store not defined.");
   if (stopOnError === undefined) throw new Error("Stop on error flag not defined.");
 
   try {
@@ -98,15 +98,15 @@ async function extractTicket(input: IFlowInput, args: { store: string, stopOnErr
     let match = await input.input.text.match(pattern);
 
     if (match) {
-      input.actions.addToContext(store, match[0], 'simple');
+      input.actions.addToContext(contextStore, match[0], 'simple');
     } else {
-      input.actions.addToContext(store, 'No ticket found', 'simple');
+      input.actions.addToContext(contextStore, 'No ticket found', 'simple');
     }
   } catch (error) {
     if (stopOnError) {
       throw new Error(error.message);
     } else {
-      input.actions.addToContext(store, { error: error.message }, 'simple');
+      input.actions.addToContext(contextStore, { error: error.message }, 'simple');
     }
   }
 
@@ -120,15 +120,15 @@ module.exports.extractTicket = extractTicket;
  * Returns the status of a given ticket (e.g. 'In progress')
  * @arg {SecretSelect} `secret` The configured secret to use
  * @arg {CognigyScript} `ticket` The ticket number e.g. ABC-1234
- * @arg {CognigyScript} `store` Where to store the result
+ * @arg {CognigyScript} `contextStore` Where to store the result
  * @arg {Boolean} `stopOnError` Whether to stop on error or continue
  */
 
-async function getTicketStatus(input: IFlowInput, args: { secret: CognigySecret, ticket: string, store: string, stopOnError: boolean }): Promise<IFlowInput | {}> {
+async function getTicketStatus(input: IFlowInput, args: { secret: CognigySecret, ticket: string, contextStore: string, stopOnError: boolean }): Promise<IFlowInput | {}> {
 
-  const { ticket, store, stopOnError, username, password, domain } = await validateArgs(args);
+  const { ticket, contextStore, stopOnError, username, password, domain } = await validateArgs(args);
 
-  return await processJiraIssue(input, ticket, store, stopOnError, username, password, domain, "status");
+  return await processJiraIssue(input, ticket, contextStore, stopOnError, username, password, domain, "status");
 }
 
 module.exports.getTicketStatus = getTicketStatus;
@@ -138,15 +138,15 @@ module.exports.getTicketStatus = getTicketStatus;
  * Returns the assignee of a given ticket (e.g. bob@bob.com).
  * @arg {SecretSelect} `secret` The configured secret to use
  * @arg {CognigyScript} `ticket` The ticket number e.g. ABC-1234
- * @arg {CognigyScript} `store` Where to store the result
+ * @arg {CognigyScript} `contextStore` Where to store the result
  * @arg {Boolean} `stopOnError` Whether to stop on error or continue
  */
 
-async function getTicketAssignee(input: IFlowInput, args: { secret: CognigySecret, ticket: string, store: string, stopOnError: boolean }): Promise<IFlowInput | {}> {
+async function getTicketAssignee(input: IFlowInput, args: { secret: CognigySecret, ticket: string, contextStore: string, stopOnError: boolean }): Promise<IFlowInput | {}> {
 
-  const { ticket, store, stopOnError, username, password, domain } = await validateArgs(args);
+  const { ticket, contextStore, stopOnError, username, password, domain } = await validateArgs(args);
 
-  return await processJiraIssue(input, ticket, store, stopOnError, username, password, domain, "assignee");
+  return await processJiraIssue(input, ticket, contextStore, stopOnError, username, password, domain, "assignee");
 }
 
 module.exports.getTicketAssignee = getTicketAssignee;
@@ -156,15 +156,15 @@ module.exports.getTicketAssignee = getTicketAssignee;
  * Returns the priority of a given ticket (e.g. 'normal')
  * @arg {SecretSelect} `secret` The configured secret to use
  * @arg {CognigyScript} `ticket` The ticket number e.g. ABC-1234
- * @arg {CognigyScript} `store` Where to store the result
+ * @arg {CognigyScript} `contextStore` Where to store the result
  * @arg {Boolean} `stopOnError` Whether to stop on error or continue
  */
 
-async function getTicketPriority(input: IFlowInput, args: { secret: CognigySecret, ticket: string, store: string, stopOnError: boolean }): Promise<IFlowInput | {}> {
+async function getTicketPriority(input: IFlowInput, args: { secret: CognigySecret, ticket: string, contextStore: string, stopOnError: boolean }): Promise<IFlowInput | {}> {
 
-  const { ticket, store, stopOnError, username, password, domain } = await validateArgs(args);
+  const { ticket, contextStore, stopOnError, username, password, domain } = await validateArgs(args);
 
-  return await processJiraIssue(input, ticket, store, stopOnError, username, password, domain, "priority");
+  return await processJiraIssue(input, ticket, contextStore, stopOnError, username, password, domain, "priority");
 }
 
 module.exports.getTicketPriority = getTicketPriority;
@@ -174,15 +174,15 @@ module.exports.getTicketPriority = getTicketPriority;
  * Returns the resolution if the ticket has one
  * @arg {SecretSelect} `secret` The configured secret to use
  * @arg {CognigyScript} `ticket` The ticket number e.g. ABC-1234
- * @arg {CognigyScript} `store` Where to store the result
+ * @arg {CognigyScript} `contextStore` Where to store the result
  * @arg {Boolean} `stopOnError` Whether to stop on error or continue
  */
 
-async function getTicketResolution(input: IFlowInput, args: { secret: CognigySecret, ticket: string, store: string, stopOnError: boolean }): Promise<IFlowInput | {}> {
+async function getTicketResolution(input: IFlowInput, args: { secret: CognigySecret, ticket: string, contextStore: string, stopOnError: boolean }): Promise<IFlowInput | {}> {
 
-  const { ticket, store, stopOnError, username, password, domain } = await validateArgs(args);
+  const { ticket, contextStore, stopOnError, username, password, domain } = await validateArgs(args);
 
-  return await processJiraIssue(input, ticket, store, stopOnError, username, password, domain, "resolution");
+  return await processJiraIssue(input, ticket, contextStore, stopOnError, username, password, domain, "resolution");
 }
 
 module.exports.getTicketResolution = getTicketResolution;
@@ -192,15 +192,15 @@ module.exports.getTicketResolution = getTicketResolution;
  * Returns the reporter of the ticket (e.g. bob@bob.com)
  * @arg {SecretSelect} `secret` The configured secret to use
  * @arg {CognigyScript} `ticket` The ticket number e.g. ABC-1234
- * @arg {CognigyScript} `store` Where to store the result
+ * @arg {CognigyScript} `contextStore` Where to store the result
  * @arg {Boolean} `stopOnError` Whether to stop on error or continue
  */
 
-async function getTicketReporter(input: IFlowInput, args: { secret: CognigySecret, ticket: string, store: string, stopOnError: boolean }): Promise<IFlowInput | {}> {
+async function getTicketReporter(input: IFlowInput, args: { secret: CognigySecret, ticket: string, contextStore: string, stopOnError: boolean }): Promise<IFlowInput | {}> {
 
-  const { ticket, store, stopOnError, username, password, domain } = await validateArgs(args);
+  const { ticket, contextStore, stopOnError, username, password, domain } = await validateArgs(args);
 
-  return await processJiraIssue(input, ticket, store, stopOnError, username, password, domain, "reporter");
+  return await processJiraIssue(input, ticket, contextStore, stopOnError, username, password, domain, "reporter");
 }
 
 module.exports.getTicketReporter = getTicketReporter;
@@ -210,15 +210,15 @@ module.exports.getTicketReporter = getTicketReporter;
  * Returns comments on this ticket, if it has any.
  * @arg {SecretSelect} `secret` The configured secret to use
  * @arg {CognigyScript} `ticket` The ticket number e.g. ABC-1234
- * @arg {CognigyScript} `store` Where to store the result
+ * @arg {CognigyScript} `contextStore` Where to store the result
  * @arg {Boolean} `stopOnError` Whether to stop on error or continue
  */
 
-async function getTicketComments(input: IFlowInput, args: { secret: CognigySecret, ticket: string, store: string, stopOnError: boolean }): Promise<IFlowInput | {}> {
+async function getTicketComments(input: IFlowInput, args: { secret: CognigySecret, ticket: string, contextStore: string, stopOnError: boolean }): Promise<IFlowInput | {}> {
 
-  const { ticket, store, stopOnError, username, password, domain } = await validateArgs(args);
+  const { ticket, contextStore, stopOnError, username, password, domain } = await validateArgs(args);
 
-  return await processJiraIssue(input, ticket, store, stopOnError, username, password, domain, "comment");
+  return await processJiraIssue(input, ticket, contextStore, stopOnError, username, password, domain, "comment");
 }
 
 module.exports.getTicketComments = getTicketComments;
@@ -228,15 +228,15 @@ module.exports.getTicketComments = getTicketComments;
  * Returns a list (array) of people watching the ticket.
  * @arg {SecretSelect} `secret` The configured secret to use
  * @arg {CognigyScript} `ticket` The ticket number e.g. ABC-1234
- * @arg {CognigyScript} `store` Where to store the result
+ * @arg {CognigyScript} `contextStore` Where to store the result
  * @arg {Boolean} `stopOnError` Whether to stop on error or continue
  */
 
-async function getTicketWatchers(input: IFlowInput, args: { secret: CognigySecret, ticket: string, store: string, stopOnError: boolean }): Promise<IFlowInput | {}> {
+async function getTicketWatchers(input: IFlowInput, args: { secret: CognigySecret, ticket: string, contextStore: string, stopOnError: boolean }): Promise<IFlowInput | {}> {
 
-  const { ticket, store, stopOnError, username, password, domain } = await validateArgs(args);
+  const { ticket, contextStore, stopOnError, username, password, domain } = await validateArgs(args);
 
-  return await processJiraIssue(input, ticket, store, stopOnError, username, password, domain, "watches");
+  return await processJiraIssue(input, ticket, contextStore, stopOnError, username, password, domain, "watches");
 }
 
 module.exports.getTicketWatchers = getTicketWatchers;
@@ -245,13 +245,13 @@ module.exports.getTicketWatchers = getTicketWatchers;
  * Returns basic summary of the ticket, including: type, project, status, assignedTo, reportedBy, resolution and comments.
  * @arg {SecretSelect} `secret` The configured secret to use
  * @arg {CognigyScript} `ticket` The ticket number e.g. ABC-1234
- * @arg {CognigyScript} `store` Where to store the result
+ * @arg {CognigyScript} `contextStore` Where to store the result
  * @arg {Boolean} `stopOnError` Whether to stop on error or continue
  */
 
-async function getTicketSummary(input: IFlowInput, args: { secret: CognigySecret, ticket: string, store: string, stopOnError: boolean }): Promise<IFlowInput | {}> {
+async function getTicketSummary(input: IFlowInput, args: { secret: CognigySecret, ticket: string, contextStore: string, stopOnError: boolean }): Promise<IFlowInput | {}> {
 
-  const { ticket, store, stopOnError, username, password, domain } = await validateArgs(args);
+  const { ticket, contextStore, stopOnError, username, password, domain } = await validateArgs(args);
 
   return new Promise((resolve, reject) => {
     let result: any = {};
@@ -275,7 +275,7 @@ async function getTicketSummary(input: IFlowInput, args: { secret: CognigySecret
           reject(errorMessage);
           return;
         }
-        input.actions.addToContext(store, { error: errorMessage }, 'simple');
+        input.actions.addToContext(contextStore, { error: errorMessage }, 'simple');
         resolve(input);
 
       } else if (error) {
@@ -315,7 +315,7 @@ async function getTicketSummary(input: IFlowInput, args: { secret: CognigySecret
           Promise.reject("Error while getting ticket summary");
         }
 
-        input.actions.addToContext(store, result, 'simple');
+        input.actions.addToContext(contextStore, result, 'simple');
         resolve(input);
       }
     });
@@ -329,13 +329,13 @@ module.exports.getTicketSummary = getTicketSummary;
  * Returns the full JIRA response, including ALL meta data. Use this if you need more info.
  * @arg {SecretSelect} `secret` The configured secret to use
  * @arg {CognigyScript} `ticket` The ticket number e.g. ABC-1234
- * @arg {CognigyScript} `store` Where to store the result
+ * @arg {CognigyScript} `contextStore` Where to store the result
  * @arg {Boolean} `stopOnError` Whether to stop on error or continue
  */
 
-async function getAllTicketInfo(input: IFlowInput, args: { secret: CognigySecret, ticket: string, store: string, stopOnError: boolean }): Promise<IFlowInput | {}> {
+async function getAllTicketInfo(input: IFlowInput, args: { secret: CognigySecret, ticket: string, contextStore: string, stopOnError: boolean }): Promise<IFlowInput | {}> {
 
-  const { ticket, store, stopOnError, username, password, domain } = await validateArgs(args);
+  const { ticket, contextStore, stopOnError, username, password, domain } = await validateArgs(args);
 
   return new Promise((resolve, reject) => {
 
@@ -359,7 +359,7 @@ async function getAllTicketInfo(input: IFlowInput, args: { secret: CognigySecret
           return;
         }
 
-        input.actions.addToContext(store, { error: errorMessage }, 'simple');
+        input.actions.addToContext(contextStore, { error: errorMessage }, 'simple');
         resolve(input);
 
       } else if (error) {
@@ -369,7 +369,7 @@ async function getAllTicketInfo(input: IFlowInput, args: { secret: CognigySecret
         if (!issue) {
           reject("Error while getting Jira issue. No issue was found");
         }
-        input.actions.addToContext(store, issue, 'simple');
+        input.actions.addToContext(contextStore, issue, 'simple');
         resolve(input);
       }
     });
@@ -379,7 +379,7 @@ async function getAllTicketInfo(input: IFlowInput, args: { secret: CognigySecret
 module.exports.getAllTicketInfo = getAllTicketInfo;
 
 
-async function processJiraIssue(input: IFlowInput, ticket: string, store: string, stopOnError: boolean, username: string, password: string, domain: string, fieldName: string): Promise<IFlowInput | {}> {
+async function processJiraIssue(input: IFlowInput, ticket: string, contextStore: string, stopOnError: boolean, username: string, password: string, domain: string, fieldName: string): Promise<IFlowInput | {}> {
 
   const jira = new JiraClient({
     host: domain,
@@ -403,7 +403,7 @@ async function processJiraIssue(input: IFlowInput, ticket: string, store: string
             return;
           }
 
-          input.actions.addToContext(store, { error: errorMessage }, 'simple');
+          input.actions.addToContext(contextStore, { error: errorMessage }, 'simple');
           resolve(input);
 
         } else if (error) {
@@ -419,7 +419,7 @@ async function processJiraIssue(input: IFlowInput, ticket: string, store: string
             status: issue.fields && issue.fields[fieldName] || null
           };
 
-          input.actions.addToContext(store, result, 'simple');
+          input.actions.addToContext(contextStore, result, 'simple');
           resolve(input);
         }
       } catch (err) {
@@ -432,20 +432,20 @@ async function processJiraIssue(input: IFlowInput, ticket: string, store: string
 
 interface IValidateArgsResponse {
   ticket: string;
-  store: string;
+  contextStore: string;
   stopOnError: boolean;
   username: string;
   password: string;
   domain: string;
 }
 
-function validateArgs(args: { secret: CognigySecret, ticket: string, store: string, stopOnError: boolean }): IValidateArgsResponse {
+function validateArgs(args: { secret: CognigySecret, ticket: string, contextStore: string, stopOnError: boolean }): IValidateArgsResponse {
 
   /* validate node arguments */
-  const { secret, ticket, store, stopOnError } = args;
+  const { secret, ticket, contextStore, stopOnError } = args;
   if (!secret) throw new Error("Secret not defined.");
   if (!ticket) throw new Error("No ticket defined. Please define a ticket like AB-1234.");
-  if (!store) throw new Error("Context store not defined.");
+  if (!contextStore) throw new Error("Context store not defined.");
   if (stopOnError === undefined) throw new Error("Stop on error flag not defined.");
 
   /* validate secrets */
@@ -456,7 +456,7 @@ function validateArgs(args: { secret: CognigySecret, ticket: string, store: stri
 
   return {
     ticket,
-    store,
+    contextStore,
     stopOnError,
     username,
     password,
