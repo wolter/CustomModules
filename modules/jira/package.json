@@ -1,11 +1,13 @@
 {
-	"name": "Jira",
-	"version": "1.0.0",
+	"name": "jira",
+	"version": "1.1.0",
 	"description": "This module integrates Cognigy.AI with Jira",
 	"main": "build/module.js",
 	"scripts": {
-		"test": "node test/test.js",
-		"build": "tsc -p ."
+		"transpile": "tsc -p .",
+		"zip": "zip jira.zip build/* package.json package-lock.json README.md icon.png icon-large.png",
+		"build": "npm run transpile && npm run lint && npm run zip",
+		"lint": "tslint -c tslint.json src/**/*.ts"
 	},
 	"repository": {
 		"type": "git",
@@ -14,8 +16,9 @@
 	"author": "Cognigy GmbH",
 	"license": "MIT",
 	"devDependencies": {
-		"@types/node": "10.12.26",
-		"typescript": "3.1.6"
+		"@types/node": "^10.12.5",
+		"tslint": "^5.16.0",
+		"typescript": "^3.1.6"
 	},
 	"dependencies": {
 		"jira-connector": "2.10.0"
