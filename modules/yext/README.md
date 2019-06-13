@@ -119,6 +119,7 @@ There are a few rules to follow, so that the node will look like this:
   - en, es, de, us, ...
 - Phone: 
   - The exact phone number of your location
+  - **The phone number has to be a valid number!**
 - CategoryIds: 
   - A list of IDs for your location
   - Look above for more information
