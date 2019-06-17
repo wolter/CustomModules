@@ -1,0 +1,13 @@
+{
+	"name": "FuzzySearch",
+	"version": "1.0.0",
+	"description": "This module adds a fuzzy logic node to Cognigy.AI.",
+	"author": "Cognigy GmbH",
+	"license": "MIT",
+	"keywords": [],
+	"main": "build/module.js",
+	"dependencies": {
+		"@types/node": "^10.12.18",
+		"fuse.js": "^3.4.5"
+	}
+}
