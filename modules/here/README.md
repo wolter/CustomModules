@@ -1,4 +1,14 @@
-Adds [**Here**](https://developer.here.com/) specific features as Flow Nodes to Cognigy.AI. Please note, you need an APP ID and an APP CODE for the **Here** API which you can generate for free with your **Here** developer account [here](https://developer.here.com/develop/rest-apis?create=Freemium-Basic).
+Adds [**Here**](https://developer.here.com/) specific features as Flow Nodes to Cognigy.AI. 
+
+### Secret
+This modules needs a CognigySecret to be defined and passed to the Nodes. The secret must have the following keys:
+
+- **key**:  app_id,
+- **value**:  Your APP ID for the HERE REST APIs 
+- **key**:  app_code
+- **value**:  Your APP CODE for the HERE REST APIs 
+
+You you can generate the APP ID and an APP CODE for the **Here** REST APIs for free with your **Here** developer account [here](https://developer.here.com/develop/rest-apis?create=Freemium-Basic).
 
 ## Node: geocoderGeocode
 
