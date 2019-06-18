@@ -32,8 +32,9 @@ async function geocoderGeocode(input: IFlowInput, args: { secret: CognigySecret,
 
     try {
 
-        // Update these options with the details of the web service you would like to call
+        if (!args.secret || !args.secret.app_id || !args.secret.app_code) return Promise.reject("Secret not defined or invalid.");
 
+        // Update these options with the details of the web service you would like to call
         const options: request_promise.OptionsWithUri = {
             uri: `https://geocoder.api.here.com/6.2/geocode.json`,
             qs: {
@@ -73,8 +74,9 @@ async function placesDiscoverSearch(input: IFlowInput, args: { secret: CognigySe
 
     try {
 
-        // Update these options with the details of the web service you would like to call
+        if (!args.secret || !args.secret.app_id || !args.secret.app_code) return Promise.reject("Secret not defined or invalid.");
 
+        // Update these options with the details of the web service you would like to call
         const options: request_promise.OptionsWithUri = {
             uri: `https://places.api.here.com/places/v1/discover/search`,
             qs: {
@@ -117,6 +119,8 @@ async function mapsImageMapview(input: IFlowInput, args: { secret: CognigySecret
 
     try {
 
+        if (!args.secret || !args.secret.app_id || !args.secret.app_code) return Promise.reject("Secret not defined or invalid.");
+        
         // Create image URL
         const imageURL = `https://image.maps.api.here.com/mia/1.6/mapview?c=${args.latitude},${args.longitude}&z=${args.zoom}&w=${args.width}&h=${args.height}&app_id=${args.secret.app_id}&app_code=${args.secret.app_code}`;
 
