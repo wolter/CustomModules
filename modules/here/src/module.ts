@@ -33,6 +33,7 @@ async function geocoderGeocode(input: IFlowInput, args: { secret: CognigySecret,
     try {
 
         if (!args.secret || !args.secret.app_id || !args.secret.app_code) return Promise.reject("Secret not defined or invalid.");
+        if (!args.searchtext) return Promise.reject("Searchtext not defined or invalid.");
 
         // Update these options with the details of the web service you would like to call
         const options: request_promise.OptionsWithUri = {
@@ -75,6 +76,8 @@ async function placesDiscoverSearch(input: IFlowInput, args: { secret: CognigySe
     try {
 
         if (!args.secret || !args.secret.app_id || !args.secret.app_code) return Promise.reject("Secret not defined or invalid.");
+        if (!args.latitude || !args.longitude) return Promise.reject("Location (latitude/longitude) not defined or invalid.");
+        if (!args.searchtext) return Promise.reject("Searchtext not defined or invalid.");
 
         // Update these options with the details of the web service you would like to call
         const options: request_promise.OptionsWithUri = {
@@ -120,7 +123,10 @@ async function mapsImageMapview(input: IFlowInput, args: { secret: CognigySecret
     try {
 
         if (!args.secret || !args.secret.app_id || !args.secret.app_code) return Promise.reject("Secret not defined or invalid.");
-        
+        if (!args.latitude || !args.longitude) return Promise.reject("Location (latitude/longitude) not defined or invalid.");
+        if (!args.zoom) return Promise.reject("Zoom-level not defined or invalid.");
+        if (!args.width || !args.height) return Promise.reject("Image-dimensions (width/height) not defined or invalid.");
+
         // Create image URL
         const imageURL = `https://image.maps.api.here.com/mia/1.6/mapview?c=${args.latitude},${args.longitude}&z=${args.zoom}&w=${args.width}&h=${args.height}&app_id=${args.secret.app_id}&app_code=${args.secret.app_code}`;
 
