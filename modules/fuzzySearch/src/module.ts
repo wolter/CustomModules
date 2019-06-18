@@ -31,6 +31,11 @@ function _handleError(input: IFlowInput, error: Error, stopOnError: boolean, wri
 async function search(input: IFlowInput, args: { items: any, options: any, searchtext: string, writeToContext: boolean, store: string, stopOnError: boolean }):  Promise<IFlowInput | {}> {
 
     try {
+
+        if (!args.items) return Promise.reject("items not defined or invalid.");
+        if (!args.options) return Promise.reject("Options not defined or invalid.");
+        if (!args.searchtext) return Promise.reject("Searchtext not defined or invalid.");
+
         const fuse = new Fuse(args.items, args.options);
         const result = fuse.search(args.searchtext);
         if (args.writeToContext) input.context.getFullContext()[args.store] = result;
