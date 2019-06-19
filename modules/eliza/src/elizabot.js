@@ -52,7 +52,7 @@ function ElizaBot(noRandomFlag, model) {
 	this.capitalizeFirstLetter=true;
 	this.debug=false;
 	this.memSize=20;
-	this.version="1.1 (original)";
+	this.version="2 (modified for Cognigy.AI)";
 	if (!this._dataParsed) this._init();
 	this.reset();
 }
