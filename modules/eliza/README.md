@@ -10,4 +10,4 @@ Takes the current input and translates it into a reply to keep the conversation 
 
 The result and Eliza's memory will be stored in the Cognigy context (`cc.STORE`) using the store name given in the node's settings.
 
-Further details are explained on the **Elizabot.js** sample webiste [documentation](https://www.masswerk.at/elizabot/).
+Further details are explained on the **Elizabot.js** sample website [documentation](https://www.masswerk.at/elizabot/).
