@@ -1,0 +1,9 @@
+{
+	"name": "Eliza",
+	"version": "1.0.0",
+	"description": "Eliza Psychotherapist",
+	"author": "Cognigy GmbH",
+	"license": "MIT",
+	"keywords": [],
+	"main": "src/module.js"
+}
